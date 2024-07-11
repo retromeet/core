@@ -17,6 +17,7 @@ module RakeSupport
     SEQUEL_BASE_MIGRATION
     VERSION_FORMAT = "%Y%m%d%H%M%S"
     MIGRATIONS_DIRECTORY = "db/migrations"
+    PASSWORD_MIGRATIONS_DIRECTORY = "db/ph_migrations"
 
     class << self
       # Migrates the database up to +target_migration+.
@@ -27,6 +28,15 @@ module RakeSupport
       def migrate(db, target_migration: nil)
         Sequel.extension :migration
         Sequel::Migrator.apply(db, MIGRATIONS_DIRECTORY, target_migration)
+      end
+
+      # Migrates the database up to +target_migration+.
+      #
+      # @param db [Sequel::Database] A connection to a database, with the password user
+      # @return [void]
+      def password_migrate(db)
+        Sequel.extension :migration
+        Sequel::Migrator.run(db, PASSWORD_MIGRATIONS_DIRECTORY, table: "schema_info_password")
       end
 
       # Migrates the database down to +target_migration+.

@@ -4,6 +4,8 @@ source "https://rubygems.org"
 
 ruby file: ".ruby-version"
 
+gem "rodauth" # Used for login
+
 # Database-related gems
 gem "pg" # Postgresql driver used by Sequel
 gem "sequel" # The base gem for accessing the database layer

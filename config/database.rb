@@ -7,9 +7,20 @@ module Database
     #
     # @raise (see .pgsql_host)
     # @raise (see .pgsql_database)
+    # @raise (see .connection_options)
     # @return [Sequel::Database]
     def connection
       @connection ||= Sequel.connect(connection_string, **connection_options)
+    end
+
+    # Connects to the database with the special password user. Should only be used for the database setup.
+    #
+    # @raise (see .pgsql_host)
+    # @raise (see .pgsql_database)
+    # @raise (see .connection_options)
+    # @return [Sequel::Database]
+    def ph_connection
+      Sequel.connect(connection_string, ph_connection_options)
     end
 
     private
@@ -31,10 +42,20 @@ module Database
         ENV.fetch("PGSQL_DATABASE")
       end
 
+      # @raise [KeyError] If the PGSQL_USERNAME enviroment variable is not filled
       # @return [Hash{Symbol=>Object}]
       def connection_options
         connection_options = {}
-        connection_options[:user] = ENV["PGSQL_USERNAME"] if ENV["PGSQL_USERNAME"]
+        connection_options[:user] = ENV.fetch("PGSQL_USERNAME")
+        connection_options[:password] = ENV["PGSQL_PASSWORD"] if ENV["PGSQL_PASSWORD"]
+        connection_options
+      end
+
+      # @raise [KeyError] If the PGSQL_PASSWORD_USERNAME enviroment variable is not filled
+      # @return [Hash{Symbol=>Object}]
+      def ph_connection_options
+        connection_options = {}
+        connection_options[:user] = ENV.fetch("PGSQL_PASSWORD_USERNAME")
         connection_options[:password] = ENV["PGSQL_PASSWORD"] if ENV["PGSQL_PASSWORD"]
         connection_options
       end

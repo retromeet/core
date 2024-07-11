@@ -6,6 +6,14 @@ require_relative "lib/rake_support/colors"
 require_relative "lib/rake_support/migrations"
 
 namespace :db do
+  desc "Sets up the database the first time. Should only be run once!"
+  task :setup do
+    Rake::Task["db:migrate"].invoke
+    RakeSupport::Migrations.password_migrate(Database.ph_connection)
+    RakeSupport::Migrations.dump_schema(Database.connection)
+    puts RakeSupport::Colors.info.call("db:setup executed")
+  end
+
   desc "Migrates the database up (options [version_number])"
   task :migrate, [:version] do |_, args|
     version = args[:version]&.to_i
