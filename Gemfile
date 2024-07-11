@@ -4,7 +4,17 @@ source "https://rubygems.org"
 
 ruby file: ".ruby-version"
 
+# The API framework-related gems
+gem "grape"
+
+gem "falcon" # The app server
+
+gem "bcrypt" # Used by rodauth for password hashing
+gem "jwt" # Used by rodauth jwt
+gem "roda" # Used for the login middleware
 gem "rodauth" # Used for login
+# gem "rotp" # Used by rodauth otp feature
+# gem "rqrcode" # Used by rodauth otp feature
 
 # Database-related gems
 gem "pg" # Postgresql driver used by Sequel
