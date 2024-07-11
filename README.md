@@ -12,20 +12,20 @@ RetroMeet requires Postgresql >= 16.0 (it might work with a lower version than t
 
 First, we need to set up the database. RetroMeet uses [rodauth](https://github.com/jeremyevans/rodauth), the following instructions will create the needed users, database and extensions needed for roda.
 1. Create two users:
-```sql
+```sh
 createuser -U postgres retromeet
 createuser -U postgres retromeet_password
 ```
 1. Create the database:
-```sql
+```sh
 createdb -U postgres -O retromeet retromeet_dev
 ```
 1. Load the citext extension:
-```sql
+```sh
 psql -U postgres -c "CREATE EXTENSION citext" retromeet_dev
 ```
 1. Give the password user temporary rights to the schema:
-```sql
+```sh
 psql -U postgres -c "GRANT CREATE ON SCHEMA public TO retromeet_password" retromeet_dev
 ```
 
@@ -35,6 +35,6 @@ rake db:setup
 ```
 
 Finally, you need to revoke the temporary rights:
-```sql
+```sh
 psql -U postgres -c "REVOKE CREATE ON SCHEMA public FROM retromeet_password" retromeet_dev
 ```
