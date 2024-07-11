@@ -1,5 +1,7 @@
 require:
   - rubocop-performance
+  - rubocop-rake
+  - rubocop-sequel
   - rubocop-yard
 
 AllCops:
