@@ -43,7 +43,7 @@ GEM
       fiber-annotation
       fiber-local (~> 1.1)
       json
-    debug (1.9.1)
+    debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
     dotenv (3.1.2)
@@ -87,11 +87,11 @@ GEM
       zeitwerk
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
-    io-console (0.7.1)
+    io-console (0.7.2)
     io-endpoint (0.11.0)
     io-event (1.6.5)
     io-stream (0.4.0)
-    irb (1.13.1)
+    irb (1.14.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.7.2)
@@ -132,10 +132,10 @@ GEM
     rack (3.1.7)
     rainbow (3.1.1)
     rake (13.2.1)
-    rdoc (6.6.3.1)
+    rdoc (6.7.0)
       psych (>= 4.0.0)
     regexp_parser (2.9.2)
-    reline (0.5.7)
+    reline (0.5.9)
       io-console (~> 0.5)
     rexml (3.3.1)
       strscan
