@@ -2,14 +2,18 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
+    bigdecimal (3.1.8)
+    dotenv (3.1.2)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
     parallel (1.25.1)
     parser (3.3.4.0)
       ast (~> 2.4.1)
       racc
+    pg (1.5.6)
     racc (1.8.0)
     rainbow (3.1.1)
+    rake (13.2.1)
     regexp_parser (2.9.2)
     rexml (3.3.1)
       strscan
@@ -29,10 +33,14 @@ GEM
     rubocop-performance (1.21.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-sequel (0.3.4)
+      rubocop (~> 1.0)
     rubocop-yard (0.9.3)
       rubocop (~> 1.21)
       yard
     ruby-progressbar (1.13.0)
+    sequel (5.82.0)
+      bigdecimal
     strscan (3.1.0)
     unicode-display_width (2.5.0)
     yard (0.9.36)
@@ -42,9 +50,14 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  dotenv
+  pg
+  rake
   rubocop
   rubocop-performance
+  rubocop-sequel
   rubocop-yard
+  sequel
 
 RUBY VERSION
    ruby 3.3.4p94
