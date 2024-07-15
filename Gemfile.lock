@@ -140,7 +140,7 @@ GEM
       io-console (~> 0.5)
     rexml (3.3.1)
       strscan
-    roda (3.81.0)
+    roda (3.82.0)
       rack
     rodauth (2.35.0)
       roda (>= 2.6.0)
