@@ -5,7 +5,10 @@ source "https://rubygems.org"
 ruby file: ".ruby-version"
 
 # The API framework-related gems
-gem "grape"
+gem "grape", "~> 2.1"
+gem "grape-entity", "~> 1.0"
+gem "grape-swagger"
+gem "grape-swagger-entity"
 
 gem "falcon" # The app server
 
@@ -26,6 +29,8 @@ gem "rake" # CLI for common tasks such as database creation and so on
 
 group :development, :test do
   gem "dotenv" # Used to load environment variables from .env files
+
+  gem "rerun" # Used to reload the server when code changes
 
   gem "debug" # Used for calling debugger from the code
 

@@ -8,6 +8,7 @@ class RodauthMiddleware < Roda
   plugin :rodauth, json: :only, db: Database.connection do
     enable :login, :logout, :create_account, :json, :jwt
     jwt_secret ENV.fetch("JWT_SECRET")
+    require_password_confirmation? false
   end
 
   route do |r|

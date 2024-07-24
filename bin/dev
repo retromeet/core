@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+exec bundle exec rerun -i "test/*" --no-notify -- bundle exec falcon serve --port 3000
