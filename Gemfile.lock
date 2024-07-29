@@ -164,7 +164,7 @@ GEM
       strscan
     roda (3.82.0)
       rack
-    rodauth (2.35.0)
+    rodauth (2.36.0)
       roda (>= 2.6.0)
       sequel (>= 4)
     rubocop (1.65.0)
