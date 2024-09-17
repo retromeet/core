@@ -21,7 +21,7 @@ class API < Grape::API
 
     # @return [Boolean]
     def authenticated?
-      rodauth.authenticated
+      rodauth.authenticated?
     end
   end
 
@@ -29,5 +29,9 @@ class API < Grape::API
 
   get :hello do
     { hello: :world }
+  end
+
+  get :profile_info do
+    { display_name: "renatolond" }
   end
 end
