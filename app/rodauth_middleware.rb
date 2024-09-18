@@ -11,6 +11,9 @@ class RodauthMiddleware < Roda
     require_password_confirmation? false
   end
 
+  def foobar
+  end
+
   route do |r|
     r.rodauth
     rodauth.require_authentication
