@@ -30,9 +30,14 @@ gem "rake" # CLI for common tasks such as database creation and so on
 group :development, :test do
   gem "dotenv" # Used to load environment variables from .env files
 
-  gem "rerun" # Used to reload the server when code changes
+  gem "rerun", require: false # Used to reload the server when code changes
 
   gem "debug" # Used for calling debugger from the code
+
+  # Code formatting and hooks
+  gem "lefthook", require: false # Used to make git hooks available between dev machines
+  gem "pronto", "~> 0.11", require: false # pronto analyzes code on changed code only
+  gem "pronto-rubocop", require: false # pronto-rubocop extends pronto for rubocop
 
   gem "rubocop", require: false # A static code analyzer and formatter
   gem "rubocop-performance", require: false # A rubocop extension with performance suggestions
