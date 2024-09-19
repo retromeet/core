@@ -1,37 +1,31 @@
 # frozen_string_literal: true
 
+require_relative "authenticated_api"
+
 # The main class for the API, from here we include other routes
 class API < Grape::API
   format :json
 
   prefix :api
 
-  helpers do
-    # Makes it easier to access rodauth
-    # @return [Rodauth::Auth]
-    def rodauth
-      env["rodauth"]
-    end
+  mount AuthenticatedAPI
 
-    # If the user is not authenticated, returns a 401 error
-    # @return [void]
-    def authenticate!
-      error!("401 Unauthorized", 401) unless authenticated?
-    end
-
-    # @return [Boolean]
-    def authenticated?
-      rodauth.authenticated?
-    end
-  end
-
-  before { authenticate! }
-
-  get :hello do
-    { hello: :world }
-  end
-
-  get :profile_info do
-    { display_name: "renatolond" }
+  if Environment.development?
+    add_swagger_documentation \
+      mount_path: "/swagger_doc",
+      info: {
+        title: "RetroMeet API",
+        description: "This is the API that RetroMeet makes available for all apps that will use it."
+      },
+      security_definitions: {
+        jwt_token: {
+          type: "apiKey",
+          name: "Authorization",
+          in: "header",
+          description: "A JWT token that can be obtained by calling the login endpoint.",
+          authorizationUrl: "/login"
+        }
+      },
+      security: { jwt_token: [] }
   end
 end

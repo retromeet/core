@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby file: ".ruby-version"
 
 # The API framework-related gems
-gem "grape", "~> 2.2"
+gem "grape", "< 2.2" # Temporary, until https://github.com/ruby-grape/grape-swagger/issues/939 is fixed
 gem "grape-entity", "~> 1.0"
 gem "grape-swagger"
 gem "grape-swagger-entity"

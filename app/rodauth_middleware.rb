@@ -12,8 +12,10 @@ class RodauthMiddleware < Roda
   end
 
   route do |r|
-    r.rodauth
-    rodauth.require_authentication
-    env["rodauth"] = rodauth
+    unless Environment.development? && r.path == "/api/swagger_doc"
+      r.rodauth
+      rodauth.require_authentication
+      env["rodauth"] = rodauth
+    end
   end
 end
