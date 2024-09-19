@@ -10,7 +10,13 @@ module Database
     # @raise (see .connection_options)
     # @return [Sequel::Database]
     def connection
-      @connection ||= Sequel.connect(connection_string, **connection_options)
+      @connection ||= begin
+        c = Sequel.connect(connection_string, **connection_options)
+        logger = Logger.new($stdout, level: Logger::INFO)
+        logger.level = Logger::DEBUG if Environment.test? || Environment.development?
+        c.logger = logger
+        c
+      end
     end
 
     # Connects to the database with the special password user. Should only be used for the database setup.
