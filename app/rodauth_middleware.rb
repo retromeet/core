@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../config/database"
-
 # middleware responsible for authentication
 class RodauthMiddleware < Roda
   plugin :middleware

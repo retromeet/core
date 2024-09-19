@@ -284,6 +284,7 @@ DEPENDENCIES
   rubocop-sequel
   rubocop-yard
   sequel
+  zeitwerk
 
 RUBY VERSION
    ruby 3.3.4p94

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "authenticated_api"
-
 # The main class for the API, from here we include other routes
 class API < Grape::API
   format :json

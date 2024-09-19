@@ -27,6 +27,8 @@ gem "sequel" # The base gem for accessing the database layer
 gem "pastel" # Used for coloring the output of rake tasks
 gem "rake" # CLI for common tasks such as database creation and so on
 
+gem "zeitwerk" # Used for autoloading the code in the API
+
 group :development, :test do
   gem "dotenv" # Used to load environment variables from .env files
 

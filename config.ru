@@ -4,11 +4,9 @@ require_relative "config/environment"
 
 Environment.load
 
-require_relative "app/rodauth_middleware"
+require_relative "config/zeitwerk"
 
 use Rack::CommonLogger
 use RodauthMiddleware
-
-require_relative "app/api"
 
 run API
