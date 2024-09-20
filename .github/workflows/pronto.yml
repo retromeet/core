@@ -1,7 +1,12 @@
 name: Pronto
 
 on:
-  - pull_request
+  pull_request:
+    paths:
+      - "**/*.rb"
+      - Rakefile
+      - config.ru
+      - Gemfile
 
 jobs:
   run:
