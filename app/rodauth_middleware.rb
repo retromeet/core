@@ -7,6 +7,12 @@ class RodauthMiddleware < Roda
     enable :login, :logout, :create_account, :json, :jwt
     jwt_secret ENV.fetch("JWT_SECRET")
     require_password_confirmation? false
+    require_login_confirmation? false
+
+    after_create_account do
+      display_name = account[:email].split("@", 2).first
+      Database.connection[:account_informations].insert(account_id: account[:id], display_name:)
+    end
   end
 
   route do |r|

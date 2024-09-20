@@ -47,3 +47,14 @@ group :development, :test do
   gem "rubocop-sequel", require: false # A rubocop extension for Sequel
   gem "rubocop-yard", require: false # A rubocop extension for yard documentation
 end
+
+group :test do
+  gem "minitest" # The test framework
+  gem "rack-test" # Adds functionality to test Rack apps
+
+  gem "database_cleaner-sequel" # Cleans the database between tests
+
+  gem "faker" # provides fake data for tests
+  gem "mocha" # adds mocking capabilities
+  gem "webmock" # Used for avoiding real requests in the test enviroment
+end

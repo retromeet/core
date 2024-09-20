@@ -57,11 +57,11 @@ module Database
         connection_options
       end
 
-      # @raise [KeyError] If the PGSQL_PASSWORD_USERNAME enviroment variable is not filled
+      # @raise [KeyError] If the PGSQL_USERNAME enviroment variable is not filled
       # @return [Hash{Symbol=>Object}]
       def ph_connection_options
         connection_options = {}
-        connection_options[:user] = ENV.fetch("PGSQL_PASSWORD_USERNAME")
+        connection_options[:user] = ENV.fetch("PGSQL_USERNAME")
         connection_options[:password] = ENV["PGSQL_PASSWORD"] if ENV["PGSQL_PASSWORD"]
         connection_options
       end

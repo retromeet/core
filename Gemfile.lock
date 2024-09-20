@@ -48,7 +48,14 @@ GEM
       fiber-annotation
       fiber-local (~> 1.1)
       json
+    crack (1.0.0)
+      bigdecimal
+      rexml
     csv (3.3.0)
+    database_cleaner-core (2.0.1)
+    database_cleaner-sequel (2.0.2)
+      database_cleaner-core (~> 2.0.0)
+      sequel
     debug (1.9.2)
       irb (~> 1.10)
       reline (>= 0.3.8)
@@ -69,6 +76,8 @@ GEM
       dry-inflector (~> 1.0)
       dry-logic (~> 1.4)
       zeitwerk (~> 2.6)
+    faker (3.4.2)
+      i18n (>= 1.8.11, < 2)
     falcon (0.48.0)
       async
       async-container (~> 0.18)
@@ -111,6 +120,7 @@ GEM
     grape-swagger-entity (0.5.5)
       grape-entity (~> 1)
       grape-swagger (~> 2)
+    hashdiff (1.1.1)
     httparty (0.22.0)
       csv
       mini_mime (>= 1.0.0)
@@ -138,6 +148,8 @@ GEM
     metrics (0.10.2)
     mini_mime (1.1.5)
     minitest (5.25.1)
+    mocha (2.4.5)
+      ruby2_keywords (>= 0.0.5)
     multi_json (1.15.0)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
@@ -252,6 +264,10 @@ GEM
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.6.0)
     uri (0.13.1)
+    webmock (3.23.1)
+      addressable (>= 2.8.0)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
     yard (0.9.36)
     zeitwerk (2.6.18)
 
@@ -261,8 +277,10 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt
+  database_cleaner-sequel
   debug
   dotenv
+  faker
   falcon
   grape (< 2.2)
   grape-entity (~> 1.0)
@@ -270,10 +288,13 @@ DEPENDENCIES
   grape-swagger-entity
   jwt
   lefthook
+  minitest
+  mocha
   pastel
   pg
   pronto (~> 0.11)
   pronto-rubocop
+  rack-test
   rake
   rerun
   roda
@@ -284,6 +305,7 @@ DEPENDENCIES
   rubocop-sequel
   rubocop-yard
   sequel
+  webmock
   zeitwerk
 
 RUBY VERSION

@@ -4,6 +4,9 @@ require_relative "lib/rake_support/load_env"
 require_relative "config/database"
 require_relative "lib/rake_support/colors"
 require_relative "lib/rake_support/migrations"
+require "minitest/test_task"
+
+Minitest::TestTask.create
 
 namespace :db do
   desc "Sets up the database the first time. Should only be run once!"
