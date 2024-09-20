@@ -1,0 +1,48 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    # Service containers to run with `runner-job`
+    services:
+      postgres:
+        image: postgres:16
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: retromeet_test
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Ruby
+    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+    # change this to (see https://github.com/ruby/setup-ruby#versioning):
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Copy github env file
+      run: cp .env.github.test .env.test.local
+    - name: Create needed user
+      run: PGPASSWORD=postgres createuser -U postgres -h localhost postgres_password
+    - name: Create needed extension
+      run: PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE EXTENSION citext" retromeet_test
+    - name: Setup the database
+      run: APP_ENV=test bundle exec rake db:setup
+    - name: Run tests
+      run: bundle exec rake test
+
