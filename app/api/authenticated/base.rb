@@ -25,10 +25,7 @@ module API
 
       before { authenticate! }
 
-      desc "foobar"
-      get :profile_info do
-        { display_name: "renatolond" }
-      end
+      mount API::Authenticated::Profile
     end
   end
 end
