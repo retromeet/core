@@ -7,6 +7,6 @@ Environment.load
 require_relative "config/zeitwerk"
 
 use Rack::CommonLogger
-use RodauthMiddleware
+use API::RodauthMiddleware
 
-run API
+run API::Base

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "../test_helper"
+require_relative "../../test_helper"
 
-describe RodauthMiddleware do
+describe API::RodauthMiddleware do
   include Rack::Test::Methods
   def app
     Rack::Builder.parse_file("config.ru")
