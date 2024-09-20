@@ -46,3 +46,37 @@ Finally, you need to revoke the temporary rights:
 ```sh
 psql -U postgres -c "REVOKE CREATE ON SCHEMA public FROM retromeet_password" retromeet_dev
 ```
+
+The same setup needs to be done for the test database, replacing `retromeet_dev` for `retromeet_test`:
+```sh
+createdb -U postgres -O retromeet retromeet_test
+psql -U postgres -c "CREATE EXTENSION citext" retromeet_test
+psql -U postgres -c "GRANT CREATE ON SCHEMA public TO retromeet_password" retromeet_test
+RACK_ENV=test rake db:setup
+psql -U postgres -c "REVOKE CREATE ON SCHEMA public FROM retromeet_password" retromeet_test
+```
+
+### Database migrations
+
+While working on the project, you might pull a newer version of `main` or merge a newer version of `main` into your branch which contains database modifications. To bring your database to the latest version, you need to migrate your database. You can do so by running:
+
+```sh
+bundle exec rake db:migrate
+```
+
+You need to do it for your test environment too, but you need to prepend the command with the variable that controls the environment:
+```sh
+APP_ENV=test bundle exec rake db:migrate
+```
+
+### Running tests
+
+You can run all tests with:
+```sh
+bundle exec rake test
+```
+
+Or a single test by running it directly:
+```sh
+bundle exec ruby test/to/run.rb
+```
