@@ -3,6 +3,9 @@
 # Contains the methods to connect to the database
 module Database
   class << self
+    # We use Falcon and need fiber concurrency for Sequel to behave well
+    Sequel.extension :fiber_concurrency
+
     # Connects to the database if no connection exists
     #
     # @raise (see .pgsql_host)
