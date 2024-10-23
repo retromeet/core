@@ -4,6 +4,7 @@ module API
   module Entities
     # Represents the profile info entity for the API
     class ProfileInfo < BasicProfileInfo
+      expose :birth_date, documentation: { type: Date }
       expose :about_me, documentation: { type: String }
       expose :genders, documentation: { type: String, is_array: true }
       expose :orientations, documentation: { type: String, is_array: true }
