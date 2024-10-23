@@ -2,7 +2,6 @@
 
 Sequel.migration do
   up do
-    extension :pg_enum
     genders = %w[
       man
       woman
@@ -115,8 +114,6 @@ Sequel.migration do
     end
   end
   down do
-    extension :pg_enum
-
     alter_table :account_informations do
       drop_column :about_me
       drop_column :birth_date

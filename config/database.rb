@@ -54,7 +54,7 @@ module Database
       # @raise [KeyError] If the PGSQL_USERNAME enviroment variable is not filled
       # @return [Hash{Symbol=>Object}]
       def connection_options
-        connection_options = {}
+        connection_options = { extensions: %i[pg_array pg_enum] }
         connection_options[:user] = ENV.fetch("PGSQL_USERNAME")
         connection_options[:password] = ENV["PGSQL_PASSWORD"] if ENV["PGSQL_PASSWORD"]
         connection_options

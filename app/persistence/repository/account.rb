@@ -13,6 +13,14 @@ module Persistence
           account_informations.where(account_id:).first
         end
 
+        # Returns basic profile information for a given account
+        #
+        # @param account_id [Integer] An id for an account
+        # @return [Hash{Symbol => Object}] A record containing +account_id+, +created_at+ and +display_name+
+        def basic_profile_info(account_id:)
+          account_informations.where(account_id:).select(:created_at, :display_name, :account_id).first
+        end
+
         private
 
           # @return [Sequel::Postgres::Dataset]
