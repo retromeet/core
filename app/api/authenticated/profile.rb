@@ -24,6 +24,21 @@ module API
           profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
           Entities::ProfileInfo.represent(profile_info)
         end
+
+        desc "Updates the current user's profile with the given parameters.",
+             success: { model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
+             failure: Authenticated::FAILURES,
+             produces: Authenticated::PRODUCES,
+             consumes: Authenticated::CONSUMES
+        params do
+          optional :about_me, type: String, desc: "The about me text for the profile"
+        end
+        post :complete do
+          Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], **declared(params))
+          profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
+          status :ok
+          Entities::ProfileInfo.represent(profile_info)
+        end
       end
     end
   end
