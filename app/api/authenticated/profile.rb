@@ -32,9 +32,25 @@ module API
              consumes: Authenticated::CONSUMES
         params do
           optional :about_me, type: String, desc: "The about me text for the profile"
+          optional :display_name, type: String, desc: "The name that is displayed for other users"
+          optional :genders, type: [String], values: Persistence::Repository::Account::GENDER_VALUES
+          optional :orientations, type: [String], values: Persistence::Repository::Account::ORIENTATION_VALUES
+          optional :languages, type: [String], values: Persistence::Repository::Account::LANGUAGE_VALUES
+          optional :relationship_type, type: String, values: Persistence::Repository::Account::RELATIONSHIP_TYPE_VALUES
+          optional :relationship_status, type: String, values: Persistence::Repository::Account::RELATIONSHIP_STATUS_VALUES
+          optional :religion, type: String, values: Persistence::Repository::Account::RELIGION_VALUES
+          optional :religion_importance, type: String, values: Persistence::Repository::Account::IMPORTANCE_VALUES
+          optional :tobacco, type: String, values: Persistence::Repository::Account::FREQUENCY_VALUES
+          optional :marijuana, type: String, values: Persistence::Repository::Account::FREQUENCY_VALUES
+          optional :alcohol, type: String, values: Persistence::Repository::Account::FREQUENCY_VALUES
+          optional :other_recreational_drugs, type: String, values: Persistence::Repository::Account::FREQUENCY_VALUES
+          optional :kids, type: String, values: Persistence::Repository::Account::HAVES_OR_HAVE_NOTS_VALUES
+          optional :wants_kids, type: String, values: Persistence::Repository::Account::WANTS_VALUES
+          optional :pets, type: String, values: Persistence::Repository::Account::HAVES_OR_HAVE_NOTS_VALUES
+          optional :wants_pets, type: String, values: Persistence::Repository::Account::WANTS_VALUES
         end
         post :complete do
-          Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], **declared(params))
+          Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], **declared(params, include_missing: false))
           profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
           status :ok
           Entities::ProfileInfo.represent(profile_info)
