@@ -126,5 +126,43 @@ describe API::Authenticated::Profile do
       assert_predicate last_response, :ok?
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
+
+    ###
+    # This is a bit of meta programming to guarantee that the all the values the database supports are correctly declared in the endpoint documentation
+    # We iterate through all the params that the endpoint supports and for each we get possible values in the database and update it
+    post_endpoint = API::Authenticated::Profile.routes.find { |v| v.request_method == "POST" && v.path == "/profile/complete(.:format)" }
+    post_endpoint.params.each_key do |param|
+      next if %w[text date].include? AccountInformation.db_schema[param.to_sym][:db_type]
+
+      if AccountInformation.db_schema[param.to_sym][:db_type].ends_with?("[]")
+        enum_type = Database.connection[:pg_type].where(typname: "_#{AccountInformation.db_schema[param.to_sym][:db_type][..-3]}").get(:typelem)
+        enum_values = Database.connection.instance_variable_get(:@enum_labels)[enum_type].map { |v| [v] }
+      else
+        enum_values = AccountInformation.db_schema[param.to_sym][:enum_values]
+      end
+      next unless enum_values
+
+      sub_tests = []
+      enum_values.each do |value|
+        sub_tests << %(it "test that the value #{value.is_a?(Array) ? value[0] : value} is accepted" do
+          body = {
+            #{param}: #{value.is_a?(Array) ? value : "\"#{value}\""}
+          }
+
+          authorized_post @auth, @endpoint, body.to_json
+
+          expected_response = body
+
+          assert_predicate last_response, :ok?
+          assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+        end
+        )
+      end
+      eval <<-RUBY, binding, __FILE__, __LINE__ + 1 # rubocop:disable Security/Eval
+        describe "#{param} parameter" do # describe "bogus parameter"
+          #{sub_tests.join("\n")} # it "test that the value bogus1 is accepted" do ...
+        end
+      RUBY
+    end
   end
 end
