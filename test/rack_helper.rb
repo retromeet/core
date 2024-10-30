@@ -22,4 +22,11 @@ module RackHelper
     header "accept", "application/json"
     get(*)
   end
+
+  def authorized_post(authorization, *)
+    header "authorization", authorization
+    header "content-type", "application/json"
+    header "accept", "application/json"
+    post(*)
+  end
 end

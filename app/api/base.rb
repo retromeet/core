@@ -9,6 +9,8 @@ module API
 
     mount API::Authenticated::Base
 
+    helpers API::Helpers::Params
+
     if Environment.development?
       add_swagger_documentation \
         mount_path: "/swagger_doc",

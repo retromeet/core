@@ -25,7 +25,7 @@ module API
           Entities::ProfileInfo.represent(profile_info)
         end
 
-        desc "Updates the current user's profile with the given parameters.",
+        desc "Updates the current user's profile with the given parameters. The return will only contain fields that could have been modified.",
              success: { model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
              failure: Authenticated::FAILURES,
              produces: Authenticated::PRODUCES,
@@ -50,10 +50,16 @@ module API
           optional :wants_pets, type: String, values: Persistence::Repository::Account::WANTS_VALUES
         end
         post :complete do
-          Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], **declared(params, include_missing: false))
+          declared_params = declared(params, include_missing: false)
+          # (renatolond, 2024-10-30) empty arrays or nil are functionally the same, so we always coerce to nil
+          coerce_empty_array_param_to_nil(declared_params, :genders)
+          coerce_empty_array_param_to_nil(declared_params, :orientations)
+          coerce_empty_array_param_to_nil(declared_params, :languages)
+
+          Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], **declared_params)
           profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
           status :ok
-          Entities::ProfileInfo.represent(profile_info)
+          Entities::ProfileInfo.represent(profile_info, only: declared_params.keys.map(&:to_sym))
         end
       end
     end

@@ -4,7 +4,7 @@ module API
   module Entities
     # Represents the profile info entity for the API
     class BasicProfileInfo < Grape::Entity
-      format_with(:iso_timestamp, &:iso8601)
+      format_with(:iso_timestamp) { |date| date&.iso8601 }
       expose :display_name, documentation: { type: String }
       expose :created_at, format_with: :iso_timestamp, documentation: { type: String }
     end

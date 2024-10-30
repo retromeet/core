@@ -114,9 +114,9 @@ module Persistence
         # @param args [Hash{Symbol => Object}] A hash containing the fields to be updated. Will not be verified for validity.
         # @return [void]
         def update_profile_info(account_id:, **args)
-          args["languages"] = Sequel.pg_array(args["languages"], :languages) if args.key?("languages")
-          args["genders"] = Sequel.pg_array(args["genders"], :genders) if args.key?("genders")
-          args["orientations"] = Sequel.pg_array(args["orientations"], :orientations) if args.key?("orientations")
+          args["languages"] = Sequel.pg_array(args["languages"], :languages) if args.key?("languages") && args["languages"]
+          args["genders"] = Sequel.pg_array(args["genders"], :genders) if args.key?("genders") && args["genders"]
+          args["orientations"] = Sequel.pg_array(args["orientations"], :orientations) if args.key?("orientations") && args["orientations"]
           account_informations.where(account_id:).update(args)
         end
 
