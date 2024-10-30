@@ -4,7 +4,7 @@
 module Database
   class << self
     # We use Falcon and need fiber concurrency for Sequel to behave well
-    Sequel.extension :fiber_concurrency
+    Sequel.extension :fiber_concurrency unless Environment.test?
 
     # Connects to the database if no connection exists
     #
@@ -57,6 +57,7 @@ module Database
         connection_options = { extensions: %i[pg_array pg_enum] }
         connection_options[:user] = ENV.fetch("PGSQL_USERNAME")
         connection_options[:password] = ENV["PGSQL_PASSWORD"] if ENV["PGSQL_PASSWORD"]
+        connection_options[:max_connections] = 1 if Environment.test?
         connection_options
       end
 

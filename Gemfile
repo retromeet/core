@@ -42,6 +42,8 @@ group :development, :test do
   gem "pronto-rubocop", require: false # pronto-rubocop extends pronto for rubocop
 
   gem "rubocop", require: false # A static code analyzer and formatter
+  gem "rubocop-factory_bot", require: false # A rubocop extension for factory bot
+  gem "rubocop-minitest", require: false # A rubocop extension for minitest
   gem "rubocop-performance", require: false # A rubocop extension with performance suggestions
   gem "rubocop-rake", require: false # A rubocop extension for Rakefiles
   gem "rubocop-sequel", require: false # A rubocop extension for Sequel
@@ -54,6 +56,7 @@ group :test do
 
   gem "database_cleaner-sequel" # Cleans the database between tests
 
+  gem "factory_bot" # makes it easier to create objects for tests
   gem "faker" # provides fake data for tests
   gem "mocha" # adds mocking capabilities
   gem "webmock" # Used for avoiding real requests in the test enviroment

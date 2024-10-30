@@ -76,6 +76,8 @@ GEM
       dry-inflector (~> 1.0)
       dry-logic (~> 1.4)
       zeitwerk (~> 2.6)
+    factory_bot (6.5.0)
+      activesupport (>= 5.0.0)
     faker (3.5.1)
       i18n (>= 1.8.11, < 2)
     falcon (0.48.3)
@@ -232,6 +234,11 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.32.3)
       parser (>= 3.3.1.0)
+    rubocop-factory_bot (2.23.1)
+      rubocop (~> 1.33)
+    rubocop-minitest (0.36.0)
+      rubocop (>= 1.61, < 2.0)
+      rubocop-ast (>= 1.31.1, < 2.0)
     rubocop-performance (1.22.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
@@ -280,6 +287,7 @@ DEPENDENCIES
   database_cleaner-sequel
   debug
   dotenv
+  factory_bot
   faker
   falcon
   grape (~> 2.2)
@@ -300,6 +308,8 @@ DEPENDENCIES
   roda
   rodauth
   rubocop
+  rubocop-factory_bot
+  rubocop-minitest
   rubocop-performance
   rubocop-rake
   rubocop-sequel

@@ -13,6 +13,17 @@ require_relative "../config/zeitwerk"
 require_relative "db_helper"
 require_relative "rack_helper"
 
+# Make factory_bot methods available in spec-style tests
+module Minitest
+  class Spec
+    include FactoryBot::Syntax::Methods
+  end
+end
+FactoryBot.find_definitions
+FactoryBot.define do
+  to_create(&:save_changes)
+end
+
 # Adapted from https://github.com/rails/rails/blob/97169912f197eee6e76fafb091113bddf624aa67/activesupport/lib/active_support/testing/assertions.rb#L101
 # Test numeric difference between the return value of an expression as a
 # result of what is evaluated in the yielded block.
