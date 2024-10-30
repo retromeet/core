@@ -52,6 +52,7 @@ end
 
 group :test do
   gem "minitest" # The test framework
+  gem "minitest-hooks", require: "minitest/hooks/default" # Adds before(:all) hooks to improve test time
   gem "rack-test" # Adds functionality to test Rack apps
 
   gem "database_cleaner-sequel" # Cleans the database between tests

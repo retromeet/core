@@ -4,13 +4,15 @@ require_relative "../../../test_helper"
 
 describe API::Authenticated::Profile do
   include RackHelper
+  before(:all) do
+    @login = "foo@retromeet.social"
+    @password = "bogus123"
+    @account = create(:account, email: @login, password: @password, account_information: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
+  end
 
   describe "get /profile/info" do
     before do
-      login = "foo@retromeet.social"
-      password = "bogus123"
-      create(:account, email: login, password:, account_information: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
-      @auth = login(login:, password:)
+      @auth = login(login: @login, password: @password)
     end
 
     it "has the information expected" do
@@ -25,11 +27,7 @@ describe API::Authenticated::Profile do
   describe "get /profile/complete" do
     before do
       @endpoint = "/api/profile/complete"
-
-      login = "foo@retromeet.social"
-      password = "bogus123"
-      @account = create(:account, email: login, password:, account_information: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
-      @auth = login(login:, password:)
+      @auth = login(login: @login, password: @password)
     end
 
     it "gets the user information" do
@@ -65,11 +63,7 @@ describe API::Authenticated::Profile do
   describe "post /profile/complete" do
     before do
       @endpoint = "/api/profile/complete"
-
-      login = "foo@retromeet.social"
-      password = "bogus123"
-      @account = create(:account, email: login, password:)
-      @auth = login(login:, password:)
+      @auth = login(login: @login, password: @password)
     end
 
     it "posts with the same information as the user account" do

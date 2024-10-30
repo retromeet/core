@@ -7,12 +7,20 @@ Database.connection[:account_statuses].import(%i[id name], [[1, "Unverified"], [
 
 DatabaseCleaner[:sequel].strategy = :transaction
 
-class Minitest::Spec # rubocop:disable Style/ClassAndModuleChildren
+class Minitest::HooksSpec # rubocop:disable Style/ClassAndModuleChildren
+  before :all do
+    DatabaseCleaner[:sequel].start
+  end
+
   before :each do
     DatabaseCleaner[:sequel].start
   end
 
   after :each do
+    DatabaseCleaner[:sequel].clean
+  end
+
+  after :all do
     DatabaseCleaner[:sequel].clean
   end
 end
