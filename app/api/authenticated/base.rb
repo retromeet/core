@@ -26,6 +26,7 @@ module API
       before { authenticate! }
 
       mount API::Authenticated::Profile
+      mount API::Authenticated::Search
     end
   end
 end

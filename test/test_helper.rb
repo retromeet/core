@@ -4,6 +4,7 @@ ENV["APP_ENV"] = "test"
 
 require "minitest/autorun"
 require "rack/test"
+require "webmock/minitest"
 
 require_relative "../config/environment"
 Environment.load
@@ -23,6 +24,11 @@ FactoryBot.find_definitions
 FactoryBot.define do
   to_create(&:save_changes)
 end
+
+# Adds a helper method that loads a json file from the webfixtures directory
+# @raise (see File.open)
+# @return [String]
+def webfixture_json_file(filename) = File.open("test/webfixtures/#{filename}.json")
 
 # Adapted from https://github.com/rails/rails/blob/97169912f197eee6e76fafb091113bddf624aa67/activesupport/lib/active_support/testing/assertions.rb#L101
 # Test numeric difference between the return value of an expression as a

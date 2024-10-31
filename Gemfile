@@ -29,6 +29,8 @@ gem "rake" # CLI for common tasks such as database creation and so on
 
 gem "zeitwerk" # Used for autoloading the code in the API
 
+gem "async-http" # Used for making requests towards other APIs
+
 group :development, :test do
   gem "dotenv" # Used to load environment variables from .env files
 

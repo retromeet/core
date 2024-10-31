@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+Server: nginx
+Date: Thu, 31 Oct 2024 11:34:18 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 612
+Connection: keep-alive
+Keep-Alive: timeout=20
+
+[{"place_id":41637089,"licence":"Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright","osm_type":"relation","osm_id":5520336,"lat":"-22.90173","lon":"-43.2797093","category":"boundary","type":"administrative","place_rank":20,"importance":0.4288063271705178,"addresstype":"suburb","name":"Méier","display_name":"Méier, Rio de Janeiro, Região Geográfica Imediata do Rio de Janeiro, Região Metropolitana do Rio de Janeiro, Região Geográfica Intermediária do Rio de Janeiro, Rio de Janeiro, Região Sudeste, Brasil","boundingbox":["-22.9106837","-22.8921121","-43.2937516","-43.2707757"]}]

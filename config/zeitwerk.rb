@@ -5,6 +5,8 @@
 loader = Zeitwerk::Loader.new
 loader.push_dir "./app/"
 loader.push_dir "./config/"
+loader.collapse "./app/objects/"
 loader.inflector.inflect("api" => "API")
 loader.inflector.inflect("authenticated_api" => "AuthenticatedAPI")
+loader.inflector.inflect("retromeet" => "RetroMeet")
 loader.setup
