@@ -3,11 +3,13 @@
 # This modules contains functions to interact with the {https://wiki.openstreetmap.org/wiki/Nominatim Nominatim} backend.
 # The backend is configured through ENV variables and will use the default backend otherwise.
 module NominatimClient
+  MAX_SEARCH_RESULTS = 10
+
   class << self
     # @param query [String] A query to be sent to nominatim
     # @param limit [Integer] The max results to return
     # @param language [String] The language for the results
-    def search(query:, limit: 10, language: "en")
+    def search(query:, limit: MAX_SEARCH_RESULTS, language: "en")
       params = {
         q: CGI.escape(query),
         format: :jsonv2,

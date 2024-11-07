@@ -12,9 +12,10 @@ module API
              consumes: Authenticated::CONSUMES
         params do
           requires :query, type: String, desc: "The place you want to look for", documentation: { example: "Méier, Rio de Janeiro, Brasil" }
-          optional :limit, type: Integer, default: 10, desc: "The maximum number of results to return", values: ..40
+          optional :limit, type: Integer, default: NominatimClient::MAX_SEARCH_RESULTS, desc: "The maximum number of results to return", values: 0..NominatimClient::MAX_SEARCH_RESULTS
         end
         post :address do
+          status :ok
           NominatimClient.search(query: params[:query], limit: params[:limit])
         end
       end
