@@ -13,7 +13,7 @@ jobs:
     # Service containers to run with `runner-job`
     services:
       postgres:
-        image: postgres:16
+        image: postgis/postgis:16-3.5
         # Provide the password for postgres
         env:
           POSTGRES_PASSWORD: postgres
@@ -39,8 +39,10 @@ jobs:
       run: cp .env.github.test .env.test.local
     - name: Create needed user
       run: PGPASSWORD=postgres createuser -U postgres -h localhost postgres_password
-    - name: Create needed extension
+    - name: Create needed extensions
       run: PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE EXTENSION citext" retromeet_test
+      # We don't need to create the extension because it's already in the image
+      # && PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE EXTENSION postgis" retromeet_test
     - name: Setup the database
       run: APP_ENV=test bundle exec rake db:setup
     - name: Run tests
