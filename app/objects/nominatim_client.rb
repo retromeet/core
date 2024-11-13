@@ -28,8 +28,8 @@ module NominatimClient
       end
       results.map do |result|
         {
-          lat: result[:lat].to_f,
-          lon: result[:lon].to_f,
+          latitude: result[:lat].to_f,
+          longitude: result[:lon].to_f,
           display_name: result[:display_name]
         }
       end

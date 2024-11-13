@@ -29,13 +29,13 @@ module PhotonClient
         components = place[:properties].slice(*AddressComposer::AllComponents)
         components[:country_code] = place[:properties][:countrycode]
         components[:name] = place[:properties][:name]
-        lon, lat = place[:geometry][:coordinates]
+        longitude, latitude = place[:geometry][:coordinates]
         display_name = AddressComposer.compose(components)
         display_name.chomp!
         display_name.gsub!("\n", ", ")
         {
-          lat:,
-          lon:,
+          latitude:,
+          longitude:,
           display_name:
         }
       end

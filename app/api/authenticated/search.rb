@@ -16,7 +16,7 @@ module API
         end
         post :address do
           status :ok
-          PhotonClient.search(query: params[:query], limit: params[:limit])
+          Entities::LocationResult.represent(PhotonClient.search(query: params[:query], limit: params[:limit]))
         end
       end
     end
