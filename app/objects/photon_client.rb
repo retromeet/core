@@ -19,13 +19,13 @@ module PhotonClient
       query_params = params.map { |k, v| "#{k}=#{v}" }
       query_params << layers
       query_params = query_params.join("&")
-      response = Sync do
+      results = Sync do
         response = client.get("/api?#{query_params}", headers: base_headers)
         JSON.parse(response.read, symbolize_names: true)
       ensure
         response&.close
       end
-      response[:features].map do |place|
+      results[:features].map do |place|
         components = place[:properties].slice(*AddressComposer::AllComponents)
         components[:country_code] = place[:properties][:countrycode]
         components[:name] = place[:properties][:name]

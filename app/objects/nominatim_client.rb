@@ -19,15 +19,19 @@ module NominatimClient
         featureType: :settlement
       }
       query_params = params.map { |k, v| "#{k}=#{v}" }.join("&")
-      Sync do
+      results = Sync do
         response = client.get("/search?#{query_params}", headers: base_headers)
         # TODO: (renatolond, 2024-11-05) I'm not too sure of the result format, but it will do for now
         JSON.parse(response.read, symbolize_names: true)
-            .map do |loc|
-          loc.slice(:lat, :lon, :display_name)
-        end
       ensure
         response&.close
+      end
+      results.map do |result|
+        {
+          lat: result[:lat].to_f,
+          lon: result[:lon].to_f,
+          display_name: result[:display_name]
+        }
       end
     end
 
