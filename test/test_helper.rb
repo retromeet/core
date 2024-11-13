@@ -25,6 +25,9 @@ FactoryBot.define do
   to_create(&:save_changes)
 end
 
+# This is needed for the PhotonClient test, since it receives the params repeateadly. If another test breaks because of it, a different way to configure needs to be looked upon
+WebMock::Config.instance.query_values_notation = :flat_array
+
 # Adds a helper method that loads a json file from the webfixtures directory
 # @raise (see File.open)
 # @return [String]

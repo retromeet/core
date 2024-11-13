@@ -16,7 +16,7 @@ module API
         end
         post :address do
           status :ok
-          NominatimClient.search(query: params[:query], limit: params[:limit])
+          PhotonClient.search(query: params[:query], limit: params[:limit])
         end
       end
     end
