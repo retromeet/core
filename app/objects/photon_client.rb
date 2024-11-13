@@ -28,16 +28,18 @@ module PhotonClient
       results[:features].map do |place|
         components = place[:properties].slice(*AddressComposer::AllComponents)
         components[:country_code] = place[:properties][:countrycode]
-        components[:name] = place[:properties][:name]
+        components[place[:properties][:osm_value]] = place[:properties][:name]
         longitude, latitude = place[:geometry][:coordinates]
         display_name = AddressComposer.compose(components)
         display_name.chomp!
         display_name.gsub!("\n", ", ")
-        {
+        Models::LocationResult.new(
           latitude:,
           longitude:,
-          display_name:
-        }
+          display_name:,
+          osm_id: place[:properties][:osm_id],
+          country_code: components[:country_code]
+        )
       end
     end
 

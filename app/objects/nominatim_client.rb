@@ -16,22 +16,28 @@ module NominatimClient
         language:,
         limit:,
         layer: :address,
-        featureType: :settlement
+        featureType: :settlement,
+        addressdetails: 1
       }
       query_params = params.map { |k, v| "#{k}=#{v}" }.join("&")
       results = Sync do
         response = client.get("/search?#{query_params}", headers: base_headers)
-        # TODO: (renatolond, 2024-11-05) I'm not too sure of the result format, but it will do for now
         JSON.parse(response.read, symbolize_names: true)
       ensure
         response&.close
       end
       results.map do |result|
-        {
+        components = result[:address].slice(*AddressComposer::AllComponents)
+        display_name = AddressComposer.compose(components)
+        display_name.chomp!
+        display_name.gsub!("\n", ", ")
+        Models::LocationResult.new(
           latitude: result[:lat].to_f,
           longitude: result[:lon].to_f,
-          display_name: result[:display_name]
-        }
+          display_name:,
+          osm_id: result[:osm_id],
+          country_code: components[:country_code]
+        )
       end
     end
 
