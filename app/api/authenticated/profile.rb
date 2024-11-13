@@ -26,7 +26,7 @@ module API
         end
 
         desc "Updates the current user's profile with the given parameters. The return will only contain fields that could have been modified.",
-             success: { model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
+             success: { status: 200, model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
              failure: Authenticated::FAILURES,
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES

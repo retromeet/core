@@ -6,7 +6,8 @@ module API
     class Search < Grape::API
       namespace :search do
         desc "Given an address, searches for a geolocation using one location provider. It takes the language of the current user in consideration.",
-             success: { model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
+             success: { code: 200, model: API::Entities::LocationResult, message: "One or more locations" },
+             is_array: true,
              failure: Authenticated::FAILURES,
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
