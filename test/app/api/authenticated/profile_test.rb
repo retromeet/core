@@ -66,6 +66,12 @@ describe API::Authenticated::Profile do
       @auth = login(login: @login, password: @password)
     end
 
+    it "gets a bad request if there's no body" do
+      authorized_post @auth, @endpoint, {}.to_json
+
+      assert_predicate last_response, :bad_request?
+    end
+
     it "posts with the same information as the user account" do
       account_information = @account.account_information
       body = {

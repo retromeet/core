@@ -55,6 +55,7 @@ module API
           coerce_empty_array_param_to_nil(declared_params, :genders)
           coerce_empty_array_param_to_nil(declared_params, :orientations)
           coerce_empty_array_param_to_nil(declared_params, :languages)
+          error!({ error: :AT_LEAST_ONE_PARAMETER_NEEDED, detail: "You need to provide at least one parameter to be changed, none given" }, :bad_request) if declared_params.empty?
 
           Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], **declared_params)
           profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
