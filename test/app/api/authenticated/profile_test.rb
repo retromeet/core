@@ -60,6 +60,39 @@ describe API::Authenticated::Profile do
     end
   end
 
+  describe "post /profile/location" do
+    before do
+      @endpoint = "/api/profile/location"
+      @auth = login(login: @login, password: @password)
+    end
+
+    it "sends a non-sensical location and gets no results back" do
+      body = {
+        location: "askdjlasjdklasjdlasjdljasdlk"
+      }
+
+      stub_request(:get, "https://photon.komoot.io/api?q=askdjlasjdklasjdlasjdljasdlk&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
+        .to_return(webfixture_json_file("photon.no_results"))
+
+      authorized_post @auth, @endpoint, body.to_json
+
+      assert_predicate last_response, :unprocessable?
+    end
+
+    it "sends a location too generic and gets too many results back" do
+      body = {
+        location: "Méier"
+      }
+
+      stub_request(:get, "https://photon.komoot.io/api?q=M%C3%A9ier&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
+        .to_return(webfixture_json_file("photon.meier"))
+
+      authorized_post @auth, @endpoint, body.to_json
+
+      assert_predicate last_response, :unprocessable?
+    end
+  end
+
   describe "post /profile/complete" do
     before do
       @endpoint = "/api/profile/complete"

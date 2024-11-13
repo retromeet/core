@@ -62,6 +62,24 @@ module API
           status :ok
           Entities::ProfileInfo.represent(profile_info, only: declared_params.keys.map(&:to_sym))
         end
+
+        desc "Updates the current user's profile location with the given place.",
+             success: { status: 200, model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
+             failure: Authenticated::FAILURES,
+             produces: Authenticated::PRODUCES,
+             consumes: Authenticated::CONSUMES
+        params do
+          requires :location, type: String, desc: "The place you're updating to. It should be one of the responses from /api/search/address"
+        end
+        post :location do
+          results = PhotonClient.search(query: params[:location])
+          error!({ error: :UNEXPECTED_RESULTS_SIZE, detail: "Expected to have exactly one location with the given name, had #{results.size} instead" }, :unprocessable_content) if results.size != 1
+
+          Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], location: params["location"])
+          profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
+          status :ok
+          Entities::ProfileInfo.represent(profile_info, only: %i[location])
+        end
       end
     end
   end
