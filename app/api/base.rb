@@ -11,6 +11,10 @@ module API
 
     helpers API::Helpers::Params
 
+    rescue_from :all do |_e|
+      error!({ error: "Internal server error" }, 500)
+    end
+
     if Environment.development?
       add_swagger_documentation \
         mount_path: "/swagger_doc",
