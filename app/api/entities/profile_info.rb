@@ -21,6 +21,7 @@ module API
       expose :wants_kids, documentation: { type: String }
       expose :religion, documentation: { type: String }
       expose :religion_importance, documentation: { type: String }
+      expose :location_display_name, documentation: { type: Hash }
     end
   end
 end

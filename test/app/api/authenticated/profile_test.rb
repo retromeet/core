@@ -51,7 +51,8 @@ describe API::Authenticated::Profile do
         wants_kids: account_information.wants_kids,
         religion: account_information.religion,
         religion_importance: account_information.religion_importance,
-        display_name: account_information.display_name
+        display_name: account_information.display_name,
+        location_display_name: account_information.location.display_name.transform_keys(&:to_sym)
       }
       authorized_get @auth, @endpoint
 
@@ -60,10 +61,64 @@ describe API::Authenticated::Profile do
     end
   end
 
+  describe "post /profile/location" do
+    before do
+      @endpoint = "/api/profile/location"
+      @auth = login(login: @login, password: @password)
+    end
+
+    it "sends a non-sensical location and gets no results back" do
+      body = {
+        location: "askdjlasjdklasjdlasjdljasdlk"
+      }
+
+      stub_request(:get, "https://photon.komoot.io/api?q=askdjlasjdklasjdlasjdljasdlk&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
+        .to_return(webfixture_json_file("photon.no_results"))
+
+      authorized_post @auth, @endpoint, body.to_json
+
+      assert_predicate last_response, :unprocessable?
+    end
+
+    it "sends a location too generic and gets too many results back" do
+      body = {
+        location: "Méier"
+      }
+
+      stub_request(:get, "https://photon.komoot.io/api?q=M%C3%A9ier&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
+        .to_return(webfixture_json_file("photon.meier"))
+
+      authorized_post @auth, @endpoint, body.to_json
+
+      assert_predicate last_response, :unprocessable?
+    end
+
+    it "sends a location that has exactly one result and updates the location for the user" do
+      body = {
+        location: "Méier, Rio de Janeiro, Região Metropolitana do Rio de Janeiro, Brazil"
+      }
+
+      stub_request(:get, "https://photon.komoot.io/api?q=M%C3%A9ier%2C+Rio+de+Janeiro%2C+Regi%C3%A3o+Metropolitana+do+Rio+de+Janeiro%2C+Brazil&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
+        .to_return(webfixture_json_file("photon.meier_single_result"))
+
+      assert_difference "Location.count", 1 do
+        authorized_post @auth, @endpoint, body.to_json
+      end
+
+      assert_predicate last_response, :ok?
+    end
+  end
+
   describe "post /profile/complete" do
     before do
       @endpoint = "/api/profile/complete"
       @auth = login(login: @login, password: @password)
+    end
+
+    it "gets a bad request if there's no body" do
+      authorized_post @auth, @endpoint, {}.to_json
+
+      assert_predicate last_response, :bad_request?
     end
 
     it "posts with the same information as the user account" do

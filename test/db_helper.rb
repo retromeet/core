@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Database.connection # Call the connection once to create the connection before the truncation below
-DatabaseCleaner[:sequel].clean_with :truncation
+DatabaseCleaner[:sequel].clean_with :truncation, except: %w[spatial_ref_sys]
 # Seed the test database:
 Database.connection[:account_statuses].import(%i[id name], [[1, "Unverified"], [2, "Verified"], [3, "Closed"]])
 

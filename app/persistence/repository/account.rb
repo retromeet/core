@@ -97,7 +97,12 @@ module Persistence
         # @param account_id [Integer] An id for an account
         # @return [Hash{Symbol => Object}] A record containing +account_id+, +created_at+ and +display_name+
         def profile_info(account_id:)
-          account_informations.where(account_id:).first
+          account_informations.left_join(:locations, id: :location_id)
+                              .where(account_id:)
+                              .select_all(:account_informations)
+                              # TODO: (renatolond, 2024-11-14) Filter the location display name for only the users' language and the fallback one
+                              .select_append(Sequel[:locations][:display_name].as(:location_display_name))
+                              .first
         end
 
         # Returns basic profile information for a given account
@@ -110,7 +115,7 @@ module Persistence
 
         # Updates the profile information for a given account
         # Does not validate argument names passed to +args+, so if not validated before-hand can raise an exception
-        # @param account_id (see #profile_info)
+        # @param account_id (see .profile_info)
         # @param args [Hash{Symbol => Object}] A hash containing the fields to be updated. Will not be verified for validity.
         # @return [void]
         def update_profile_info(account_id:, **args)
@@ -118,6 +123,15 @@ module Persistence
           args["genders"] = Sequel.pg_array(args["genders"], :genders) if args.key?("genders") && args["genders"]
           args["orientations"] = Sequel.pg_array(args["orientations"], :orientations) if args.key?("orientations") && args["orientations"]
           account_informations.where(account_id:).update(args)
+        end
+
+        # Updates the profile location for a given account
+        # @param account_id (see .profile_info)
+        # @param location_result (see Persistence::Repository::Location.upsert_location)
+        # @return [void]
+        def update_profile_location(account_id:, location_result:)
+          location_id = Persistence::Repository::Location.upsert_location(location_result:)
+          account_informations.where(account_id:).update(location_id:)
         end
 
         private

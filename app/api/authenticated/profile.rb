@@ -26,7 +26,7 @@ module API
         end
 
         desc "Updates the current user's profile with the given parameters. The return will only contain fields that could have been modified.",
-             success: { model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
+             success: { status: 200, model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
              failure: Authenticated::FAILURES,
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
@@ -55,11 +55,30 @@ module API
           coerce_empty_array_param_to_nil(declared_params, :genders)
           coerce_empty_array_param_to_nil(declared_params, :orientations)
           coerce_empty_array_param_to_nil(declared_params, :languages)
+          error!({ error: :AT_LEAST_ONE_PARAMETER_NEEDED, detail: "You need to provide at least one parameter to be changed, none given" }, :bad_request) if declared_params.empty?
 
           Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], **declared_params)
           profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
           status :ok
           Entities::ProfileInfo.represent(profile_info, only: declared_params.keys.map(&:to_sym))
+        end
+
+        desc "Updates the current user's profile location with the given place.",
+             success: { status: 200, model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
+             failure: Authenticated::FAILURES,
+             produces: Authenticated::PRODUCES,
+             consumes: Authenticated::CONSUMES
+        params do
+          requires :location, type: String, desc: "The place you're updating to. It should be one of the responses from /api/search/address"
+        end
+        post :location do
+          results = PhotonClient.search(query: params[:location])
+          error!({ error: :UNEXPECTED_RESULTS_SIZE, detail: "Expected to have exactly one location with the given name, had #{results.size} instead" }, :unprocessable_content) if results.size != 1
+
+          Persistence::Repository::Account.update_profile_location(account_id: rodauth.session[:account_id], location_result: results.first)
+          profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
+          status :ok
+          Entities::ProfileInfo.represent(profile_info, only: %i[location])
         end
       end
     end

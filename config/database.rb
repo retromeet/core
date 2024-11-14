@@ -5,6 +5,8 @@ module Database
   class << self
     # We use Falcon and need fiber concurrency for Sequel to behave well
     Sequel.extension :fiber_concurrency unless Environment.test?
+    # Used for some jsonb operations with locations
+    Sequel.extension :pg_json_ops
 
     # Connects to the database if no connection exists
     #
@@ -54,7 +56,7 @@ module Database
       # @raise [KeyError] If the PGSQL_USERNAME enviroment variable is not filled
       # @return [Hash{Symbol=>Object}]
       def connection_options
-        connection_options = { extensions: %i[pg_array pg_enum] }
+        connection_options = { extensions: %i[pg_array pg_enum pg_json] }
         connection_options[:user] = ENV.fetch("PGSQL_USERNAME")
         connection_options[:password] = ENV["PGSQL_PASSWORD"] if ENV["PGSQL_PASSWORD"]
         connection_options[:max_connections] = 1 if Environment.test?

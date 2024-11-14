@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/retromeet/address_composer.git
+  revision: 9170b3fe686ac651a53ec26f59e700baa1eb5bb5
+  submodules: true
+  specs:
+    address_composer (1.0.1)
+      mustache (~> 1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -157,6 +165,7 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
+    mustache (1.1.1)
     mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
     mustermann-grape (1.1.0)
@@ -285,6 +294,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  address_composer!
   async-http
   bcrypt
   database_cleaner-sequel

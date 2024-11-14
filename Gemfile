@@ -31,6 +31,8 @@ gem "zeitwerk" # Used for autoloading the code in the API
 
 gem "async-http" # Used for making requests towards other APIs
 
+gem "address_composer", github: "retromeet/address_composer", submodules: true
+
 group :development, :test do
   gem "dotenv" # Used to load environment variables from .env files
 

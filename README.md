@@ -16,7 +16,7 @@ There's a [pronto](https://github.com/prontolabs/pronto) github action running o
 
 ### Setup
 
-RetroMeet requires Postgresql >= 16.0 (it might work with a lower version than that, but it is not guaranteed).
+RetroMeet requires Postgresql >= 16.0 (it might work with a lower version than that, but it is not guaranteed) and PostGIS >= 3.4 (again, might work with a lower version, but not guaranteed).
 
 First, we need to set up the database. RetroMeet uses [rodauth](https://github.com/jeremyevans/rodauth), the following instructions will create the needed users, database and extensions needed for roda.
 1. Create two users:
@@ -31,6 +31,10 @@ createdb -U postgres -O retromeet retromeet_dev
 1. Load the citext extension:
 ```sh
 psql -U postgres -c "CREATE EXTENSION citext" retromeet_dev
+```
+1. Load the postgis extension:
+```sh
+psql -U postgres -c "CREATE EXTENSION postgis" retromeet_dev
 ```
 1. Give the password user temporary rights to the schema:
 ```sh
@@ -51,6 +55,7 @@ The same setup needs to be done for the test database, replacing `retromeet_dev`
 ```sh
 createdb -U postgres -O retromeet retromeet_test
 psql -U postgres -c "CREATE EXTENSION citext" retromeet_test
+psql -U postgres -c "CREATE EXTENSION postgis" retromeet_test
 psql -U postgres -c "GRANT CREATE ON SCHEMA public TO retromeet_password" retromeet_test
 RACK_ENV=test rake db:setup
 psql -U postgres -c "REVOKE CREATE ON SCHEMA public FROM retromeet_password" retromeet_test

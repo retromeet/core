@@ -39,7 +39,7 @@ module RetroMeet
       # Takes the +RETROMEET_VERSION_METADATA+ environment variable into consideration
       # @return [String,nil]
       def build_metadata
-        ENV.fetch("MASTODON_VERSION_METADATA", nil)
+        ENV.fetch("RETROMEET_VERSION_METADATA", nil)
       end
 
       # @return [Array<String>]

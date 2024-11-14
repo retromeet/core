@@ -9,25 +9,39 @@ module NominatimClient
     # @param query [String] A query to be sent to nominatim
     # @param limit [Integer] The max results to return
     # @param language [String] The language for the results
+    # @return [Array<Models::LocationResult>]
     def search(query:, limit: MAX_SEARCH_RESULTS, language: "en")
+      limit = MAX_SEARCH_RESULTS if limit > MAX_SEARCH_RESULTS
+
       params = {
         q: CGI.escape(query),
         format: :jsonv2,
         language:,
         limit:,
         layer: :address,
-        featureType: :settlement
+        featureType: :settlement,
+        addressdetails: 1
       }
       query_params = params.map { |k, v| "#{k}=#{v}" }.join("&")
-      Sync do
+      results = Sync do
         response = client.get("/search?#{query_params}", headers: base_headers)
-        # TODO: (renatolond, 2024-11-05) I'm not too sure of the result format, but it will do for now
         JSON.parse(response.read, symbolize_names: true)
-            .map do |loc|
-          loc.slice(:lat, :lon, :display_name)
-        end
       ensure
         response&.close
+      end
+      results.map do |result|
+        components = result[:address].slice(*AddressComposer::AllComponents)
+        display_name = AddressComposer.compose(components)
+        display_name.chomp!
+        display_name.gsub!("\n", ", ")
+        Models::LocationResult.new(
+          latitude: result[:lat].to_f,
+          longitude: result[:lon].to_f,
+          display_name:,
+          osm_id: result[:osm_id],
+          country_code: components[:country_code],
+          language:
+        )
       end
     end
 
@@ -35,7 +49,7 @@ module NominatimClient
 
       # Returns the retromeet-core base host to be used for requests based off the environment variables
       # @return [Async::HTTP::Endpoint]
-      def nominatim_host = @nominatim_host ||= Async::HTTP::Endpoint.parse("https://nominatim.openstreetmap.org")
+      def nominatim_host = @nominatim_host ||= Async::HTTP::Endpoint.parse(ENV.fetch("NOMINATIM_API_HOST", "https://nominatim.openstreetmap.org"))
 
       # @return [Hash] Base headers to be used for requests
       def base_headers = @base_headers ||= { "Content-Type" => "application/json", "User-Agent": RetroMeet::Version.user_agent }.freeze

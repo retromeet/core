@@ -60,6 +60,8 @@ module RakeSupport
       # @param db (see .migrate)
       # @return [void]
       def dump_schema(db)
+        return unless Environment.development? || Environment.test?
+
         db.extension :schema_dumper
         schema = db.dump_schema_migration(same_db: true)
         current_migration = db[:schema_migrations].order_by(Sequel[:filename].desc).get(:filename)
@@ -68,6 +70,7 @@ module RakeSupport
 
 #{schema}"
         File.write("db/schema.rb", schema)
+        system("#{Gem.bin_path("rubocop", "rubocop")} -a db/schema.rb > /dev/null")
       end
 
       # Creates a new migration file, will add a timestamp and +name+ to the file.

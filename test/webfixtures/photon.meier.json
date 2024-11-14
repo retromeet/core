@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+Server: nginx/1.22.1
+Date: Wed, 13 Nov 2024 09:36:44 GMT
+Content-Type: application/json;charset=utf-8
+Connection: keep-alive
+Access-Control-Allow-Origin: *
+Access-Control-Request-Method: get
+Access-Control-Allow-Headers: *
+Expires: Wed, 13 Nov 2024 10:36:44 GMT
+Cache-Control: max-age=3600
+
+{"features":[{"geometry":{"coordinates":[-43.2797093,-22.90173],"type":"Point"},"type":"Feature","properties":{"osm_type":"R","osm_id":5520336,"extent":[-43.2937516,-22.8921121,-43.2707757,-22.9106837],"country":"Brazil","osm_key":"place","city":"Rio de Janeiro","countrycode":"BR","osm_value":"suburb","name":"Méier","county":"Região Metropolitana do Rio de Janeiro","state":"Rio de Janeiro","type":"district"}},{"geometry":{"coordinates":[13.9440022,53.7028752],"type":"Point"},"type":"Feature","properties":{"osm_type":"R","osm_id":1408068,"extent":[13.9117139,53.7240401,13.9989948,53.6851044],"country":"Germany","osm_key":"place","countrycode":"DE","osm_value":"village","name":"Meiersberg","county":"Vorpommern-Greifswald","state":"Mecklenburg-Vorpommern","type":"city"}},{"geometry":{"coordinates":[5.516390104700668,51.58844725],"type":"Point"},"type":"Feature","properties":{"osm_type":"R","osm_id":6838008,"extent":[5.3709476,51.6557026,5.6565559,51.5212962],"country":"Netherlands","osm_key":"boundary","countrycode":"NL","osm_value":"administrative","name":"Meierijstad","state":"North Brabant","type":"city"}},{"geometry":{"coordinates":[12.966444,48.432506],"type":"Point"},"type":"Feature","properties":{"osm_type":"N","osm_id":3204975107,"country":"Germany","osm_key":"place","city":"Pfarrkirchen","countrycode":"DE","osm_value":"hamlet","postcode":"84347","name":"Meier","county":"Landkreis Rottal-Inn","state":"Bavaria","type":"district"}},{"geometry":{"coordinates":[13.169217,48.417125],"type":"Point"},"type":"Feature","properties":{"osm_type":"N","osm_id":888754893,"country":"Germany","osm_key":"place","city":"Bayerbach an der Rott","countrycode":"DE","osm_value":"hamlet","postcode":"94137","name":"Meier","county":"Landkreis Rottal-Inn","state":"Bavaria","type":"district"}}],"type":"FeatureCollection"}
