@@ -91,6 +91,21 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :unprocessable?
     end
+
+    it "sends a location that has exactly one result and updates the location for the user" do
+      body = {
+        location: "Méier, Rio de Janeiro, Região Metropolitana do Rio de Janeiro, Brazil"
+      }
+
+      stub_request(:get, "https://photon.komoot.io/api?q=M%C3%A9ier%2C+Rio+de+Janeiro%2C+Regi%C3%A3o+Metropolitana+do+Rio+de+Janeiro%2C+Brazil&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
+        .to_return(webfixture_json_file("photon.meier_single_result"))
+
+      assert_difference "Location.count", 1 do
+        authorized_post @auth, @endpoint, body.to_json
+      end
+
+      assert_predicate last_response, :ok?
+    end
   end
 
   describe "post /profile/complete" do

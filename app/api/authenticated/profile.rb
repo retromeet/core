@@ -75,7 +75,7 @@ module API
           results = PhotonClient.search(query: params[:location])
           error!({ error: :UNEXPECTED_RESULTS_SIZE, detail: "Expected to have exactly one location with the given name, had #{results.size} instead" }, :unprocessable_content) if results.size != 1
 
-          Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], location: params["location"])
+          Persistence::Repository::Account.update_profile_location(account_id: rodauth.session[:account_id], location_result: results.first)
           profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
           status :ok
           Entities::ProfileInfo.represent(profile_info, only: %i[location])
