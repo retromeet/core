@@ -17,6 +17,7 @@ module Database
     def connection
       @connection ||= begin
         c = Sequel.connect(connection_string, **connection_options)
+        c.sql_log_level = :debug
         logger = Logger.new($stdout, level: Logger::INFO)
         logger.level = Logger::DEBUG if Environment.test? || Environment.development?
         c.logger = logger
