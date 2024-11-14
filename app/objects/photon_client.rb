@@ -8,8 +8,10 @@ module PhotonClient
   class << self
     # @param query [String] A query to be sent to nominatim
     # @param limit [Integer] The max results to return
-    # @param language [String] The language for the results
+    # @param language [String] The language for the results, can only be one of +supported_languages+.
+    # @return [Array<Models::LocationResult>]
     def search(query:, limit: MAX_SEARCH_RESULTS, language: "en")
+      language = normalize_language(language)
       params = {
         q: CGI.escape(query),
         lang: language,
@@ -45,9 +47,27 @@ module PhotonClient
 
     private
 
+      # The public photon API only supports a few languages (en, fr, de)
+      # to support more languages another photon instance has to be used with a custom import
+      # This will normalize any language not supported by the default endpoint to one of the supported ones
+      # you can override the supported languages with the env variable defined below
+      #
+      # @param language (see .search)
+      # @return [String]
+      def normalize_language(language)
+        return language if supported_languages.include?(language)
+
+        supported_languages.first
+      end
+
+      # @return [Array<String>]
+      def supported_languages
+        @supported_languages ||= ENV.fetch("PHOTON_SUPPORTED_LANGUAGES", "en,fr,de").split(",")
+      end
+
       # Returns the photon host to be used for requests
       # @return [Async::HTTP::Endpoint]
-      def photon_host = @photon_host ||= Async::HTTP::Endpoint.parse("https://photon.komoot.io")
+      def photon_host = @photon_host ||= Async::HTTP::Endpoint.parse(ENV.fetch("PHOTON_API_HOST", "https://photon.komoot.io"))
 
       # @return [Hash] Base headers to be used for requests
       def base_headers = @base_headers ||= { "Content-Type" => "application/json", "User-Agent": RetroMeet::Version.user_agent }.freeze

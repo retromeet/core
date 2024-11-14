@@ -10,6 +10,8 @@ module NominatimClient
     # @param limit [Integer] The max results to return
     # @param language [String] The language for the results
     def search(query:, limit: MAX_SEARCH_RESULTS, language: "en")
+      limit = MAX_SEARCH_RESULTS if limit > MAX_SEARCH_RESULTS
+
       params = {
         q: CGI.escape(query),
         format: :jsonv2,
@@ -45,7 +47,7 @@ module NominatimClient
 
       # Returns the retromeet-core base host to be used for requests based off the environment variables
       # @return [Async::HTTP::Endpoint]
-      def nominatim_host = @nominatim_host ||= Async::HTTP::Endpoint.parse("https://nominatim.openstreetmap.org")
+      def nominatim_host = @nominatim_host ||= Async::HTTP::Endpoint.parse(ENV.fetch("NOMINATIM_API_HOST", "https://nominatim.openstreetmap.org"))
 
       # @return [Hash] Base headers to be used for requests
       def base_headers = @base_headers ||= { "Content-Type" => "application/json", "User-Agent": RetroMeet::Version.user_agent }.freeze
