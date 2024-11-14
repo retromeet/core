@@ -40,7 +40,8 @@ module PhotonClient
           longitude:,
           display_name:,
           osm_id: place[:properties][:osm_id],
-          country_code: components[:country_code]
+          country_code: components[:country_code],
+          language:
         )
       end
     end
