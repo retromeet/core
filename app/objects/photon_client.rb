@@ -45,6 +45,10 @@ module PhotonClient
       end
     end
 
+    # @param language (see .search)
+    # @return [Boolean]
+    def language_supported?(language) = supported_languages.include?(language)
+
     private
 
       # The public photon API only supports a few languages (en, fr, de)
@@ -55,7 +59,7 @@ module PhotonClient
       # @param language (see .search)
       # @return [String]
       def normalize_language(language)
-        return language if supported_languages.include?(language)
+        return language if language_supported?(language)
 
         supported_languages.first
       end

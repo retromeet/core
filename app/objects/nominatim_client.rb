@@ -9,6 +9,7 @@ module NominatimClient
     # @param query [String] A query to be sent to nominatim
     # @param limit [Integer] The max results to return
     # @param language [String] The language for the results
+    # @return [Array<Models::LocationResult>]
     def search(query:, limit: MAX_SEARCH_RESULTS, language: "en")
       limit = MAX_SEARCH_RESULTS if limit > MAX_SEARCH_RESULTS
 
