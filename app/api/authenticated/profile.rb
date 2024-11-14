@@ -78,7 +78,7 @@ module API
           Persistence::Repository::Account.update_profile_location(account_id: rodauth.session[:account_id], location_result: results.first)
           profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
           status :ok
-          Entities::ProfileInfo.represent(profile_info, only: %i[location])
+          Entities::ProfileInfo.represent(profile_info, only: %i[location_display_name])
         end
       end
     end
