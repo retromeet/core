@@ -51,7 +51,8 @@ describe API::Authenticated::Profile do
         wants_kids: account_information.wants_kids,
         religion: account_information.religion,
         religion_importance: account_information.religion_importance,
-        display_name: account_information.display_name
+        display_name: account_information.display_name,
+        location_display_name: account_information.location.display_name.transform_keys(&:to_sym)
       }
       authorized_get @auth, @endpoint
 

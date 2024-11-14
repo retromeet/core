@@ -2,10 +2,12 @@
 
 class AccountInformation < Sequel::Model
   many_to_one :account
+  many_to_one :location
 end
 FactoryBot.define do
   factory :account_information do
     account
+    location
     about_me { Faker::Lorem.paragraph }
     birth_date { Date.new(1985, 8, 5) }
     genders { %w[questioning man] }

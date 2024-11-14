@@ -9,8 +9,8 @@ FactoryBot.define do
       latitude { Faker::Address.latitude }
       longitude { Faker::Address.longitude }
     end
-    display_name { Faker::Address.full_name }
-    country_code { Faker::Address.country_code }
+    display_name { Sequel.pg_jsonb_wrap({ en: "Reception zone" }) }
+    country_code { Faker::Address.country_code.downcase }
     osm_id { rand(1..10_000) }
     geom { Sequel.lit("POINT(#{longitude}, #{latitude})::geometry") }
   end
