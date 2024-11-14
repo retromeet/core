@@ -72,7 +72,7 @@ module API
           requires :location, type: String, desc: "The place you're updating to. It should be one of the responses from /api/search/address"
         end
         post :location do
-          results = PhotonClient.search(query: params[:location])
+          results = LocationServiceProxy.search(query: params[:location])
           error!({ error: :UNEXPECTED_RESULTS_SIZE, detail: "Expected to have exactly one location with the given name, had #{results.size} instead" }, :unprocessable_content) if results.size != 1
 
           Persistence::Repository::Account.update_profile_location(account_id: rodauth.session[:account_id], location_result: results.first)
