@@ -27,6 +27,7 @@ module API
 
       mount API::Authenticated::Profile
       mount API::Authenticated::Search
+      mount API::Authenticated::Listing
     end
   end
 end
