@@ -39,7 +39,8 @@ module PhotonClient
           latitude:,
           longitude:,
           display_name:,
-          osm_id: place[:properties][:osm_id],
+          osm_type: place.dig(:properties, :osm_value),
+          osm_id: place.dig(:properties, :osm_id),
           country_code: components[:country_code],
           language:
         )

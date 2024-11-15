@@ -39,6 +39,7 @@ module NominatimClient
           longitude: result[:lon].to_f,
           display_name:,
           osm_id: result[:osm_id],
+          osm_type: result[:addresstype],
           country_code: components[:country_code],
           language:
         )

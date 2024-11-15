@@ -5,7 +5,7 @@ require_relative "../../../test_helper"
 describe Persistence::Repository::Location do
   describe ".upsert_location" do
     it "calls with a location that does not exist yet and it gets inserted" do
-      location_result = Models::LocationResult.new(latitude: -22.90173, longitude: -43.2797093, display_name: "Méier, Rio de Janeiro, Região Metropolitana do Rio de Janeiro, Brazil", country_code: "BR", osm_id: 5_520_336, language: "en")
+      location_result = Models::LocationResult.new(latitude: -22.90173, longitude: -43.2797093, display_name: "Méier, Rio de Janeiro, Região Metropolitana do Rio de Janeiro, Brazil", country_code: "BR", osm_id: 5_520_336, osm_type: "foo", language: "en")
 
       assert_difference "Location.count", 1 do
         Persistence::Repository::Location.upsert_location(location_result:)
@@ -24,7 +24,7 @@ describe Persistence::Repository::Location do
     end
 
     it "calls with a location that already exists and things get properly upserted" do
-      location_result = Models::LocationResult.new(latitude: -22.90173, longitude: -43.2797093, display_name: "Méier, Rio de Janeiro, Região Metropolitana do Rio de Janeiro, Brasil", country_code: "BR", osm_id: 5_520_336, language: "pt")
+      location_result = Models::LocationResult.new(latitude: -22.90173, longitude: -43.2797093, display_name: "Méier, Rio de Janeiro, Região Metropolitana do Rio de Janeiro, Brasil", country_code: "BR", osm_id: 5_520_336, osm_type: "foo", language: "pt")
       create(:location, osm_id: location_result.osm_id, latitude: location_result.latitude, longitude: location_result.longitude, display_name: { en: "Méier, Rio de Janeiro, Região Metropolitana do Rio de Janeiro, Brazil" }, country_code: "br")
 
       assert_difference "Location.count", 0 do

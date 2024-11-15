@@ -7,6 +7,8 @@ module API
       expose :latitude, documentation: { type: Float }
       expose :longitude, documentation: { type: Float }
       expose :display_name, documentation: { type: String }
+      expose :osm_id, documentation: { type: Integer }
+      expose :osm_type, documentation: { type: String }
     end
   end
 end
