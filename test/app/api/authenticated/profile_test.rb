@@ -69,7 +69,8 @@ describe API::Authenticated::Profile do
 
     it "sends a non-sensical location and gets no results back" do
       body = {
-        location: "askdjlasjdklasjdlasjdljasdlk"
+        location: "askdjlasjdklasjdlasjdljasdlk",
+        osm_id: 0
       }
 
       stub_request(:get, "https://photon.komoot.io/api?q=askdjlasjdklasjdlasjdljasdlk&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
@@ -80,22 +81,26 @@ describe API::Authenticated::Profile do
       assert_predicate last_response, :unprocessable?
     end
 
-    it "sends a location too generic and gets too many results back" do
+    it "sends a location too generic and gets too many results back but it is correctly filtered by osm_id" do
       body = {
-        location: "Méier"
+        location: "Méier",
+        osm_id: 5_520_336
       }
 
       stub_request(:get, "https://photon.komoot.io/api?q=M%C3%A9ier&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
         .to_return(webfixture_json_file("photon.meier"))
 
-      authorized_post @auth, @endpoint, body.to_json
+      assert_difference "Location.count", 1 do
+        authorized_post @auth, @endpoint, body.to_json
+      end
 
-      assert_predicate last_response, :unprocessable?
+      assert_predicate last_response, :ok?
     end
 
     it "sends a location that has exactly one result and updates the location for the user" do
       body = {
-        location: "Méier, Rio de Janeiro, Região Metropolitana do Rio de Janeiro, Brazil"
+        location: "Méier, Rio de Janeiro, Região Metropolitana do Rio de Janeiro, Brazil",
+        osm_id: 5_520_336
       }
 
       stub_request(:get, "https://photon.komoot.io/api?q=M%C3%A9ier%2C+Rio+de+Janeiro%2C+Regi%C3%A3o+Metropolitana+do+Rio+de+Janeiro%2C+Brazil&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
