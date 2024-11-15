@@ -35,11 +35,24 @@ module PhotonClient
         display_name = AddressComposer.compose(components)
         display_name.chomp!
         display_name.gsub!("\n", ", ")
+        osm_type = place.dig(:properties, :osm_value)
+        if osm_type == "administrative"
+          # Try to convert back to the original osm_type, there's a chance this is wrong, but it will be a best-effort
+          osm_type = case place.dig(:properties, :type)
+                     when "city"
+                       "municipality"
+                     when "district"
+                       "suburb"
+                     else
+                       puts "UKNOWN COMBO!! #{place.dig(:properties, :type)} #{place.dig(:properties, :osm_value)}"
+                       place.dig(:properties, :type)
+          end
+        end
         Models::LocationResult.new(
           latitude:,
           longitude:,
           display_name:,
-          osm_type: place.dig(:properties, :osm_value),
+          osm_type:,
           osm_id: place.dig(:properties, :osm_id),
           country_code: components[:country_code],
           language:
