@@ -219,4 +219,43 @@ describe API::Authenticated::Profile do
       RUBY
     end
   end
+
+  describe "get /profile/:id/complete" do
+    before do
+      @endpoint = "/api/profile/%<id>s/complete"
+      @auth = login(login: @login, password: @password)
+    end
+
+    make_my_diffs_pretty!
+    it "gets the user information" do
+      account_information = @account.account_information
+      expected_response = {
+        account_id: @account.id,
+        about_me: account_information.about_me,
+        genders: account_information.genders,
+        orientations: account_information.orientations,
+        languages: account_information.languages,
+        relationship_status: account_information.relationship_status,
+        relationship_type: account_information.relationship_type,
+        tobacco: account_information.tobacco,
+        marijuana: account_information.marijuana,
+        alcohol: account_information.alcohol,
+        other_recreational_drugs: account_information.other_recreational_drugs,
+        pets: account_information.pets,
+        wants_pets: account_information.wants_pets,
+        kids: account_information.kids,
+        wants_kids: account_information.wants_kids,
+        religion: account_information.religion,
+        religion_importance: account_information.religion_importance,
+        display_name: account_information.display_name,
+        location_display_name: account_information.location.display_name.transform_keys(&:to_sym),
+        location_distance: nil, # TODO: I think this should display the distance to the logged in user
+        age: 39 # TODO: calculate this so that this test don't breaks when the profile ages
+      }
+      authorized_get @auth, format(@endpoint, id: @account.id)
+
+      assert_predicate last_response, :ok?
+      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+    end
+  end
 end

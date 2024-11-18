@@ -21,35 +21,43 @@ describe API::Authenticated::Profile do
     @paris_account = create(:account, account_information: { display_name: "Paris account", location_id: @paris.id, birth_date: Date.new(2004, 6, 1) })
 
     @etterbeek_profile = {
+      account_id: @etterbeek_account.id,
       display_name: "Etterbeek account",
       genders: @etterbeek_account.account_information.genders,
       orientations: @etterbeek_account.account_information.orientations,
       relationship_status: @etterbeek_account.account_information.relationship_status,
       location_display_name: @etterbeek.display_name.transform_keys(&:to_sym),
+      location_distance: 3.60585778981352,
       age: 37 # TODO: calculate this so that this test don't breaks when the profile ages
     }
     @amsterdam_profile = {
+      account_id: @amsterdam_account.id,
       display_name: "Amsterdam account",
       genders: @amsterdam_account.account_information.genders,
       orientations: @amsterdam_account.account_information.orientations,
       relationship_status: @amsterdam_account.account_information.relationship_status,
       location_display_name: @amsterdam.display_name.transform_keys(&:to_sym),
+      location_distance: 171.18810403107398,
       age: 27 # TODO: calculate this so that this test don't breaks when the profile ages
     }
     @cologne_profile = {
+      account_id: @cologne_account.id,
       display_name: "Cologne account",
       genders: @cologne_account.account_information.genders,
       orientations: @cologne_account.account_information.orientations,
       relationship_status: @cologne_account.account_information.relationship_status,
       location_display_name: @cologne.display_name.transform_keys(&:to_sym),
+      location_distance: 181.5191324427601,
       age: 20 # TODO: calculate this so that this test don't breaks when the profile ages
     }
     @paris_profile = {
+      account_id: @paris_account.id,
       display_name: "Paris account",
       genders: @paris_account.account_information.genders,
       orientations: @paris_account.account_information.orientations,
       relationship_status: @paris_account.account_information.relationship_status,
       location_display_name: @paris.display_name.transform_keys(&:to_sym),
+      location_distance: 266.8743807484807,
       age: 20 # TODO: calculate this so that this test don't breaks when the profile ages
     }
   end

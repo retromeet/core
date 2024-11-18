@@ -10,6 +10,14 @@ module API
         extra_year_or_not = 0 if now.month > birth_date.month || (now.month == birth_date.month && now.day >= birth_date.day)
         now.year - birth_date.year - extra_year_or_not
       end
+      format_with(:distance_in_km) do |distance|
+        if distance.nil?
+          nil
+        else
+          distance / 1_000
+        end
+      end
+      expose :account_id, documentation: { type: Integer }
       expose :display_name, documentation: { type: String }
       expose :about_me, documentation: { type: String }
       expose :genders, documentation: { type: String, is_array: true }
@@ -28,6 +36,7 @@ module API
       expose :religion, documentation: { type: String }
       expose :religion_importance, documentation: { type: String }
       expose :location_display_name, documentation: { type: Hash }
+      expose :location_distance, format_with: :distance_in_km, documentation: { type: Float }
       expose :birth_date, format_with: :age_formatter, as: :age, documentation: { type: Integer }
     end
   end
