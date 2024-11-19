@@ -82,6 +82,23 @@ module API
           status :ok
           Entities::ProfileInfo.represent(profile_info, only: %i[location_display_name])
         end
+        namespace ":id" do
+          params do
+            requires :id, type: Integer
+          end
+
+          desc "Returns the complete profile information for the requested account id.",
+               success: { model: API::Entities::OtherProfileInfo, message: "The profile for the account id, if exists" },
+               failure: Authenticated::FAILURES,
+               produces: Authenticated::PRODUCES,
+               consumes: Authenticated::CONSUMES
+          get :complete do
+            profile_info = Persistence::Repository::Account.profile_info(account_id: params[:id])
+            error!({ error: :PROFILE_NOT_FOUND, detail: "The requested profile does not exist or you don't have permission to see it" }, :not_found) unless profile_info
+
+            Entities::OtherProfileInfo.represent(profile_info)
+          end
+        end
       end
     end
   end

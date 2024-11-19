@@ -134,6 +134,13 @@ module Persistence
           account_informations.where(account_id:).update(location_id:)
         end
 
+        # @return [String]
+        def profile_location(account_id:)
+          account_informations.inner_join(:locations, id: :location_id)
+                              .where(account_id:)
+                              .get(Sequel[:locations][:geom])
+        end
+
         private
 
           # @return [Sequel::Postgres::Dataset]
