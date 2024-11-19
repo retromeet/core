@@ -7,7 +7,7 @@ describe API::Authenticated::Profile do
   before(:all) do
     @login = "foo@retromeet.social"
     @password = "bogus123"
-    @account = create(:account, email: @login, password: @password, account_information: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
+    @account = create(:account, email: @login, password: @password, profile: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
   end
 
   describe "get /profile/info" do
@@ -31,28 +31,28 @@ describe API::Authenticated::Profile do
     end
 
     it "gets the user information" do
-      account_information = @account.account_information
+      profile = @account.profile
       expected_response = {
-        about_me: account_information.about_me,
-        created_at: account_information.created_at.iso8601,
-        birth_date: account_information.birth_date.to_s,
-        genders: account_information.genders,
-        orientations: account_information.orientations,
-        languages: account_information.languages,
-        relationship_status: account_information.relationship_status,
-        relationship_type: account_information.relationship_type,
-        tobacco: account_information.tobacco,
-        marijuana: account_information.marijuana,
-        alcohol: account_information.alcohol,
-        other_recreational_drugs: account_information.other_recreational_drugs,
-        pets: account_information.pets,
-        wants_pets: account_information.wants_pets,
-        kids: account_information.kids,
-        wants_kids: account_information.wants_kids,
-        religion: account_information.religion,
-        religion_importance: account_information.religion_importance,
-        display_name: account_information.display_name,
-        location_display_name: account_information.location.display_name.transform_keys(&:to_sym)
+        about_me: profile.about_me,
+        created_at: profile.created_at.iso8601,
+        birth_date: profile.birth_date.to_s,
+        genders: profile.genders,
+        orientations: profile.orientations,
+        languages: profile.languages,
+        relationship_status: profile.relationship_status,
+        relationship_type: profile.relationship_type,
+        tobacco: profile.tobacco,
+        marijuana: profile.marijuana,
+        alcohol: profile.alcohol,
+        other_recreational_drugs: profile.other_recreational_drugs,
+        pets: profile.pets,
+        wants_pets: profile.wants_pets,
+        kids: profile.kids,
+        wants_kids: profile.wants_kids,
+        religion: profile.religion,
+        religion_importance: profile.religion_importance,
+        display_name: profile.display_name,
+        location_display_name: profile.location.display_name.transform_keys(&:to_sym)
       }
       authorized_get @auth, @endpoint
 
@@ -127,25 +127,25 @@ describe API::Authenticated::Profile do
     end
 
     it "posts with the same information as the user account" do
-      account_information = @account.account_information
+      profile = @account.profile
       body = {
-        about_me: account_information.about_me,
-        genders: account_information.genders,
-        orientations: account_information.orientations,
-        languages: account_information.languages,
-        relationship_status: account_information.relationship_status,
-        relationship_type: account_information.relationship_type,
-        tobacco: account_information.tobacco,
-        marijuana: account_information.marijuana,
-        alcohol: account_information.alcohol,
-        other_recreational_drugs: account_information.other_recreational_drugs,
-        pets: account_information.pets,
-        wants_pets: account_information.wants_pets,
-        kids: account_information.kids,
-        wants_kids: account_information.wants_kids,
-        religion: account_information.religion,
-        religion_importance: account_information.religion_importance,
-        display_name: account_information.display_name
+        about_me: profile.about_me,
+        genders: profile.genders,
+        orientations: profile.orientations,
+        languages: profile.languages,
+        relationship_status: profile.relationship_status,
+        relationship_type: profile.relationship_type,
+        tobacco: profile.tobacco,
+        marijuana: profile.marijuana,
+        alcohol: profile.alcohol,
+        other_recreational_drugs: profile.other_recreational_drugs,
+        pets: profile.pets,
+        wants_pets: profile.wants_pets,
+        kids: profile.kids,
+        wants_kids: profile.wants_kids,
+        religion: profile.religion,
+        religion_importance: profile.religion_importance,
+        display_name: profile.display_name
       }
       authorized_post @auth, @endpoint, body.to_json
 
@@ -186,19 +186,18 @@ describe API::Authenticated::Profile do
     # We iterate through all the params that the endpoint supports and for each we get possible values in the database and update it
     post_endpoint = API::Authenticated::Profile.routes.find { |v| v.request_method == "POST" && v.path == "/profile/complete(.:format)" }
     post_endpoint.params.each_key do |param|
-      next if %w[text date].include? AccountInformation.db_schema[param.to_sym][:db_type]
+      next if %w[text date].include? Profile.db_schema[param.to_sym][:db_type]
 
-      if AccountInformation.db_schema[param.to_sym][:db_type].ends_with?("[]")
-        enum_type = Database.connection[:pg_type].where(typname: "_#{AccountInformation.db_schema[param.to_sym][:db_type][..-3]}").get(:typelem)
+      if Profile.db_schema[param.to_sym][:db_type].ends_with?("[]")
+        enum_type = Database.connection[:pg_type].where(typname: "_#{Profile.db_schema[param.to_sym][:db_type][..-3]}").get(:typelem)
         enum_values = Database.connection.instance_variable_get(:@enum_labels)[enum_type].map { |v| [v] }
       else
-        enum_values = AccountInformation.db_schema[param.to_sym][:enum_values]
+        enum_values = Profile.db_schema[param.to_sym][:enum_values]
       end
       next unless enum_values
 
-      sub_tests = []
-      enum_values.each do |value|
-        sub_tests << %(it "test that the value #{value.is_a?(Array) ? value[0] : value} is accepted" do
+      sub_tests = enum_values.map do |value|
+        %(it "test that the value #{value.is_a?(Array) ? value[0] : value} is accepted" do
           body = {
             #{param}: #{value.is_a?(Array) ? value : "\"#{value}\""}
           }
@@ -228,27 +227,27 @@ describe API::Authenticated::Profile do
 
     make_my_diffs_pretty!
     it "gets the user information" do
-      account_information = @account.account_information
+      profile = @account.profile
       expected_response = {
         account_id: @account.id,
-        about_me: account_information.about_me,
-        genders: account_information.genders,
-        orientations: account_information.orientations,
-        languages: account_information.languages,
-        relationship_status: account_information.relationship_status,
-        relationship_type: account_information.relationship_type,
-        tobacco: account_information.tobacco,
-        marijuana: account_information.marijuana,
-        alcohol: account_information.alcohol,
-        other_recreational_drugs: account_information.other_recreational_drugs,
-        pets: account_information.pets,
-        wants_pets: account_information.wants_pets,
-        kids: account_information.kids,
-        wants_kids: account_information.wants_kids,
-        religion: account_information.religion,
-        religion_importance: account_information.religion_importance,
-        display_name: account_information.display_name,
-        location_display_name: account_information.location.display_name.transform_keys(&:to_sym),
+        about_me: profile.about_me,
+        genders: profile.genders,
+        orientations: profile.orientations,
+        languages: profile.languages,
+        relationship_status: profile.relationship_status,
+        relationship_type: profile.relationship_type,
+        tobacco: profile.tobacco,
+        marijuana: profile.marijuana,
+        alcohol: profile.alcohol,
+        other_recreational_drugs: profile.other_recreational_drugs,
+        pets: profile.pets,
+        wants_pets: profile.wants_pets,
+        kids: profile.kids,
+        wants_kids: profile.wants_kids,
+        religion: profile.religion,
+        religion_importance: profile.religion_importance,
+        display_name: profile.display_name,
+        location_display_name: profile.location.display_name.transform_keys(&:to_sym),
         location_distance: nil, # TODO: I think this should display the distance to the logged in user
         age: 39 # TODO: calculate this so that this test don't breaks when the profile ages
       }

@@ -16,7 +16,7 @@ module API
 
       after_create_account do
         display_name = account[:email].split("@", 2).first
-        Database.connection[:account_informations].insert(account_id: account[:id], display_name:)
+        Persistence::Repository::Account.create_profile(account_id: account[:id], display_name:)
       end
     end
 

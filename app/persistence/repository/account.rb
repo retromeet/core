@@ -97,12 +97,12 @@ module Persistence
         # @param account_id [Integer] An id for an account
         # @return [Hash{Symbol => Object}] A record containing +account_id+, +created_at+ and +display_name+
         def profile_info(account_id:)
-          account_informations.left_join(:locations, id: :location_id)
-                              .where(account_id:)
-                              .select_all(:account_informations)
-                              # TODO: (renatolond, 2024-11-14) Filter the location display name for only the users' language and the fallback one
-                              .select_append(Sequel[:locations][:display_name].as(:location_display_name))
-                              .first
+          profiles.left_join(:locations, id: :location_id)
+                  .where(account_id:)
+                  .select_all(:profiles)
+                  # TODO: (renatolond, 2024-11-14) Filter the location display name for only the users' language and the fallback one
+                  .select_append(Sequel[:locations][:display_name].as(:location_display_name))
+                  .first
         end
 
         # Returns basic profile information for a given account
@@ -110,7 +110,7 @@ module Persistence
         # @param account_id [Integer] An id for an account
         # @return [Hash{Symbol => Object}] A record containing +account_id+, +created_at+ and +display_name+
         def basic_profile_info(account_id:)
-          account_informations.where(account_id:).select(:created_at, :display_name, :account_id).first
+          profiles.where(account_id:).select(:created_at, :display_name, :account_id).first
         end
 
         # Updates the profile information for a given account
@@ -122,7 +122,7 @@ module Persistence
           args["languages"] = Sequel.pg_array(args["languages"], :languages) if args.key?("languages") && args["languages"]
           args["genders"] = Sequel.pg_array(args["genders"], :genders) if args.key?("genders") && args["genders"]
           args["orientations"] = Sequel.pg_array(args["orientations"], :orientations) if args.key?("orientations") && args["orientations"]
-          account_informations.where(account_id:).update(args)
+          profiles.where(account_id:).update(args)
         end
 
         # Updates the profile location for a given account
@@ -131,21 +131,29 @@ module Persistence
         # @return [void]
         def update_profile_location(account_id:, location_result:)
           location_id = Persistence::Repository::Location.upsert_location(location_result:)
-          account_informations.where(account_id:).update(location_id:)
+          profiles.where(account_id:).update(location_id:)
         end
 
+        # @param account_id (see .profile_info)
         # @return [String]
         def profile_location(account_id:)
-          account_informations.inner_join(:locations, id: :location_id)
-                              .where(account_id:)
-                              .get(Sequel[:locations][:geom])
+          profiles.inner_join(:locations, id: :location_id)
+                  .where(account_id:)
+                  .get(Sequel[:locations][:geom])
+        end
+
+        # @param account_id (see .profile_info)
+        # @param display_name [String] the display name for the profile
+        # @return [void]
+        def create_profile(account_id:, display_name:)
+          profiles.insert(account_id:, display_name:)
         end
 
         private
 
           # @return [Sequel::Postgres::Dataset]
-          def account_informations
-            Database.connection[:account_informations]
+          def profiles
+            Database.connection[:profiles]
           end
       end
     end

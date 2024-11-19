@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class AccountInformation < Sequel::Model
+class Profile < Sequel::Model
   many_to_one :account
   many_to_one :location
 end
 FactoryBot.define do
-  factory :account_information do
+  factory :profile do
     account
     location
     about_me { Faker::Lorem.paragraph }
