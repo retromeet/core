@@ -225,11 +225,10 @@ describe API::Authenticated::Profile do
       @auth = login(login: @login, password: @password)
     end
 
-    make_my_diffs_pretty!
     it "gets the user information" do
       profile = @account.profile
       expected_response = {
-        account_id: @account.id,
+        id: @account.profile.id,
         about_me: profile.about_me,
         genders: profile.genders,
         orientations: profile.orientations,
@@ -251,7 +250,7 @@ describe API::Authenticated::Profile do
         location_distance: nil, # TODO: I think this should display the distance to the logged in user
         age: 39 # TODO: calculate this so that this test don't breaks when the profile ages
       }
-      authorized_get @auth, format(@endpoint, id: @account.id)
+      authorized_get @auth, format(@endpoint, id: @account.profile.id)
 
       assert_predicate last_response, :ok?
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)

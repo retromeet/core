@@ -19,7 +19,7 @@ module Persistence
                                        .where(Sequel.function(:ST_DWithin, Sequel.lit("geom::geography"), Sequel.lit("?::geography", profile_location), max_distance_in_meters))
                                        .order(:dist)
           accounts = profiles.inner_join(location_subquery, id: :location_id)
-                             .select(:display_name, :account_id, :birth_date, :genders, :orientations, :relationship_status, :location_display_name, Sequel[:dist].as(:location_distance))
+                             .select(:display_name, Sequel[:profiles][:id], :birth_date, :genders, :orientations, :relationship_status, :location_display_name, Sequel[:dist].as(:location_distance))
                              .exclude(Sequel[:profiles][:account_id] => account_id)
           accounts.where { account_id > min_account_id } if min_account_id
           accounts.to_a

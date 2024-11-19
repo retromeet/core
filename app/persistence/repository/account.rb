@@ -92,13 +92,18 @@ module Persistence
       ].freeze
 
       class << self
+        # @param account_id [Integer] An id for an account
+        def profile_id_from_account_id(account_id:)
+          profiles.where(account_id:).get(:id)
+        end
+
         # Returns profile information for a given account
         #
-        # @param account_id [Integer] An id for an account
+        # @param id [Integer] An id for a profile, it should be an UUID
         # @return [Hash{Symbol => Object}] A record containing +account_id+, +created_at+ and +display_name+
-        def profile_info(account_id:)
+        def profile_info(id:)
           profiles.left_join(:locations, id: :location_id)
-                  .where(account_id:)
+                  .where(Sequel[:profiles][:id] => id)
                   .select_all(:profiles)
                   # TODO: (renatolond, 2024-11-14) Filter the location display name for only the users' language and the fallback one
                   .select_append(Sequel[:locations][:display_name].as(:location_display_name))
@@ -107,7 +112,7 @@ module Persistence
 
         # Returns basic profile information for a given account
         #
-        # @param account_id [Integer] An id for an account
+        # @param account_id (see .profile_id_from_account_id)
         # @return [Hash{Symbol => Object}] A record containing +account_id+, +created_at+ and +display_name+
         def basic_profile_info(account_id:)
           profiles.where(account_id:).select(:created_at, :display_name, :account_id).first
@@ -115,7 +120,7 @@ module Persistence
 
         # Updates the profile information for a given account
         # Does not validate argument names passed to +args+, so if not validated before-hand can raise an exception
-        # @param account_id (see .profile_info)
+        # @param account_id (see .profile_id_from_account_id)
         # @param args [Hash{Symbol => Object}] A hash containing the fields to be updated. Will not be verified for validity.
         # @return [void]
         def update_profile_info(account_id:, **args)
@@ -126,7 +131,7 @@ module Persistence
         end
 
         # Updates the profile location for a given account
-        # @param account_id (see .profile_info)
+        # @param account_id (see .profile_id_from_account_id)
         # @param location_result (see Persistence::Repository::Location.upsert_location)
         # @return [void]
         def update_profile_location(account_id:, location_result:)
@@ -134,7 +139,7 @@ module Persistence
           profiles.where(account_id:).update(location_id:)
         end
 
-        # @param account_id (see .profile_info)
+        # @param account_id (see .profile_id_from_account_id)
         # @return [String]
         def profile_location(account_id:)
           profiles.inner_join(:locations, id: :location_id)
@@ -142,7 +147,7 @@ module Persistence
                   .get(Sequel[:locations][:geom])
         end
 
-        # @param account_id (see .profile_info)
+        # @param account_id (see .profile_id_from_account_id)
         # @param display_name [String] the display name for the profile
         # @return [void]
         def create_profile(account_id:, display_name:)

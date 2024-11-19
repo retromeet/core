@@ -21,7 +21,7 @@ module API
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         get :complete do
-          profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
+          profile_info = Persistence::Repository::Account.profile_info(id: rodauth.session[:profile_id])
           Entities::ProfileInfo.represent(profile_info)
         end
 
@@ -58,7 +58,7 @@ module API
           error!({ error: :AT_LEAST_ONE_PARAMETER_NEEDED, detail: "You need to provide at least one parameter to be changed, none given" }, :bad_request) if declared_params.empty?
 
           Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], **declared_params)
-          profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
+          profile_info = Persistence::Repository::Account.profile_info(id: rodauth.session[:profile_id])
           status :ok
           Entities::ProfileInfo.represent(profile_info, only: declared_params.keys.map(&:to_sym))
         end
@@ -78,13 +78,13 @@ module API
           error!({ error: :UNEXPECTED_RESULTS_SIZE, detail: "Expected to have exactly one location with the given name, had #{results.size} instead" }, :unprocessable_content) if results.size != 1
 
           Persistence::Repository::Account.update_profile_location(account_id: rodauth.session[:account_id], location_result: results.first)
-          profile_info = Persistence::Repository::Account.profile_info(account_id: rodauth.session[:account_id])
+          profile_info = Persistence::Repository::Account.profile_info(id: rodauth.session[:profile_id])
           status :ok
           Entities::ProfileInfo.represent(profile_info, only: %i[location_display_name])
         end
         namespace ":id" do
           params do
-            requires :id, type: Integer
+            requires :id, type: String
           end
 
           desc "Returns the complete profile information for the requested account id.",
@@ -93,7 +93,7 @@ module API
                produces: Authenticated::PRODUCES,
                consumes: Authenticated::CONSUMES
           get :complete do
-            profile_info = Persistence::Repository::Account.profile_info(account_id: params[:id])
+            profile_info = Persistence::Repository::Account.profile_info(id: params[:id])
             error!({ error: :PROFILE_NOT_FOUND, detail: "The requested profile does not exist or you don't have permission to see it" }, :not_found) unless profile_info
 
             Entities::OtherProfileInfo.represent(profile_info)

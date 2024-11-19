@@ -21,7 +21,7 @@ describe API::Authenticated::Profile do
     @paris_account = create(:account, profile: { display_name: "Paris account", location_id: @paris.id, birth_date: Date.new(2004, 6, 1) })
 
     @etterbeek_profile = {
-      account_id: @etterbeek_account.id,
+      id: @etterbeek_account.profile.id,
       display_name: "Etterbeek account",
       genders: @etterbeek_account.profile.genders,
       orientations: @etterbeek_account.profile.orientations,
@@ -31,7 +31,7 @@ describe API::Authenticated::Profile do
       age: 37 # TODO: calculate this so that this test don't breaks when the profile ages
     }
     @amsterdam_profile = {
-      account_id: @amsterdam_account.id,
+      id: @amsterdam_account.profile.id,
       display_name: "Amsterdam account",
       genders: @amsterdam_account.profile.genders,
       orientations: @amsterdam_account.profile.orientations,
@@ -41,7 +41,7 @@ describe API::Authenticated::Profile do
       age: 27 # TODO: calculate this so that this test don't breaks when the profile ages
     }
     @cologne_profile = {
-      account_id: @cologne_account.id,
+      id: @cologne_account.profile.id,
       display_name: "Cologne account",
       genders: @cologne_account.profile.genders,
       orientations: @cologne_account.profile.orientations,
@@ -51,7 +51,7 @@ describe API::Authenticated::Profile do
       age: 20 # TODO: calculate this so that this test don't breaks when the profile ages
     }
     @paris_profile = {
-      account_id: @paris_account.id,
+      id: @paris_account.profile.id,
       display_name: "Paris account",
       genders: @paris_account.profile.genders,
       orientations: @paris_account.profile.orientations,
