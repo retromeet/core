@@ -17,7 +17,7 @@ module API
           distance / 1_000
         end
       end
-      expose :account_id, documentation: { type: Integer }
+      expose :id, documentation: { type: String }
       expose :display_name, documentation: { type: String }
       expose :about_me, documentation: { type: String }
       expose :genders, documentation: { type: String, is_array: true }

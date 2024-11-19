@@ -16,7 +16,7 @@ module API
 
       after_create_account do
         display_name = account[:email].split("@", 2).first
-        Database.connection[:account_informations].insert(account_id: account[:id], display_name:)
+        Persistence::Repository::Account.create_profile(account_id: account[:id], display_name:)
       end
     end
 
@@ -25,6 +25,7 @@ module API
         r.rodauth
         rodauth.require_authentication
         rodauth.check_active_session
+        rodauth.session[:profile_id] = Persistence::Repository::Account.profile_id_from_account_id(account_id: rodauth.session[:account_id])
         env["rodauth"] = rodauth
       end
     end

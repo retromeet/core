@@ -8,7 +8,7 @@ describe API::Authenticated::Search do
   before(:all) do
     @login = "foo@retromeet.social"
     @password = "bogus123"
-    @account = create(:account, email: @login, password: @password, account_information: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
+    @account = create(:account, email: @login, password: @password, profile: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
   end
 
   describe "GET /api/search/address" do
