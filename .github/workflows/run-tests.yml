@@ -13,7 +13,7 @@ jobs:
     # Service containers to run with `runner-job`
     services:
       postgres:
-        image: postgis/postgis:16-3.5
+        image: renatolond/pg_uuidv7:v1.6.0
         # Provide the password for postgres
         env:
           POSTGRES_PASSWORD: postgres
@@ -40,7 +40,7 @@ jobs:
     - name: Create needed user
       run: PGPASSWORD=postgres createuser -U postgres -h localhost postgres_password
     - name: Create needed extensions
-      run: PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE EXTENSION citext" retromeet_test
+      run: PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE EXTENSION citext" retromeet_test && PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE EXTENSION pg_uuidv7" retromeet_test
       # We don't need to create the extension because it's already in the image
       # && PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE EXTENSION postgis" retromeet_test
     - name: Setup the database
