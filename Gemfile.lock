@@ -257,7 +257,7 @@ GEM
       rubocop (~> 1.0)
     rubocop-sequel (0.3.7)
       rubocop (~> 1.0)
-    rubocop-yard (0.9.3)
+    rubocop-yard (0.10.0)
       rubocop (~> 1.21)
       yard
     ruby-progressbar (1.13.0)
@@ -286,7 +286,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    yard (0.9.36)
+    yard (0.9.37)
     zeitwerk (2.7.1)
 
 PLATFORMS

@@ -57,3 +57,6 @@ Style/SymbolArray:
 Style/DocumentationMethod:
   Enabled: true
   RequireForNonPublicMethods: true
+
+YARD/MismatchName:
+  EnforcedStylePrototypeName: before
