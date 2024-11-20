@@ -20,7 +20,16 @@ module Persistence
           # TODO: (renatolond, 2024-11-14) It seems .returning(:id) is only supported for merge on pg >=17
           # For now doing two operations, but fix to do only one when possible
 
-          conversations.merge_using(Database.connection.select(Sequel.as(Sequel.lit("?::uuid", profile1_id), :profile1_id), Sequel.as(Sequel.lit("?::uuid", profile2_id), :profile2_id)).as(:u), Sequel[:conversations][:profile1_id] => Sequel[:u][:profile1_id], Sequel[:conversations][:profile2_id] => Sequel[:u][:profile2_id])
+          merge_join_table = Database.connection
+                                     .select(
+                                       Sequel.as(Sequel.lit("?::uuid", profile1_id), :profile1_id),
+                                       Sequel.as(Sequel.lit("?::uuid", profile2_id), :profile2_id)
+                                     )
+                                     .as(:u)
+
+          conversations.merge_using(merge_join_table,
+                                    Sequel[:conversations][:profile1_id] => Sequel[:u][:profile1_id],
+                                    Sequel[:conversations][:profile2_id] => Sequel[:u][:profile2_id])
                        .merge_insert(profile1_id:, profile2_id:)
                        .merge
 
