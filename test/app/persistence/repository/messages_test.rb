@@ -81,4 +81,17 @@ describe Persistence::Repository::Messages do
       assert_equal "profile2", message.sender
     end
   end
+
+  describe ".find_conversations" do
+    before do
+      @conversation1 = create(:conversation, profile1_id: @account1.profile.id, profile2_id: @account2.profile.id)
+      @conversation2 = create(:conversation, profile1_id: @account2.profile.id, profile2_id: @account3.profile.id)
+    end
+
+    it "find all conversations from a profile" do
+      conversations = Persistence::Repository::Messages.find_conversations(profile_id: @account2.profile.id)
+
+      assert_equal 2, conversations.size
+    end
+  end
 end

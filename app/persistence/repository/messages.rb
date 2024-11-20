@@ -57,6 +57,15 @@ module Persistence
           messages.insert(conversation_id:, sender:, content:)
         end
 
+        # @param profile_id (see .insert_message)
+        # @return [Array<Hash>]
+        def find_conversations(profile_id:)
+          # TODO: (renatolond, 2024-11-20) I think this needs an index to support this query, look into it
+          conversations.where(profile1_id: profile_id)
+                       .union(conversations.where(profile2_id: profile_id), from_self: false)
+                       .to_a
+        end
+
         private
 
           # @return [Sequel::Postgres::Dataset]
