@@ -66,6 +66,20 @@ module Persistence
                        .to_a
         end
 
+        # Returns the last 20 messages from a conversation
+        # @param conversation_id (see .insert_message)
+        # @param max_id [Integer, nil] Used for pagination, will only look for messages with id smaller than the given one
+        # @return [Array<Hash>]
+        def find_messages(conversation_id:, max_id: nil)
+          # TODO: (renatolond, 2024-11-20) I think this needs an index to support this query, look into it
+          m = messages.where(conversation_id:)
+                      .order(Sequel[:id].desc)
+                      .limit(20)
+
+          m = m.where { id < max_id } if max_id
+          m.to_a
+        end
+
         private
 
           # @return [Sequel::Postgres::Dataset]

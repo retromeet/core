@@ -94,4 +94,31 @@ describe Persistence::Repository::Messages do
       assert_equal 2, conversations.size
     end
   end
+
+  describe ".find_messages" do
+    before do
+      create(:message, conversation: @conversation, sender: "profile1", content: "Message 1")
+      create(:message, conversation: @conversation, sender: "profile2", content: "Message 2")
+      @message3 = create(:message, conversation: @conversation, sender: "profile1", content: "Message 3")
+      create(:message, conversation: @conversation, sender: "profile1", content: "Message 4")
+      create(:message, conversation: @conversation, sender: "profile2", content: "Message 5")
+    end
+
+    it "find all messages for a conversation" do
+      messages = Persistence::Repository::Messages.find_messages(conversation_id: @conversation.id)
+      expected_messages = ["Message 5", "Message 4", "Message 3", "Message 2", "Message 1"]
+
+      assert_equal 5, messages.size
+      assert_equal(expected_messages, messages.map { |v| v[:content] })
+    end
+
+    it "paginate messages for a conversation" do
+      messages = Persistence::Repository::Messages.find_messages(conversation_id: @conversation.id, max_id: @message3.id)
+
+      expected_messages = ["Message 2", "Message 1"]
+
+      assert_equal 2, messages.size
+      assert_equal(expected_messages, messages.map { |v| v[:content] })
+    end
+  end
 end
