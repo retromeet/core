@@ -49,4 +49,36 @@ describe Persistence::Repository::Messages do
       end
     end
   end
+  describe ".insert_message" do
+    it "tries to insert a message into a conversation that does not exist and fails" do
+      profile_id = @account1.profile.id
+      assert_raises Persistence::Repository::Messages::ConversationNotFound do
+        Persistence::Repository::Messages.insert_message(conversation_id: "11111111-1111-7111-b111-111111111111", profile_id:, content: "oh hi")
+      end
+    end
+    it "tries to insert a message into a conversation but the sender does not belong and fails" do
+      profile_id = @account2.profile.id
+      assert_raises ArgumentError do
+        Persistence::Repository::Messages.insert_message(conversation_id: @conversation.id, profile_id:, content: "oh hi")
+      end
+    end
+    it "inserts a message into a conversation with the first profile" do
+      profile_id = @account1.profile.id
+      message_id = assert_difference "Message.count", 1 do
+        Persistence::Repository::Messages.insert_message(conversation_id: @conversation.id, profile_id:, content: "oh hi")
+      end
+      message = Message.find(id: message_id)
+
+      assert_equal "profile1", message.sender
+    end
+    it "inserts a message into a conversation with the second profile" do
+      profile_id = @account3.profile.id
+      message_id = assert_difference "Message.count", 1 do
+        Persistence::Repository::Messages.insert_message(conversation_id: @conversation.id, profile_id:, content: "oh hi")
+      end
+      message = Message.find(id: message_id)
+
+      assert_equal "profile2", message.sender
+    end
+  end
 end

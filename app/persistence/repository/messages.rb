@@ -4,6 +4,8 @@ module Persistence
   module Repository
     # Contains database logic around locations
     module Messages
+      ConversationNotFound = Class.new(StandardError)
+
       class << self
         # Either finds an existing conversation or creates a new one between the two given profiles
         # Order does not matter, will always make sure the profiles are in the same order.
@@ -23,6 +25,27 @@ module Persistence
                        .merge
 
           conversations.where(profile1_id:, profile2_id:).get(:id)
+        end
+
+        # @param conversation_id [String] The uuid for the conversation
+        # @param profile_id [String] The uuid for a profile
+        # @param content [String] The message contents, will be save as-is
+        # @raise [ArgumentError] If the profile does not belong to the conversation
+        # @raise [ConversationNotFound] If there's no conversation with the given id
+        # @return [Integer] The new message id
+        def insert_message(conversation_id:, profile_id:, content:)
+          conversation = conversations.where(id: conversation_id).first
+          raise ConversationNotFound, "Conversation with given id was not found" if conversation.nil?
+
+          sender = if profile_id == conversation[:profile1_id]
+            "profile1"
+          elsif profile_id == conversation[:profile2_id]
+            "profile2"
+          else
+            raise ArgumentError, "profile_id is not part of this conversation"
+          end
+
+          messages.insert(conversation_id:, sender:, content:)
         end
 
         private
