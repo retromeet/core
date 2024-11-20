@@ -6,6 +6,8 @@ end
 
 FactoryBot.define do
   factory :message do
+    conversation
+    sender { "profile1" }
     content { Faker::Lorem.paragraph }
   end
 end

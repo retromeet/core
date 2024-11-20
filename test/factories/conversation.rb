@@ -7,7 +7,7 @@ end
 
 FactoryBot.define do
   factory :conversation do
-    profile1
-    profile2
+    profile1 factory: :profile
+    profile2 factory: :profile
   end
 end
