@@ -100,7 +100,7 @@ module Persistence
         # Returns profile information for a given account
         #
         # @param id [Integer] An id for a profile, it should be an UUID
-        # @return [Hash{Symbol => Object}] A record containing +account_id+, +created_at+ and +display_name+
+        # @return [Hash{Symbol => Object}] A record containing all information about a profile
         def profile_info(id:)
           profiles.left_join(:locations, id: :location_id)
                   .where(Sequel[:profiles][:id] => id)
