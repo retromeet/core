@@ -60,10 +60,12 @@ module Persistence
         # @param profile_id (see .insert_message)
         # @return [Array<Hash>]
         def find_conversations(profile_id:)
+          profile1_query = conversations.where(profile1_id: profile_id)
+          profile2_query = conversations.where(profile2_id: profile_id)
+
           # TODO: (renatolond, 2024-11-20) I think this needs an index to support this query, look into it
-          conversations.where(profile1_id: profile_id)
-                       .union(conversations.where(profile2_id: profile_id), from_self: false)
-                       .to_a
+          profile1_query.union(profile2_query, from_self: false)
+                        .to_a
         end
 
         # Returns the last 20 messages from a conversation
