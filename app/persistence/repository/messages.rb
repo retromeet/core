@@ -69,16 +69,23 @@ module Persistence
         end
 
         # Returns the last 20 messages from a conversation
+        # Only max_id or min_id should be passed, if both are passed the response will be empty.
+        #
         # @param conversation_id (see .insert_message)
         # @param max_id [Integer, nil] Used for pagination, will only look for messages with id smaller than the given one
+        # @param min_id [Integer, nil] Used for pagination, will only look for messages with id bigger than the given one
         # @return [Array<Hash>]
-        def find_messages(conversation_id:, max_id: nil)
+        def find_messages(conversation_id:, max_id: nil, min_id: nil)
           # TODO: (renatolond, 2024-11-20) I think this needs an index to support this query, look into it
-          m = messages.where(conversation_id:)
+          m = messages.join(:conversations, id: conversation_id)
+                      .select_all(:messages)
+                      .select_append(Sequel.case({ "profile1" => :profile1_id }, :profile2_id, :sender).as(:sender))
+                      .where(conversation_id:)
                       .order(Sequel[:id].desc)
                       .limit(20)
 
-          m = m.where { id < max_id } if max_id
+          m = m.where { Sequel[:messages][:id] < max_id } if max_id
+          m = m.where { Sequel[:messages][:id] > min_id } if min_id
           m.to_a
         end
 
