@@ -68,6 +68,16 @@ module Persistence
                         .to_a
         end
 
+        # @param profile_id (see .insert_message)
+        # @return [Array<Hash>]
+        # @param conversation_id [Object]
+        def find_conversation(profile_id:, conversation_id:)
+          conversations.where(profile1_id: profile_id)
+                       .or(profile2_id: profile_id)
+                       .where(id: conversation_id)
+                       .first
+        end
+
         # Returns the last 20 messages from a conversation
         # Only max_id or min_id should be passed, if both are passed the response will be empty.
         #

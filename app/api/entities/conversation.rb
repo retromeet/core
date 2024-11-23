@@ -7,7 +7,7 @@ module API
       format_with(:iso_timestamp) { |date| date&.iso8601 }
       expose :id, documentation: { type: String }
       expose :other_profile, using: API::Entities::OtherProfileInfo
-      expose :created_at, documentation: { type: DateTime }
+      expose :created_at, format_with: :iso_timestamp, documentation: { type: DateTime }
       expose :last_seen_at, format_with: :iso_timestamp, documentation: { type: [NilClass, DateTime] }
     end
   end

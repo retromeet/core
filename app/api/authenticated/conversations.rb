@@ -43,6 +43,25 @@ module API
             requires :conversation_id, type: String, regexp: /\A[0-9A-F]{8}-[0-9A-F]{4}-7[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\z/i
           end
 
+          get "/" do
+            conversation = Persistence::Repository::Messages.find_conversation(profile_id: rodauth.session[:profile_id], conversation_id: params[:conversation_id])
+
+            if conversation[:profile1_id] == rodauth.session[:profile_id]
+              conversation[:other_profile_id] = conversation.delete(:profile2_id)
+              conversation[:last_seen_at] = conversation.delete(:profile1_last_seen_at)
+              conversation.delete(:profile1_id)
+              conversation.delete(:profile2_last_seen_at)
+            elsif conversation[:profile2_id] == rodauth.session[:profile_id]
+              conversation[:other_profile_id] = conversation.delete(:profile1_id)
+              conversation[:last_seen_at] = conversation.delete(:profile2_last_seen_at)
+              conversation.delete(:profile2_id)
+              conversation.delete(:profile1_last_seen_at)
+            end
+            conversation[:other_profile] = Persistence::Repository::Account.profile_info(id: conversation[:other_profile_id])
+
+            present conversation, with: Entities::Conversation
+          end
+
           namespace :messages do
             params do
               optional :min_id, type: Integer, documentation: { desc: "The min id to filter by, can be used to get new messages after the one the user has" }

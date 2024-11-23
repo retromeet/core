@@ -9,5 +9,7 @@ FactoryBot.define do
   factory :conversation do
     profile1 factory: :profile
     profile2 factory: :profile
+    profile1_last_seen_at { Time.now }
+    profile2_last_seen_at { Time.now - 60 }
   end
 end
