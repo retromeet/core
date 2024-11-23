@@ -10,9 +10,10 @@ module API
            produces: Authenticated::PRODUCES,
            consumes: Authenticated::CONSUMES
       namespace :conversations do
-        get "/" do
-          conversations = Persistence::Repository::Messages.find_conversations(profile_id: rodauth.session[:profile_id])
-          conversations.each do |conversation|
+        helpers do
+          # @param conversation [Hash{Symbol => Object}] A hash containing conversation information, will be modified!
+          # @return [Hash{Symbol => Object}] The modified conversation object
+          def filter_conversation_for_current_profile!(conversation)
             if conversation[:profile1_id] == rodauth.session[:profile_id]
               conversation[:other_profile_id] = conversation.delete(:profile2_id)
               conversation[:last_seen_at] = conversation.delete(:profile1_last_seen_at)
@@ -25,6 +26,14 @@ module API
               conversation.delete(:profile1_last_seen_at)
             end
             conversation[:other_profile] = Persistence::Repository::Account.profile_info(id: conversation[:other_profile_id])
+            conversation
+          end
+        end
+
+        get "/" do
+          conversations = Persistence::Repository::Messages.find_conversations(profile_id: rodauth.session[:profile_id])
+          conversations.each do |conversation|
+            filter_conversation_for_current_profile!(conversation)
           end
           present conversations, with: Entities::Conversations
         end
@@ -46,18 +55,7 @@ module API
           get "/" do
             conversation = Persistence::Repository::Messages.find_conversation(profile_id: rodauth.session[:profile_id], conversation_id: params[:conversation_id])
 
-            if conversation[:profile1_id] == rodauth.session[:profile_id]
-              conversation[:other_profile_id] = conversation.delete(:profile2_id)
-              conversation[:last_seen_at] = conversation.delete(:profile1_last_seen_at)
-              conversation.delete(:profile1_id)
-              conversation.delete(:profile2_last_seen_at)
-            elsif conversation[:profile2_id] == rodauth.session[:profile_id]
-              conversation[:other_profile_id] = conversation.delete(:profile1_id)
-              conversation[:last_seen_at] = conversation.delete(:profile2_last_seen_at)
-              conversation.delete(:profile2_id)
-              conversation.delete(:profile1_last_seen_at)
-            end
-            conversation[:other_profile] = Persistence::Repository::Account.profile_info(id: conversation[:other_profile_id])
+            filter_conversation_for_current_profile!(conversation)
 
             present conversation, with: Entities::Conversation
           end
