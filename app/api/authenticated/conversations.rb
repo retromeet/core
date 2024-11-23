@@ -39,7 +39,7 @@ module API
         end
 
         params do
-          requires :other_profile_id, type: String, regexp: /\A[0-9A-F]{8}-[0-9A-F]{4}-7[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\z/i
+          requires :other_profile_id, type: String, regexp: Utils::UUID7_RE
         end
         post "/" do
           conversation_id = Persistence::Repository::Messages.upsert_conversation(profile1_id: rodauth.session[:profile_id], profile2_id: params[:other_profile_id])
@@ -49,7 +49,7 @@ module API
 
         namespace ":conversation_id" do
           params do
-            requires :conversation_id, type: String, regexp: /\A[0-9A-F]{8}-[0-9A-F]{4}-7[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\z/i
+            requires :conversation_id, type: String, regexp: Utils::UUID7_RE
           end
 
           get "/" do
