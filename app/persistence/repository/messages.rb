@@ -41,7 +41,7 @@ module Persistence
         # @param content [String] The message contents, will be save as-is
         # @raise [ArgumentError] If the profile does not belong to the conversation
         # @raise [ConversationNotFound] If there's no conversation with the given id
-        # @return [Integer] The new message id
+        # @return [Hash{Symbol => Object}] A hash with the recently inserted message
         def insert_message(conversation_id:, profile_id:, content:)
           conversation = conversations.where(id: conversation_id).first
           raise ConversationNotFound, "Conversation with given id was not found" if conversation.nil?
@@ -54,7 +54,13 @@ module Persistence
             raise ArgumentError, "profile_id is not part of this conversation"
           end
 
-          messages.insert(conversation_id:, sender:, content:)
+          message = messages.returning(Sequel.lit("*")).insert(conversation_id:, sender:, content:).first
+          message[:sender] = if message[:sender] == "profile1"
+            conversation[:profile1_id]
+          else
+            conversation[:profile2_id]
+          end
+          message
         end
 
         # @param profile_id (see .insert_message)

@@ -4,11 +4,6 @@ module API
   module Authenticated
     # This class contains any profile-related endpoints
     class Conversations < Grape::API
-      desc "Returns a list of nearby profiles to the logged-in user.",
-           success: { model: API::Entities::Conversations, message: "A list of profiles" },
-           failure: Authenticated::FAILURES,
-           produces: Authenticated::PRODUCES,
-           consumes: Authenticated::CONSUMES
       namespace :conversations do
         helpers do
           # @param conversation [Hash{Symbol => Object}] A hash containing conversation information, will be modified!
@@ -30,6 +25,11 @@ module API
           end
         end
 
+        desc "Returns the conversations that the logged-in has going on",
+             success: { model: Entities::Conversations, message: "A list of conversations" },
+             failure: Authenticated::FAILURES,
+             produces: Authenticated::PRODUCES,
+             consumes: Authenticated::CONSUMES
         get "/" do
           conversations = Persistence::Repository::Messages.find_conversations(profile_id: rodauth.session[:profile_id])
           conversations.each do |conversation|
@@ -38,6 +38,11 @@ module API
           present conversations, with: Entities::Conversations
         end
 
+        desc "Creates a conversation with another user.",
+             success: { model: Entities::Conversations, message: "A list of conversations" },
+             failure: Authenticated::FAILURES,
+             produces: Authenticated::PRODUCES,
+             consumes: Authenticated::CONSUMES
         params do
           requires :other_profile_id, type: String, regexp: Utils::UUID7_RE
         end
@@ -52,6 +57,11 @@ module API
             requires :conversation_id, type: String, regexp: Utils::UUID7_RE
           end
 
+          desc "Returns a single conversation for the logged-in user",
+               success: { model: Entities::Conversation, message: "A conversation" },
+               failure: Authenticated::FAILURES,
+               produces: Authenticated::PRODUCES,
+               consumes: Authenticated::CONSUMES
           get "/" do
             conversation = Persistence::Repository::Messages.find_conversation(profile_id: rodauth.session[:profile_id], conversation_id: params[:conversation_id])
 
@@ -61,6 +71,11 @@ module API
           end
 
           namespace :messages do
+            desc "Returns 20 messages from the requested conversation. Params can be used to paginate the conversation and get more messages.",
+                 success: { model: Entities::Messages, message: "A list of messages" },
+                 failure: Authenticated::FAILURES,
+                 produces: Authenticated::PRODUCES,
+                 consumes: Authenticated::CONSUMES
             params do
               optional :min_id, type: Integer, documentation: { desc: "The min id to filter by, can be used to get new messages after the one the user has" }
               optional :max_id, type: Integer, documentation: { desc: "The max id to filter by, should be used to paginate messages back in time" }
@@ -69,12 +84,16 @@ module API
               present Persistence::Repository::Messages.find_messages(conversation_id: params[:conversation_id], min_id: params[:min_id], max_id: params[:max_id]), with: Entities::Messages
             end
 
+            desc "Creates a single message in the given conversation.",
+                 success: { model: Entities::Message, message: "The recently created message" },
+                 failure: Authenticated::FAILURES,
+                 produces: Authenticated::PRODUCES,
+                 consumes: Authenticated::CONSUMES
             params do
               requires :content, type: String, documentation: { desc: "The content of the message" }
             end
             post "/" do
-              message_id = Persistence::Repository::Messages.insert_message(conversation_id: params[:conversation_id], profile_id: rodauth.session[:profile_id], content: params[:content])
-              present Persistence::Repository::Messages.find_messages(conversation_id: params[:conversation_id], min_id: message_id - 1).first, with: Entities::Message
+              present Persistence::Repository::Messages.insert_message(conversation_id: params[:conversation_id], profile_id: rodauth.session[:profile_id], content: params[:content]), with: Entities::Message
             end
           end
         end

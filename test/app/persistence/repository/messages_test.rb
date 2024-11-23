@@ -64,21 +64,23 @@ describe Persistence::Repository::Messages do
     end
     it "inserts a message into a conversation with the first profile" do
       profile_id = @account1.profile.id
-      message_id = assert_difference "Message.count", 1 do
+      inserted_message = assert_difference "Message.count", 1 do
         Persistence::Repository::Messages.insert_message(conversation_id: @conversation.id, profile_id:, content: "oh hi")
       end
-      message = Message.find(id: message_id)
+      message = Message.find(id: inserted_message[:id])
 
       assert_equal "profile1", message.sender
+      assert_equal profile_id, inserted_message[:sender]
     end
     it "inserts a message into a conversation with the second profile" do
       profile_id = @account3.profile.id
-      message_id = assert_difference "Message.count", 1 do
+      inserted_message = assert_difference "Message.count", 1 do
         Persistence::Repository::Messages.insert_message(conversation_id: @conversation.id, profile_id:, content: "oh hi")
       end
-      message = Message.find(id: message_id)
+      message = Message.find(id: inserted_message[:id])
 
       assert_equal "profile2", message.sender
+      assert_equal profile_id, inserted_message[:sender]
     end
   end
 
