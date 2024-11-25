@@ -32,6 +32,6 @@ jobs:
       uses: actions-js/push@v1.5
       with:
         github_token: ${{ secrets.PAT_FOR_API_DOCS }}
-        message: "auto: Update swagger file for main (commit: ${{ github.event.ref }})"
+        message: "auto: Update swagger file for main (commit: ${{ github.event.after }})"
         repository: "retromeet/landing"
         directory: "landing"
