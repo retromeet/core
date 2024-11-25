@@ -44,5 +44,9 @@ module API
         },
         security: { jwt_token: [] }
     end
+
+    route :any, "*path" do
+      error!({ error: "NOT_FOUND", with: Entities::Error }, 404)
+    end
   end
 end
