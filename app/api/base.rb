@@ -32,7 +32,7 @@ module API
         doc_version: RetroMeet::Version.to_s,
         info: {
           title: "RetroMeet API",
-          description: "This is the API that RetroMeet makes available for all apps that will use it!",
+          description: "This is the API that RetroMeet makes available for all apps that will use it.",
           license: "GNU Affero General Public License v3.0",
           license_url: "https://raw.githubusercontent.com/retromeet/core/refs/heads/main/LICENSE"
         },
