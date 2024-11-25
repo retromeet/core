@@ -106,7 +106,12 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :bad_request?
 
-      expected_response = { error: "max_distance does not have a valid value" }
+      expected_response = {
+        error: "VALIDATION_ERROR",
+        details: [
+          { fields: ["max_distance"], errors: ["does not have a valid value"] }
+        ]
+      }
 
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end

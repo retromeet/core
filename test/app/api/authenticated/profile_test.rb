@@ -16,7 +16,7 @@ describe API::Authenticated::Profile do
     end
 
     it "has the information expected" do
-      expected_response = { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) }
+      expected_response = { id: @account.profile.id, display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) }
       authorized_get @auth, "/api/profile/info"
 
       assert_predicate last_response, :ok?
@@ -33,6 +33,7 @@ describe API::Authenticated::Profile do
     it "gets the user information" do
       profile = @account.profile
       expected_response = {
+        id: profile.id,
         about_me: profile.about_me,
         created_at: profile.created_at.iso8601,
         birth_date: profile.birth_date.to_s,

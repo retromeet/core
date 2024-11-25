@@ -100,7 +100,7 @@ module Persistence
         # Returns profile information for a given account
         #
         # @param id [Integer] An id for a profile, it should be an UUID
-        # @return [Hash{Symbol => Object}] A record containing +account_id+, +created_at+ and +display_name+
+        # @return [Hash{Symbol => Object}] A record containing all information about a profile
         def profile_info(id:)
           profiles.left_join(:locations, id: :location_id)
                   .where(Sequel[:profiles][:id] => id)
@@ -113,9 +113,9 @@ module Persistence
         # Returns basic profile information for a given account
         #
         # @param account_id (see .profile_id_from_account_id)
-        # @return [Hash{Symbol => Object}] A record containing +account_id+, +created_at+ and +display_name+
+        # @return [Hash{Symbol => Object}] A record containing +profile_id+, +created_at+ and +display_name+
         def basic_profile_info(account_id:)
-          profiles.where(account_id:).select(:created_at, :display_name, :account_id).first
+          profiles.where(account_id:).select(:created_at, :display_name, :id).first
         end
 
         # Updates the profile information for a given account

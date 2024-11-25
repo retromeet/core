@@ -11,10 +11,19 @@ module API
 
     helpers API::Helpers::Params
 
-    unless Environment.test?
-      rescue_from :all do |_e|
-        error!({ error: "Internal server error" }, 500)
+    rescue_from Grape::Exceptions::ValidationErrors do |e|
+      errors = e.errors.map do |key, value|
+        { fields: key, errors: value }
       end
+      error!({ error: "VALIDATION_ERROR", details: errors, with: Entities::Error }, 400)
+    end
+
+    rescue_from :all do |e|
+      if Environment.test? || Environment.development?
+        puts e
+        puts e.backtrace
+      end
+      error!({ error: "INTERNAL_SERVER_ERROR", with: Entities::Error }, 500)
     end
 
     if Environment.development?
@@ -34,6 +43,10 @@ module API
           }
         },
         security: { jwt_token: [] }
+    end
+
+    route :any, "*path" do
+      error!({ error: "NOT_FOUND", with: Entities::Error }, 404)
     end
   end
 end
