@@ -29,4 +29,10 @@ module RackHelper
     header "accept", "application/json"
     post(*)
   end
+
+  def json_post(*)
+    header "content-type", "application/json"
+    header "accept", "application/json"
+    post(*)
+  end
 end
