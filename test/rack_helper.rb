@@ -30,6 +30,13 @@ module RackHelper
     post(*)
   end
 
+  def authorized_put(authorization, *)
+    header "authorization", authorization
+    header "content-type", "application/json"
+    header "accept", "application/json"
+    put(*)
+  end
+
   def json_post(*)
     header "content-type", "application/json"
     header "accept", "application/json"

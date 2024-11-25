@@ -75,13 +75,43 @@ module Persistence
         end
 
         # @param profile_id (see .insert_message)
+        # @param conversation_id (see .insert_message)
         # @return [Array<Hash>]
-        # @param conversation_id [Object]
         def find_conversation(profile_id:, conversation_id:)
           conversations.where(profile1_id: profile_id)
                        .or(profile2_id: profile_id)
                        .where(id: conversation_id)
                        .first
+        end
+
+        # @param profile_id (see .insert_message)
+        # @param conversation_id (see .insert_message)
+        # @return [void]
+        def update_view_time(conversation_id:, profile_id:)
+          conversation = conversations.where(id: conversation_id).first
+          raise ConversationNotFound, "Conversation with given id was not found" if conversation.nil?
+
+          sender = if profile_id == conversation[:profile1_id]
+            :profile1
+          elsif profile_id == conversation[:profile2_id]
+            :profile2
+          else
+            raise ArgumentError, "profile_id is not part of this conversation"
+          end
+
+          conversations.where(id: conversation_id).update("#{sender}_last_seen_at": Sequel.function(:statement_timestamp))
+        end
+
+        # @param conversation_id (see .insert_message)
+        # @param sender [String] Either "profile1" or "profile2", will be used to check if there's messages from that user
+        # @param since [DateTime] Time to check against
+        # @return [nil,Content] Returns nil if there's no messages, or a single message content if there are
+        def new_messages(conversation_id:, sender:, since:)
+          since ||= Sequel.function(:to_timestamp, 0)
+          messages.where(conversation_id:, sender:)
+                  .where { sent_at > since }
+                  .order(Sequel[:sent_at].desc)
+                  .get(:content)
         end
 
         # Returns the last 20 messages from a conversation

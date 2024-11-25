@@ -9,6 +9,7 @@ module API
       expose :other_profile, using: API::Entities::OtherProfileInfo
       expose :created_at, format_with: :iso_timestamp, documentation: { type: DateTime }
       expose :last_seen_at, format_with: :iso_timestamp, documentation: { type: [NilClass, DateTime] }
+      expose :new_messages, as: :new_messages_preview, documentation: { type: String }
     end
   end
 end

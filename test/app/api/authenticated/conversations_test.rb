@@ -23,7 +23,7 @@ describe API::Authenticated::Conversations do
       @endpoint = "/api/conversations/"
       @auth = login(login: @login, password: @password)
     end
-    it "gets the user information" do
+    it "gets all conversations" do
       other_profile = @account2.profile
       expected_response = {
         conversations: [
@@ -31,6 +31,7 @@ describe API::Authenticated::Conversations do
             id: @conversation.id,
             created_at: @conversation.created_at.iso8601,
             last_seen_at: @conversation.profile1_last_seen_at.iso8601,
+            new_messages_preview: nil,
             other_profile: {
               id: other_profile.id,
               display_name: other_profile.display_name,
@@ -82,12 +83,13 @@ describe API::Authenticated::Conversations do
       assert_predicate last_response, :bad_request?
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
-    it "gets the user information" do
+    it "gets the single conversation" do
       other_profile = @account2.profile
       expected_response = {
         id: @conversation.id,
         created_at: @conversation.created_at.iso8601,
         last_seen_at: @conversation.profile1_last_seen_at.iso8601,
+        new_messages_preview: nil,
         other_profile: {
           id: other_profile.id,
           display_name: other_profile.display_name,
@@ -116,6 +118,59 @@ describe API::Authenticated::Conversations do
 
       assert_predicate last_response, :ok?
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+    end
+    it "gets the single conversation with an unseen message" do
+      other_profile = @account2.profile
+      create(:message, conversation: @conversation, sender: "profile2", content: "New message!!", sent_at: @conversation.profile1_last_seen_at + 1)
+
+      expected_response = {
+        id: @conversation.id,
+        created_at: @conversation.created_at.iso8601,
+        last_seen_at: @conversation.profile1_last_seen_at.iso8601,
+        new_messages_preview: "New message!!",
+        other_profile: {
+          id: other_profile.id,
+          display_name: other_profile.display_name,
+          about_me: other_profile.about_me,
+          genders: other_profile.genders,
+          orientations: other_profile.orientations,
+          languages: other_profile.languages,
+          relationship_status: other_profile.relationship_status,
+          relationship_type: other_profile.relationship_type,
+          tobacco: other_profile.tobacco,
+          alcohol: other_profile.alcohol,
+          marijuana: other_profile.marijuana,
+          other_recreational_drugs: other_profile.other_recreational_drugs,
+          pets: other_profile.pets,
+          wants_pets: other_profile.wants_pets,
+          kids: other_profile.kids,
+          wants_kids: other_profile.wants_kids,
+          religion: other_profile.religion,
+          religion_importance: other_profile.religion_importance,
+          location_display_name: other_profile.location.display_name.transform_keys(&:to_sym),
+          location_distance: nil, # TODO: I think this should display the distance to the logged in user
+          age: 39 # TODO: calculate this so that this test don't breaks when the profile ages
+        }
+      }
+      authorized_get @auth, format(@endpoint, id: @conversation.id)
+
+      assert_predicate last_response, :ok?
+      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+    end
+  end
+  describe "get /conversations/:id/viewed" do
+    before do
+      @endpoint = "/api/conversations/%<id>s/viewed"
+      @auth = login(login: @login, password: @password)
+    end
+    it "Updates the time for the first user" do
+      last_seen_at = @conversation.profile1_last_seen_at
+      authorized_put @auth, format(@endpoint, id: @conversation.id)
+
+      assert_predicate last_response, :no_content?
+      @conversation.reload
+
+      assert_operator last_seen_at, :<, @conversation.profile1_last_seen_at
     end
   end
 

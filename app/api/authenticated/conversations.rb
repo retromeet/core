@@ -9,17 +9,21 @@ module API
           # @param conversation [Hash{Symbol => Object}] A hash containing conversation information, will be modified!
           # @return [Hash{Symbol => Object}] The modified conversation object
           def filter_conversation_for_current_profile!(conversation)
+            sender = nil # This is used to see if there are new messages in the conversation to be notified
             if conversation[:profile1_id] == rodauth.session[:profile_id]
+              sender = "profile2"
               conversation[:other_profile_id] = conversation.delete(:profile2_id)
               conversation[:last_seen_at] = conversation.delete(:profile1_last_seen_at)
               conversation.delete(:profile1_id)
               conversation.delete(:profile2_last_seen_at)
             elsif conversation[:profile2_id] == rodauth.session[:profile_id]
+              sender = "profile1"
               conversation[:other_profile_id] = conversation.delete(:profile1_id)
               conversation[:last_seen_at] = conversation.delete(:profile2_last_seen_at)
               conversation.delete(:profile2_id)
               conversation.delete(:profile1_last_seen_at)
             end
+            conversation[:new_messages] = Persistence::Repository::Messages.new_messages(conversation_id: conversation[:id], sender:, since: conversation[:last_seen_at])
             conversation[:other_profile] = Persistence::Repository::Account.profile_info(id: conversation[:other_profile_id])
             conversation
           end
@@ -68,6 +72,16 @@ module API
             filter_conversation_for_current_profile!(conversation)
 
             present conversation, with: Entities::Conversation
+          end
+
+          desc "Updates the last_seen_at for the current logged-in user",
+               success: [{ code: 204, message: "Time was updated" }],
+               failure: Authenticated::FAILURES,
+               produces: Authenticated::PRODUCES,
+               consumes: Authenticated::CONSUMES
+          put :viewed do
+            Persistence::Repository::Messages.update_view_time(conversation_id: params[:conversation_id], profile_id: rodauth.session[:profile_id])
+            status :no_content
           end
 
           namespace :messages do
