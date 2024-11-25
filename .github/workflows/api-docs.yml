@@ -1,0 +1,37 @@
+name: API Docs
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  push:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    # Checkout the landing repository
+    - uses: actions/checkout@v4
+      with:
+        repository: "retromeet/landing"
+        path: "landing"
+        token: ${{ secrets.PAT_FOR_API_DOCS }}
+
+    - name: Set up Ruby
+    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+    # change this to (see https://github.com/ruby/setup-ruby#versioning):
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - name: Copy github env file
+      run: cp .env.github.test .env.test.local
+    - name: Run tests
+      run: bundle exec rake oapi:fetch > $GITHUB_WORKSPACE/landing/_data/openapi_main.json
+    - name: Commit & Push changes
+      uses: actions-js/push@v1.5
+      with:
+        github_token: ${{ secrets.PAT_FOR_API_DOCS }}
+        message: "auto: Update swagger file for main (commit: ${{ github.event.ref }})"
+        repository: "retromeet/landing"
+        directory: "landing"
