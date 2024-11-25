@@ -69,6 +69,19 @@ describe API::Authenticated::Conversations do
       @endpoint = "/api/conversations/%<id>s/"
       @auth = login(login: @login, password: @password)
     end
+    it "gets a 400 if the id is not valid" do
+      expected_response = {
+        error: "VALIDATION_ERROR",
+        details: [
+          { fields: ["conversation_id"], errors: ["is invalid"] }
+        ]
+      }
+
+      authorized_get @auth, format(@endpoint, id: "boo!")
+
+      assert_predicate last_response, :bad_request?
+      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+    end
     it "gets the user information" do
       other_profile = @account2.profile
       expected_response = {
@@ -110,6 +123,20 @@ describe API::Authenticated::Conversations do
     before do
       @endpoint = "/api/conversations/%<id>s/messages"
       @auth = login(login: @login, password: @password)
+    end
+
+    it "gets a 400 if min_id and max_id are not valid" do
+      expected_response = {
+        error: "VALIDATION_ERROR",
+        details: [
+          { fields: ["min_id"], errors: ["is invalid"] },
+          { fields: ["max_id"], errors: ["is invalid"] }
+        ]
+      }
+      authorized_get @auth, "#{format(@endpoint, id: @conversation.id)}?min_id=a&max_id=b"
+
+      assert_predicate last_response, :bad_request?
+      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
 
     it "gets the user information" do
