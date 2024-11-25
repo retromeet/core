@@ -4,9 +4,17 @@ require "minitest/test_task"
 
 Minitest::TestTask.create
 
+require "grape-swagger/rake/oapi_tasks"
+GrapeSwagger::Rake::OapiTasks.new("API::Base")
+
+task :environment do # rubocop:disable Rake/Desc # We do not want to describe this one because it's only here as dependency for the other tasks
+  require_relative "config/environment"
+  Environment.load
+  require_relative "config/zeitwerk"
+end
+
 namespace :db do
-  task :load do # rubocop:disable Rake/Desc # We do not want to describe this one because it's only here as dependency for the other tasks
-    require_relative "lib/rake_support/load_env"
+  task load: :environment do # rubocop:disable Rake/Desc # We do not want to describe this one because it's only here as dependency for the other tasks
     require_relative "config/database"
     require_relative "lib/rake_support/colors"
     require_relative "lib/rake_support/migrations"
