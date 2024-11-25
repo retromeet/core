@@ -29,6 +29,7 @@ module API
     if Environment.development?
       add_swagger_documentation \
         mount_path: "/swagger_doc",
+        doc_version: RetroMeet::Version.to_s,
         info: {
           title: "RetroMeet API",
           description: "This is the API that RetroMeet makes available for all apps that will use it.",
