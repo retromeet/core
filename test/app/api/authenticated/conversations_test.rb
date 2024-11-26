@@ -3,7 +3,7 @@
 require_relative "../../../test_helper"
 
 describe API::Authenticated::Conversations do
-  include RackHelper
+  include SwaggerHelper::TestMethods
   before(:all) do
     @login = "foo@retromeet.social"
     @password = "bogus123"
@@ -20,7 +20,7 @@ describe API::Authenticated::Conversations do
 
   describe "get /conversations" do
     before do
-      @endpoint = "/api/conversations/"
+      @endpoint = "/api/conversations"
       @auth = login(login: @login, password: @password)
     end
     it "gets all conversations" do
@@ -31,7 +31,6 @@ describe API::Authenticated::Conversations do
             id: @conversation.id,
             created_at: @conversation.created_at.iso8601,
             last_seen_at: @conversation.profile1_last_seen_at.iso8601,
-            new_messages_preview: nil,
             other_profile: {
               id: other_profile.id,
               display_name: other_profile.display_name,
@@ -52,7 +51,6 @@ describe API::Authenticated::Conversations do
               religion: other_profile.religion,
               religion_importance: other_profile.religion_importance,
               location_display_name: other_profile.location.display_name.transform_keys(&:to_sym),
-              location_distance: nil, # TODO: I think this should display the distance to the logged in user
               age: 39 # TODO: calculate this so that this test don't breaks when the profile ages
             }
           }
@@ -61,13 +59,14 @@ describe API::Authenticated::Conversations do
       authorized_get @auth, format(@endpoint)
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end
 
   describe "get /conversations/:id" do
     before do
-      @endpoint = "/api/conversations/%<id>s/"
+      @endpoint = "/api/conversations/%<id>s"
       @auth = login(login: @login, password: @password)
     end
     it "gets a 400 if the id is not valid" do
@@ -81,6 +80,7 @@ describe API::Authenticated::Conversations do
       authorized_get @auth, format(@endpoint, id: "boo!")
 
       assert_predicate last_response, :bad_request?
+      assert_response_schema_confirm(400)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
     it "gets the single conversation" do
@@ -89,7 +89,6 @@ describe API::Authenticated::Conversations do
         id: @conversation.id,
         created_at: @conversation.created_at.iso8601,
         last_seen_at: @conversation.profile1_last_seen_at.iso8601,
-        new_messages_preview: nil,
         other_profile: {
           id: other_profile.id,
           display_name: other_profile.display_name,
@@ -110,13 +109,13 @@ describe API::Authenticated::Conversations do
           religion: other_profile.religion,
           religion_importance: other_profile.religion_importance,
           location_display_name: other_profile.location.display_name.transform_keys(&:to_sym),
-          location_distance: nil, # TODO: I think this should display the distance to the logged in user
           age: 39 # TODO: calculate this so that this test don't breaks when the profile ages
         }
       }
       authorized_get @auth, format(@endpoint, id: @conversation.id)
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
     it "gets the single conversation with an unseen message" do
@@ -148,13 +147,13 @@ describe API::Authenticated::Conversations do
           religion: other_profile.religion,
           religion_importance: other_profile.religion_importance,
           location_display_name: other_profile.location.display_name.transform_keys(&:to_sym),
-          location_distance: nil, # TODO: I think this should display the distance to the logged in user
           age: 39 # TODO: calculate this so that this test don't breaks when the profile ages
         }
       }
       authorized_get @auth, format(@endpoint, id: @conversation.id)
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end
@@ -168,6 +167,7 @@ describe API::Authenticated::Conversations do
       authorized_put @auth, format(@endpoint, id: @conversation.id)
 
       assert_predicate last_response, :no_content?
+      assert_schema_conform(204)
       @conversation.reload
 
       assert_operator last_seen_at, :<, @conversation.profile1_last_seen_at
@@ -191,6 +191,7 @@ describe API::Authenticated::Conversations do
       authorized_get @auth, "#{format(@endpoint, id: @conversation.id)}?min_id=a&max_id=b"
 
       assert_predicate last_response, :bad_request?
+      assert_response_schema_confirm(400)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
 
@@ -205,6 +206,7 @@ describe API::Authenticated::Conversations do
       authorized_get @auth, format(@endpoint, id: @conversation.id)
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end
@@ -229,6 +231,7 @@ describe API::Authenticated::Conversations do
       expected_response[:sent_at] = @message.sent_at.iso8601
 
       assert_predicate last_response, :created?
+      assert_schema_conform(201)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end

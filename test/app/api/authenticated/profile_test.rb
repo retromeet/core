@@ -3,7 +3,7 @@
 require_relative "../../../test_helper"
 
 describe API::Authenticated::Profile do
-  include RackHelper
+  include SwaggerHelper::TestMethods
   before(:all) do
     @login = "foo@retromeet.social"
     @password = "bogus123"
@@ -20,6 +20,7 @@ describe API::Authenticated::Profile do
       authorized_get @auth, "/api/profile/info"
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end
@@ -58,6 +59,7 @@ describe API::Authenticated::Profile do
       authorized_get @auth, @endpoint
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end
@@ -80,6 +82,7 @@ describe API::Authenticated::Profile do
       authorized_post @auth, @endpoint, body.to_json
 
       assert_predicate last_response, :unprocessable?
+      assert_schema_conform(422)
     end
 
     it "sends a location too generic and gets too many results back but it is correctly filtered by osm_id" do
@@ -96,6 +99,7 @@ describe API::Authenticated::Profile do
       end
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
     end
 
     it "sends a location that has exactly one result and updates the location for the user" do
@@ -112,6 +116,7 @@ describe API::Authenticated::Profile do
       end
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
     end
   end
 
@@ -125,6 +130,7 @@ describe API::Authenticated::Profile do
       authorized_post @auth, @endpoint, {}.to_json
 
       assert_predicate last_response, :bad_request?
+      assert_schema_conform(400)
     end
 
     it "posts with the same information as the user account" do
@@ -153,6 +159,7 @@ describe API::Authenticated::Profile do
       expected_response = body
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
     it "sets all nullable fields to null" do
@@ -179,13 +186,14 @@ describe API::Authenticated::Profile do
       expected_response = body
 
       assert_predicate last_response, :ok?
+      # assert_response_schema_confirm(200) # (renatolond, 2024-11-26) since oapi2 has no nullable possibility, this cannot be checked. see if https://github.com/interagent/committee/pull/400 can make this work
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
 
     ###
     # This is a bit of meta programming to guarantee that the all the values the database supports are correctly declared in the endpoint documentation
     # We iterate through all the params that the endpoint supports and for each we get possible values in the database and update it
-    post_endpoint = API::Authenticated::Profile.routes.find { |v| v.request_method == "POST" && v.path == "/profile/complete(.:format)" }
+    post_endpoint = API::Authenticated::Profile.routes.find { |v| v.request_method == "POST" && v.path == "/api/profile/complete(.json)" }
     post_endpoint.params.each_key do |param|
       next if %w[text date].include? Profile.db_schema[param.to_sym][:db_type]
 
@@ -208,6 +216,7 @@ describe API::Authenticated::Profile do
           expected_response = body
 
           assert_predicate last_response, :ok?
+          assert_schema_conform(200)
           assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
         end
         )
@@ -248,12 +257,12 @@ describe API::Authenticated::Profile do
         religion_importance: profile.religion_importance,
         display_name: profile.display_name,
         location_display_name: profile.location.display_name.transform_keys(&:to_sym),
-        location_distance: nil, # TODO: I think this should display the distance to the logged in user
         age: 39 # TODO: calculate this so that this test don't breaks when the profile ages
       }
       authorized_get @auth, format(@endpoint, id: @account.profile.id)
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end

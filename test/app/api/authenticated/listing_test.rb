@@ -3,7 +3,7 @@
 require_relative "../../../test_helper"
 
 describe API::Authenticated::Profile do
-  include RackHelper
+  include SwaggerHelper::TestMethods
   before(:all) do
     # Create a few locations to create accounts around
     @schaerbeek = create(:location, latitude: 50.8676041, longitude: 4.3737121, language: "en", name: "Schaerbeek - Schaarbeek, Brussels-Capital, Belgium", country_code: "be", osm_id: 58_260)
@@ -73,6 +73,7 @@ describe API::Authenticated::Profile do
       authorized_get @auth, @endpoint
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       parsed_response = JSON.parse(last_response.body, symbolize_names: true)
 
       assert_equal 1, parsed_response[:profiles].size
@@ -84,6 +85,7 @@ describe API::Authenticated::Profile do
       authorized_get @auth, @endpoint, { max_distance: 200 }
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       parsed_response = JSON.parse(last_response.body, symbolize_names: true)
 
       assert_equal 3, parsed_response[:profiles].size
@@ -95,6 +97,7 @@ describe API::Authenticated::Profile do
       authorized_get @auth, @endpoint, { max_distance: 400 }
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       parsed_response = JSON.parse(last_response.body, symbolize_names: true)
 
       assert_equal 4, parsed_response[:profiles].size
@@ -105,6 +108,7 @@ describe API::Authenticated::Profile do
       authorized_get @auth, @endpoint, { max_distance: 401 }
 
       assert_predicate last_response, :bad_request?
+      assert_response_schema_confirm(400)
 
       expected_response = {
         error: "VALIDATION_ERROR",

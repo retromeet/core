@@ -56,11 +56,10 @@ module API
           present conversation, with: Entities::Conversation
         end
 
+        params do
+          requires :conversation_id, type: String, documentation: { format: :uuid }, regexp: Utils::UUID7_RE
+        end
         namespace ":conversation_id" do
-          params do
-            requires :conversation_id, type: String, regexp: Utils::UUID7_RE
-          end
-
           desc "Returns a single conversation for the logged-in user",
                success: { model: Entities::Conversation, message: "A conversation" },
                failure: Authenticated::FAILURES,

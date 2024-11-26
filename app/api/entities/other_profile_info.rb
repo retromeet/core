@@ -36,7 +36,7 @@ module API
       expose :religion, documentation: { type: String }
       expose :religion_importance, documentation: { type: String }
       expose :location_display_name, documentation: { type: Hash }
-      expose :location_distance, format_with: :distance_in_km, documentation: { type: Float }
+      expose :location_distance, format_with: :distance_in_km, documentation: { type: Float }, expose_nil: false
       expose :birth_date, format_with: :age_formatter, as: :age, documentation: { type: Integer }
     end
   end
