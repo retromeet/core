@@ -3,6 +3,7 @@
 require "minitest/test_task"
 
 Minitest::TestTask.create
+task default: :test # Make testing the default task
 
 require "grape-swagger/rake/oapi_tasks"
 GrapeSwagger::Rake::OapiTasks.new("API::Base")
