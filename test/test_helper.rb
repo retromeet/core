@@ -33,6 +33,10 @@ WebMock::Config.instance.query_values_notation = :flat_array
 # @return [String]
 def webfixture_json_file(filename) = File.open("test/webfixtures/#{filename}.json")
 
+require_relative "swagger_helper"
+
+SwaggerHelper.prepare!
+
 # Adapted from https://github.com/rails/rails/blob/97169912f197eee6e76fafb091113bddf624aa67/activesupport/lib/active_support/testing/assertions.rb#L101
 # Test numeric difference between the return value of an expression as a
 # result of what is evaluated in the yielded block.
@@ -85,6 +89,7 @@ def assert_difference(expression, *args, &block)
     actual = exp.call
     error  = "#{code.inspect} didn't change by #{diff}, but by #{actual - before_value}"
     error  = "#{message}.\n#{error}" if message
+
     assert_equal(before_value + diff, actual, error)
   end
 

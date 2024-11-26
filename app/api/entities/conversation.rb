@@ -8,8 +8,8 @@ module API
       expose :id, documentation: { type: String }
       expose :other_profile, using: API::Entities::OtherProfileInfo
       expose :created_at, format_with: :iso_timestamp, documentation: { type: DateTime }
-      expose :last_seen_at, format_with: :iso_timestamp, documentation: { type: [NilClass, DateTime] }
-      expose :new_messages, as: :new_messages_preview, documentation: { type: String }
+      expose :last_seen_at, format_with: :iso_timestamp, documentation: { type: [DateTime, NilClass] }
+      expose :new_messages, as: :new_messages_preview, documentation: { type: String }, expose_nil: false
     end
   end
 end

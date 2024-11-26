@@ -26,7 +26,7 @@ module API
       error!({ error: "INTERNAL_SERVER_ERROR", with: Entities::Error }, 500)
     end
 
-    if Environment.development?
+    if Environment.development? || Environment.test?
       add_swagger_documentation \
         mount_path: "/swagger_doc",
         doc_version: RetroMeet::Version.to_s,
@@ -45,7 +45,9 @@ module API
             authorizationUrl: "/login"
           }
         },
-        security: { jwt_token: [] }
+        security: { jwt_token: [] },
+        consumes: ["application/json"],
+        produces: ["application/json"]
     end
 
     route :any, "*path" do

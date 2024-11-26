@@ -21,7 +21,7 @@ module API
     end
 
     route do |r|
-      unless Environment.development? && r.path == "/api/swagger_doc"
+      unless (Environment.development? || Environment.test?) && r.path == "/api/swagger_doc"
         r.rodauth
         rodauth.require_authentication
         rodauth.check_active_session

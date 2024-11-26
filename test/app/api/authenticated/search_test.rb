@@ -3,7 +3,7 @@
 require_relative "../../../test_helper"
 
 describe API::Authenticated::Search do
-  include RackHelper
+  include SwaggerHelper::TestMethods
 
   before(:all) do
     @login = "foo@retromeet.social"
@@ -35,6 +35,7 @@ describe API::Authenticated::Search do
       authorized_post @auth, @endpoint, body.to_json
 
       assert_predicate last_response, :ok?
+      assert_schema_conform(200)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end
