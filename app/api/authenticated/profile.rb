@@ -82,11 +82,11 @@ module API
           status :ok
           Entities::ProfileInfo.represent(profile_info, only: %i[location_display_name])
         end
-        namespace ":id" do
-          params do
-            requires :id, type: String, regexp: Utils::UUID7_RE
-          end
 
+        params do
+          requires :id, type: String, documentation: { format: :uuid }, regexp: Utils::UUID7_RE
+        end
+        namespace ":id" do
           desc "Returns the complete profile information for the requested account id.",
                success: { model: API::Entities::OtherProfileInfo, message: "The profile for the account id, if exists" },
                failure: Authenticated::FAILURES,

@@ -48,7 +48,7 @@ module API
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         params do
-          requires :other_profile_id, type: String, regexp: Utils::UUID7_RE
+          requires :other_profile_id, type: String, documentation: { format: :uuid }, regexp: Utils::UUID7_RE
         end
         post "/" do
           conversation_id = Persistence::Repository::Messages.upsert_conversation(profile1_id: rodauth.session[:profile_id], profile2_id: params[:other_profile_id])
