@@ -24,7 +24,7 @@ module SwaggerHelper
         c.register_format "float", ->(data) { }
       end
 
-      @committee_options = { schema: Committee::Drivers.load_from_data(oapi_doc) }
+      @committee_options = { schema: Committee::Drivers.load_from_data(oapi_doc), validate_success_only: false }
       # @committee_options[:schema_coverage] = Committee::Test::SchemaCoverage.new(@committee_options[:schema]) # Committee only support oapiv3 for schema coverage, add when https://github.com/ruby-grape/grape-swagger/issues/603 is done
     end
 

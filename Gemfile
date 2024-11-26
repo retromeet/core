@@ -61,7 +61,8 @@ group :test do
 
   gem "database_cleaner-sequel" # Cleans the database between tests
 
-  gem "committee", "~> 5.4" # Used to test the swagger documentation in the tests
+  gem "committee", # Used to test the swagger documentation in the tests
+      github: "retromeet/committee", ref: "31a7e80" # This adds extra validation to OpenAPI 2, can be replaced if https://github.com/interagent/committee/pull/433 gets merged and released
 
   gem "factory_bot" # makes it easier to create objects for tests
   gem "faker" # provides fake data for tests
