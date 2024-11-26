@@ -6,7 +6,7 @@ module API
     class Listing < Grape::API
       desc "Returns a list of nearby profiles to the logged-in user.",
            success: { model: API::Entities::OtherProfileInfos, message: "A list of profiles" },
-           failure: Authenticated::FAILURES,
+           failure: Authenticated.failures([400, 401, 500]),
            produces: Authenticated::PRODUCES,
            consumes: Authenticated::CONSUMES
       params do

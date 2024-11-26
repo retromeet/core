@@ -8,7 +8,7 @@ module API
         desc "Given an address, searches for a geolocation using one location provider. It takes the language of the current user in consideration.",
              success: { code: 200, model: API::Entities::LocationResult, message: "One or more locations" },
              is_array: true,
-             failure: Authenticated::FAILURES,
+             failure: Authenticated.failures([400, 401, 500]),
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         params do

@@ -7,7 +7,7 @@ module API
       namespace :profile do
         desc "Returns basic profile information that can be used to display information about the current logged-in user",
              success: { model: API::Entities::ProfileInfo, message: "The profile info for the authenticated user" },
-             failure: Authenticated::FAILURES,
+             failure: Authenticated.failures,
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         get :info do
@@ -17,7 +17,7 @@ module API
 
         desc "Returns the complete profile information of the logged-in user. This can be used to display how their profile currently looks like to others.",
              success: { model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
-             failure: Authenticated::FAILURES,
+             failure: Authenticated.failures,
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         get :complete do
@@ -26,8 +26,8 @@ module API
         end
 
         desc "Updates the current user's profile with the given parameters. The return will only contain fields that could have been modified.",
-             success: { status: 200, model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
-             failure: Authenticated::FAILURES,
+             success: { code: 200, model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
+             failure: Authenticated.failures([400, 401, 500]),
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         params do
@@ -64,8 +64,8 @@ module API
         end
 
         desc "Updates the current user's profile location with the given place.",
-             success: { status: 200, model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
-             failure: Authenticated::FAILURES,
+             success: { code: 200, model: API::Entities::ProfileInfo, message: "The profile for the authenticated user" },
+             failure: Authenticated.failures([400, 422, 401, 500]),
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         params do
@@ -89,7 +89,7 @@ module API
         namespace ":id" do
           desc "Returns the complete profile information for the requested account id.",
                success: { model: API::Entities::OtherProfileInfo, message: "The profile for the account id, if exists" },
-               failure: Authenticated::FAILURES,
+               failure: Authenticated.failures([400, 401, 500]),
                produces: Authenticated::PRODUCES,
                consumes: Authenticated::CONSUMES
           get :complete do

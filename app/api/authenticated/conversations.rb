@@ -31,7 +31,7 @@ module API
 
         desc "Returns the conversations that the logged-in has going on",
              success: { model: Entities::Conversations, message: "A list of conversations" },
-             failure: Authenticated::FAILURES,
+             failure: Authenticated.failures([400, 401, 500]),
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         get "/" do
@@ -44,7 +44,7 @@ module API
 
         desc "Creates a conversation with another user.",
              success: { model: Entities::Conversations, message: "A list of conversations" },
-             failure: Authenticated::FAILURES,
+             failure: Authenticated.failures([400, 401, 500]),
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         params do
@@ -62,7 +62,7 @@ module API
         namespace ":conversation_id" do
           desc "Returns a single conversation for the logged-in user",
                success: { model: Entities::Conversation, message: "A conversation" },
-               failure: Authenticated::FAILURES,
+               failure: Authenticated.failures([400, 401, 500]),
                produces: Authenticated::PRODUCES,
                consumes: Authenticated::CONSUMES
           get "/" do
@@ -75,7 +75,7 @@ module API
 
           desc "Updates the last_seen_at for the current logged-in user",
                success: [{ code: 204, message: "Time was updated" }],
-               failure: Authenticated::FAILURES,
+               failure: Authenticated.failures([400, 401, 500]),
                produces: Authenticated::PRODUCES,
                consumes: Authenticated::CONSUMES
           put :viewed do
@@ -86,7 +86,7 @@ module API
           namespace :messages do
             desc "Returns 20 messages from the requested conversation. Params can be used to paginate the conversation and get more messages.",
                  success: { model: Entities::Messages, message: "A list of messages" },
-                 failure: Authenticated::FAILURES,
+                 failure: Authenticated.failures([400, 401, 500]),
                  produces: Authenticated::PRODUCES,
                  consumes: Authenticated::CONSUMES
             params do
@@ -99,7 +99,7 @@ module API
 
             desc "Creates a single message in the given conversation.",
                  success: { model: Entities::Message, message: "The recently created message" },
-                 failure: Authenticated::FAILURES,
+                 failure: Authenticated.failures([400, 401, 500]),
                  produces: Authenticated::PRODUCES,
                  consumes: Authenticated::CONSUMES
             params do
