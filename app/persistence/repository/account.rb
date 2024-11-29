@@ -154,6 +154,22 @@ module Persistence
           profiles.insert(account_id:, display_name:)
         end
 
+        # @param account_id (see .profile_id_from_account_id)
+        # @return [Hash]
+        def profile_picture(account_id:)
+          profiles.where(account_id:)
+                  .get(:picture)
+                  .to_hash
+        end
+
+        # @param account_id (see .profile_id_from_account_id)
+        # @param picture [Hash] picture data coming from Shrine
+        # @return [void]
+        def update_profile_picture(account_id:, picture:)
+          profiles.where(account_id:)
+                  .update(picture: Sequel.pg_jsonb_wrap(picture))
+        end
+
         private
 
           # @return [Sequel::Postgres::Dataset]

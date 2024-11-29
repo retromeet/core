@@ -83,6 +83,21 @@ module API
           Entities::ProfileInfo.represent(profile_info, only: %i[location_display_name])
         end
 
+        desc "Endpoint that accepts a new profile picture",
+             success: [code: 204, message: "Updated sucessfully"],
+             failure: Authenticated.failures,
+             consumes: ["multipart/form-data"]
+        params do
+          requires :profile_picture, type: File
+        end
+        post :picture do
+          attacher = ImageUploader::Attacher.from_data(Persistence::Repository::Account.profile_picture(account_id: rodauth.session[:account_id]))
+          attacher.assign(params[:profile_picture], metadata: { type: :profile_picture, profile_id: rodauth.session[:profile_id] })
+          attacher.finalize
+          Persistence::Repository::Account.update_profile_picture(account_id: rodauth.session[:account_id], picture: attacher.data)
+          "foo"
+        end
+
         params do
           requires :id, type: String, documentation: { format: :uuid }, regexp: Utils::UUID7_RE
         end
