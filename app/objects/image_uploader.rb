@@ -26,4 +26,7 @@ class ImageUploader < Shrine
     profile_id = metadata[:profile_id]
     [type, profile_id, basename].compact.join("/")
   end
+
+  # TODO: get host from config
+  plugin :download_endpoint, prefix: "images", host: "localhost:3000"
 end

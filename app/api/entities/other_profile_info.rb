@@ -18,7 +18,7 @@ module API
         end
       end
       format_with(:picture_formatter) do |picture_hash|
-        ImageUploader::Attacher.from_data(picture_hash.to_h).url
+        ImageUploader::Attacher.from_data(picture_hash.to_h).file.download_url
       end
       expose :id, documentation: { type: String }
       expose :display_name, documentation: { type: String }

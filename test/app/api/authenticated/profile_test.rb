@@ -289,7 +289,7 @@ describe API::Authenticated::Profile do
         display_name: profile.display_name,
         location_display_name: profile.location.display_name.transform_keys(&:to_sym),
         age: 39, # TODO: calculate this so that this test don't breaks when the profile ages
-        picture: ImageUploader::Attacher.from_data(profile.picture.to_h).url
+        picture: ImageUploader::Attacher.from_data(profile.picture.to_h).file.download_url
 
       }
       authorized_get @auth, format(@endpoint, id: profile.id)
