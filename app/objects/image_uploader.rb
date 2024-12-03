@@ -28,5 +28,5 @@ class ImageUploader < Shrine
   end
 
   # TODO: get host from config
-  plugin :download_endpoint, prefix: "images", host: "localhost:3000"
+  plugin :download_endpoint, prefix: "images"
 end
