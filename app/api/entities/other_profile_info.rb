@@ -17,6 +17,9 @@ module API
           distance / 1_000
         end
       end
+      format_with(:picture_formatter) do |picture_hash|
+        ImageUploader::Attacher.from_data(picture_hash.to_h).url
+      end
       expose :id, documentation: { type: String }
       expose :display_name, documentation: { type: String }
       expose :about_me, documentation: { type: String }
@@ -38,6 +41,7 @@ module API
       expose :location_display_name, documentation: { type: Hash }
       expose :location_distance, format_with: :distance_in_km, documentation: { type: Float }, expose_nil: false
       expose :birth_date, format_with: :age_formatter, as: :age, documentation: { type: Integer }
+      expose :picture, format_with: :picture_formatter, documentation: { type: String }, expose_nil: false
     end
   end
 end
