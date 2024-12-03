@@ -159,7 +159,7 @@ module Persistence
         def profile_picture(account_id:)
           profiles.where(account_id:)
                   .get(:picture)
-                  .to_hash
+                  &.to_hash
         end
 
         # @param account_id (see .profile_id_from_account_id)

@@ -266,4 +266,21 @@ describe API::Authenticated::Profile do
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end
+
+  describe "post /api/profile/picture" do
+    before do
+      @endpoint = "/api/profile/picture"
+      @auth = login(login: @login, password: @password)
+    end
+
+    it "posts a picture and the picture gets saved" do
+      authorized_post @auth, @endpoint, profile_picture: Rack::Test::UploadedFile.new("test/files/retromeet_128.png")
+
+      assert_predicate last_response, :no_content?
+      @account.reload
+
+      assert_predicate @account.profile.picture, :present?
+      assert_equal "retromeet_128.png", @account.profile.picture.dig("metadata", "filename")
+    end
+  end
 end

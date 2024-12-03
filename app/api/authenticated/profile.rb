@@ -95,7 +95,7 @@ module API
           attacher.assign(params[:profile_picture], metadata: { type: :profile_picture, profile_id: rodauth.session[:profile_id] })
           attacher.finalize
           Persistence::Repository::Account.update_profile_picture(account_id: rodauth.session[:account_id], picture: attacher.data)
-          "foo"
+          status :no_content
         end
 
         params do
