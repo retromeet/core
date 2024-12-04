@@ -36,6 +36,8 @@ gem "address_composer", # Used for taking components of the address from the Pho
 
 gem "shrine" # Used for file uploads
 
+gem "aws-sdk-s3", "~> 1.176" # For S3-like storage in Shrine
+
 group :development, :test do
   gem "dotenv" # Used to load environment variables from .env files
 
