@@ -39,7 +39,7 @@ module API
           # It might be better to mount this apart from grape and just check auth first.
           # For the moment it will do
           new_env = request.env.dup
-          new_env["PATH_INFO"] = request.path["/api".length..]
+          new_env["PATH_INFO"] = request.path[("/api".length)..]
           status, headers, body = ImageUploader.download_response(new_env)
           content_type headers["content-type"]
           headers.each { |k, v| header k, v }
