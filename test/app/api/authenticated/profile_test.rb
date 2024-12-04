@@ -265,5 +265,55 @@ describe API::Authenticated::Profile do
       assert_schema_conform(200)
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
+
+    it "gets the user information_with_picture" do
+      profile = create(:profile_with_picture)
+      expected_response = {
+        id: profile.id,
+        about_me: profile.about_me,
+        genders: profile.genders,
+        orientations: profile.orientations,
+        languages: profile.languages,
+        relationship_status: profile.relationship_status,
+        relationship_type: profile.relationship_type,
+        tobacco: profile.tobacco,
+        marijuana: profile.marijuana,
+        alcohol: profile.alcohol,
+        other_recreational_drugs: profile.other_recreational_drugs,
+        pets: profile.pets,
+        wants_pets: profile.wants_pets,
+        kids: profile.kids,
+        wants_kids: profile.wants_kids,
+        religion: profile.religion,
+        religion_importance: profile.religion_importance,
+        display_name: profile.display_name,
+        location_display_name: profile.location.display_name.transform_keys(&:to_sym),
+        age: 39, # TODO: calculate this so that this test don't breaks when the profile ages
+        picture: ImageUploader::Attacher.from_data(profile.picture.to_h).file.download_url
+
+      }
+      authorized_get @auth, format(@endpoint, id: profile.id)
+
+      assert_predicate last_response, :ok?
+      assert_schema_conform(200)
+      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+    end
+  end
+
+  describe "post /api/profile/picture" do
+    before do
+      @endpoint = "/api/profile/picture"
+      @auth = login(login: @login, password: @password)
+    end
+
+    it "posts a picture and the picture gets saved" do
+      authorized_post @auth, @endpoint, profile_picture: Rack::Test::UploadedFile.new("test/files/retromeet_128.png")
+
+      assert_predicate last_response, :no_content?
+      @account.reload
+
+      assert_predicate @account.profile.picture, :present?
+      assert_equal "retromeet_128.png", @account.profile.picture.dig("metadata", "filename")
+    end
   end
 end

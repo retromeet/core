@@ -95,3 +95,35 @@ def assert_difference(expression, *args, &block)
 
   retval
 end
+
+def image_data
+  @image_data ||= begin
+    attacher = ImageUploader::Attacher.new
+    attacher.set(uploaded_image)
+
+    # if you're processing derivatives
+    # attacher.set_derivatives(
+    #   large: uploaded_image,
+    #   medium: uploaded_image,
+    #   small: uploaded_image
+    # )
+
+    attacher.data
+  end
+end
+
+def uploaded_image
+  @uploaded_image ||= begin
+    file = File.open("test/files/retromeet_128.png", binmode: true)
+
+    # for performance we skip metadata extraction and assign test metadata
+    uploaded_file = Shrine.upload(file, :store, metadata: false)
+    uploaded_file.metadata.merge!(
+      "size" => File.size(file.path),
+      "mime_type" => "image/jpeg",
+      "filename" => "test.jpg"
+    )
+
+    uploaded_file
+  end
+end

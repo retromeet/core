@@ -29,6 +29,24 @@ module API
       mount API::Authenticated::Search
       mount API::Authenticated::Listing
       mount API::Authenticated::Conversations
+
+      namespace :images do
+        desc "",
+             hidden: true
+        get "*" do
+          # (renatolond, 2024-12-03) This is a bit to hack-y for my tastes.
+          # The idea is that if Shrine is configured to serve from disk, we use the rodauth authentication here as well.
+          # It might be better to mount this apart from grape and just check auth first.
+          # For the moment it will do
+          new_env = request.env.dup
+          new_env["PATH_INFO"] = request.path[("/api".length)..]
+          status, headers, body = ImageUploader.download_response(new_env)
+          content_type headers["content-type"]
+          headers.each { |k, v| header k, v }
+          status status
+          stream body.file.to_io
+        end
+      end
     end
   end
 end

@@ -27,5 +27,11 @@ FactoryBot.define do
     religion_importance { "not_important" }
     display_name { Faker::Twitter.screen_name }
     created_at { Time.now }
+
+    trait :with_picture do
+      picture { image_data }
+    end
+
+    factory :profile_with_picture, traits: %i[with_picture]
   end
 end
