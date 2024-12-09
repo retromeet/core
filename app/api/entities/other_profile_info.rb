@@ -5,10 +5,7 @@ module API
     # Represents another user's profile info for the API
     class OtherProfileInfo < Grape::Entity
       format_with(:age_formatter) do |birth_date|
-        now = Time.now.utc.to_date
-        extra_year_or_not = 1
-        extra_year_or_not = 0 if now.month > birth_date.month || (now.month == birth_date.month && now.day >= birth_date.day)
-        now.year - birth_date.year - extra_year_or_not
+        AgeHelper.age_from_date(birth_date)
       end
       format_with(:distance_in_km) do |distance|
         if distance.nil?
