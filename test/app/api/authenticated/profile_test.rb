@@ -55,6 +55,7 @@ describe API::Authenticated::Profile do
         religion_importance: profile.religion_importance,
         display_name: profile.display_name,
         location_display_name: profile.location.display_name.transform_keys(&:to_sym),
+        age: 39, # TODO: calculate this so that this test don't breaks when the profile ages
         hide_age: profile.hide_age
       }
       authorized_get @auth, @endpoint
