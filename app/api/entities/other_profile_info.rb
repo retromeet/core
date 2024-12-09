@@ -5,6 +5,8 @@ module API
     # Represents another user's profile info for the API
     class OtherProfileInfo < Grape::Entity
       format_with(:age_formatter) do |birth_date|
+        next nil if object[:hide_age]
+
         AgeHelper.age_from_date(birth_date)
       end
       format_with(:distance_in_km) do |distance|
@@ -42,7 +44,7 @@ module API
       expose :religion_importance, documentation: { type: String }
       expose :location_display_name, documentation: { type: Hash }
       expose :location_distance, format_with: :distance_in_km, documentation: { type: Float }, expose_nil: false
-      expose :birth_date, format_with: :age_formatter, as: :age, documentation: { type: Integer }
+      expose :birth_date, format_with: :age_formatter, as: :age, documentation: { type: Integer }, if: ->(object, _options) { !object[:hide_age] }
       expose :picture, format_with: :picture_formatter, documentation: { type: String }, expose_nil: false
     end
   end
