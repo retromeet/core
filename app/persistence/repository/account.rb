@@ -149,9 +149,10 @@ module Persistence
 
         # @param account_id (see .profile_id_from_account_id)
         # @param display_name [String] the display name for the profile
+        # @param birth_date [String,Date] the birth date for the profile
         # @return [void]
-        def create_profile(account_id:, display_name:)
-          profiles.insert(account_id:, display_name:)
+        def create_profile(account_id:, display_name:, birth_date:)
+          profiles.insert(account_id:, display_name:, birth_date:)
         end
 
         # @param account_id (see .profile_id_from_account_id)

@@ -48,6 +48,7 @@ module API
           optional :wants_kids, type: String, values: Persistence::Repository::Account::WANTS_VALUES
           optional :pets, type: String, values: Persistence::Repository::Account::HAVES_OR_HAVE_NOTS_VALUES
           optional :wants_pets, type: String, values: Persistence::Repository::Account::WANTS_VALUES
+          optional :hide_age, type: Boolean
         end
         post :complete do
           declared_params = declared(params, include_missing: false)
