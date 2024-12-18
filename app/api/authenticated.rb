@@ -5,6 +5,7 @@ module API
     FAILURES = {
       400 => [400, "Bad request", Entities::Error].freeze,
       401 => [401, "Unauthorized", Entities::Error].freeze,
+      404 => [404, "Not found", Entities::Error].freeze,
       422 => [422, "Unprocessable entity", Entities::Error].freeze,
       500 => [500, "Server error", Entities::Error].freeze
     }.freeze
