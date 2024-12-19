@@ -11,6 +11,10 @@ module API
 
     helpers API::Helpers::Params
 
+    rescue_from Persistence::Repository::Blocks::ProfileNotFound do |_e|
+      error!({ error: "NOT_FOUND", details: { fields: :target_profile_id, errors: "not found" }, with: Entities::Error }, 404)
+    end
+
     rescue_from Grape::Exceptions::ValidationErrors do |e|
       errors = e.errors.map do |key, value|
         { fields: key, errors: value }

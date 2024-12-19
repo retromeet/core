@@ -348,4 +348,27 @@ describe API::Authenticated::Profile do
       assert_equal "retromeet_128.png", @account.profile.picture.dig("metadata", "filename")
     end
   end
+
+  describe "post /profile/:id/block" do
+    before do
+      @endpoint = "/api/profile/%<id>s/block"
+      @auth = login(login: @login, password: @password)
+    end
+
+    it "blocks a profile" do
+      profile = create(:profile)
+      assert_difference "ProfileBlock.count", 1 do
+        authorized_post @auth, format(@endpoint, id: profile.id)
+      end
+
+      assert_predicate last_response, :no_content?
+    end
+
+    it "gets a 404 for a non existing uuid" do
+      authorized_post @auth, format(@endpoint, id: "11111111-1111-7111-b111-111111111111")
+
+      assert_predicate last_response, :not_found?
+      assert_schema_conform(404)
+    end
+  end
 end

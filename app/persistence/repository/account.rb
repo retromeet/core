@@ -4,6 +4,8 @@ module Persistence
   module Repository
     # Contains database logic around accounts
     module Account
+      extend Datasets
+
       GENDER_VALUES = %w[
         man
         woman
@@ -139,11 +141,11 @@ module Persistence
           profiles.where(account_id:).update(location_id:)
         end
 
-        # @param account_id (see .profile_id_from_account_id)
+        # @param id (see .profile_info)
         # @return [String]
-        def profile_location(account_id:)
+        def profile_location(id:)
           profiles.inner_join(:locations, id: :location_id)
-                  .where(account_id:)
+                  .where(Sequel[:profiles][:id] => id)
                   .get(Sequel[:locations][:geom])
         end
 
@@ -170,13 +172,6 @@ module Persistence
           profiles.where(account_id:)
                   .update(picture: Sequel.pg_jsonb_wrap(picture))
         end
-
-        private
-
-          # @return [Sequel::Postgres::Dataset]
-          def profiles
-            Database.connection[:profiles]
-          end
       end
     end
   end
