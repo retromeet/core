@@ -4,6 +4,8 @@ module Persistence
   module Repository
     # Contains database logic around accounts
     module Account
+      extend Datasets
+
       GENDER_VALUES = %w[
         man
         woman
@@ -170,13 +172,6 @@ module Persistence
           profiles.where(account_id:)
                   .update(picture: Sequel.pg_jsonb_wrap(picture))
         end
-
-        private
-
-          # @return [Sequel::Postgres::Dataset]
-          def profiles
-            Database.connection[:profiles]
-          end
       end
     end
   end

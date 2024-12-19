@@ -4,6 +4,8 @@ module Persistence
   module Repository
     # Contains database logic around locations
     module Messages
+      extend Datasets
+
       ConversationNotFound = Class.new(StandardError)
 
       class << self
@@ -134,18 +136,6 @@ module Persistence
           m = m.where { Sequel[:messages][:id] > min_id } if min_id
           m.to_a
         end
-
-        private
-
-          # @return [Sequel::Postgres::Dataset]
-          def conversations
-            Database.connection[:conversations]
-          end
-
-          # @return [Sequel::Postgres::Dataset]
-          def messages
-            Database.connection[:messages]
-          end
       end
     end
   end

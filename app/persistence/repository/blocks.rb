@@ -4,6 +4,7 @@ module Persistence
   module Repository
     # Contains database logic around profile blocks
     module Blocks
+      extend Datasets
       ProfileNotFound = Class.new(StandardError)
 
       class << self
@@ -16,18 +17,6 @@ module Persistence
 
           profile_blocks.insert(profile_id:, target_profile_id:)
         end
-
-        private
-
-          # @return [Sequel::Postgres::Dataset]
-          def profile_blocks
-            Database.connection[:profile_blocks]
-          end
-
-          # @return [Sequel::Postgres::Dataset]
-          def profiles
-            Database.connection[:profiles]
-          end
       end
     end
   end

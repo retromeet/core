@@ -4,6 +4,8 @@ module Persistence
   module Repository
     # Contains database logic around locations
     module Location
+      extend Datasets
+
       class << self
         # @param location_result [Models::LocationResult]
         def upsert_location(location_result:)
@@ -19,13 +21,6 @@ module Persistence
 
           locations.where(osm_id: location_result.osm_id).get(:id)
         end
-
-        private
-
-          # @return [Sequel::Postgres::Dataset]
-          def locations
-            Database.connection[:locations]
-          end
       end
     end
   end
