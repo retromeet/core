@@ -4,6 +4,8 @@ module Persistence
   module Repository
     # Contains database logic around the account listing
     module Listing
+      extend Datasets
+
       class << self
         # Returns accounts that are near the requested Account
         # will paginate results with min_account_id
@@ -31,23 +33,6 @@ module Persistence
 
           accounts.to_a
         end
-
-        private
-
-          # @return [Sequel::Postgres::Dataset]
-          def locations
-            Database.connection[:locations]
-          end
-
-          # @return [Sequel::Postgres::Dataset]
-          def profiles
-            Database.connection[:profiles]
-          end
-
-          # @return [Sequel::Postgres::Dataset]
-          def profile_blocks
-            Database.connection[:profile_blocks]
-          end
       end
     end
   end
