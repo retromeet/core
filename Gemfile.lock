@@ -260,7 +260,7 @@ GEM
     rerun (0.14.0)
       listen (~> 3.0)
     rexml (3.3.9)
-    roda (3.86.0)
+    roda (3.87.0)
       rack
     rodauth (2.37.0)
       roda (>= 2.6.0)
