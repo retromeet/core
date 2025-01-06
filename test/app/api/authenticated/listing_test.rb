@@ -28,7 +28,7 @@ describe API::Authenticated::Profile do
       relationship_status: @etterbeek_account.profile.relationship_status,
       location_display_name: @etterbeek.display_name.transform_keys(&:to_sym),
       location_distance: 3.60585778981352,
-      age: 37 # TODO: calculate this so that this test don't breaks when the profile ages
+      age: AgeHelper.age_from_date(@etterbeek_account.profile.birth_date)
     }
     @amsterdam_profile = {
       id: @amsterdam_account.profile.id,
@@ -38,7 +38,7 @@ describe API::Authenticated::Profile do
       relationship_status: @amsterdam_account.profile.relationship_status,
       location_display_name: @amsterdam.display_name.transform_keys(&:to_sym),
       location_distance: 171.18810403107398,
-      age: 27 # TODO: calculate this so that this test don't breaks when the profile ages
+      age: AgeHelper.age_from_date(@amsterdam_account.profile.birth_date)
     }
     @cologne_profile = {
       id: @cologne_account.profile.id,
@@ -48,7 +48,7 @@ describe API::Authenticated::Profile do
       relationship_status: @cologne_account.profile.relationship_status,
       location_display_name: @cologne.display_name.transform_keys(&:to_sym),
       location_distance: 181.5191324427601,
-      age: 20 # TODO: calculate this so that this test don't breaks when the profile ages
+      age: AgeHelper.age_from_date(@cologne_account.profile.birth_date)
     }
     @paris_profile = {
       id: @paris_account.profile.id,
@@ -58,7 +58,7 @@ describe API::Authenticated::Profile do
       relationship_status: @paris_account.profile.relationship_status,
       location_display_name: @paris.display_name.transform_keys(&:to_sym),
       location_distance: 266.8743807484807,
-      age: 20 # TODO: calculate this so that this test don't breaks when the profile ages
+      age: AgeHelper.age_from_date(@paris_account.profile.birth_date)
     }
   end
 
