@@ -11,7 +11,7 @@ module Persistence
         # @param profile_id [String] A uuid for the profile creating the block
         # @param target_profile_id [String] A uuid for the profile being targeted by the block, will be searched in the DB
         # @raise [ProfileNotFound] If +target_profile_id+ is not found in the DB.
-        # @return [void]
+        # @return [Integer] the block id
         def block_profile(profile_id:, target_profile_id:)
           raise ProfileNotFound unless profiles.where(id: target_profile_id).get(:id)
 
@@ -30,6 +30,23 @@ module Persistence
                         .merge_insert(profile_id:, target_profile_id:)
                         .merge
 
+          profile_blocks.where(profile_id:, target_profile_id:).get(:id)
+        end
+
+        # @param profile_id (see .block_profile)
+        # @param target_profile_id (see .block_profile)
+        # @raise [ProfileNotFound] If +target_profile_id+ is not found in the DB.
+        # @return [void]
+        def unblock_profile(profile_id:, target_profile_id:)
+          raise ProfileNotFound unless profiles.where(id: target_profile_id).get(:id)
+
+          profile_blocks.where(profile_id:, target_profile_id:).delete
+        end
+
+        # @param profile_id (see .block_profile)
+        # @param target_profile_id (see .block_profile)
+        # @return [Integer] the block id
+        def block_info(profile_id:, target_profile_id:)
           profile_blocks.where(profile_id:, target_profile_id:).get(:id)
         end
       end
