@@ -15,7 +15,22 @@ module Persistence
         def block_profile(profile_id:, target_profile_id:)
           raise ProfileNotFound unless profiles.where(id: target_profile_id).get(:id)
 
-          profile_blocks.insert(profile_id:, target_profile_id:)
+          # TODO: (renatolond, 2025-01-08) It seems .returning(:id) is only supported for merge on pg >=17
+          # For now doing two operations, but fix to do only one when possible
+          merge_join_table = Database.connection
+                                     .select(
+                                       Sequel.as(Sequel.lit("?::uuid", profile_id), :profile_id),
+                                       Sequel.as(Sequel.lit("?::uuid", target_profile_id), :target_profile_id)
+                                     )
+                                     .as(:u)
+
+          profile_blocks.merge_using(merge_join_table,
+                                     Sequel[:profile_blocks][:profile_id] => Sequel[:u][:profile_id],
+                                     Sequel[:profile_blocks][:target_profile_id] => Sequel[:u][:target_profile_id])
+                        .merge_insert(profile_id:, target_profile_id:)
+                        .merge
+
+          profile_blocks.where(profile_id:, target_profile_id:).get(:id)
         end
       end
     end
