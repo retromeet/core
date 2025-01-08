@@ -37,6 +37,13 @@ module RackHelper
     put(*)
   end
 
+  def authorized_delete(authorization, *)
+    header "authorization", authorization
+    header "content-type", "application/json"
+    header "accept", "application/json"
+    delete(*)
+  end
+
   def json_post(*)
     header "content-type", "application/json"
     header "accept", "application/json"

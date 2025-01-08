@@ -103,7 +103,7 @@ module API
           requires :id, type: String, documentation: { format: :uuid }, regexp: Utils::UUID7_RE
         end
         namespace ":id" do
-          desc "Returns the complete profile information for the requested account id.",
+          desc "Returns the complete profile information for the requested profile id.",
                success: { model: API::Entities::OtherProfileInfo, message: "The profile for the account id, if exists" },
                failure: Authenticated.failures([400, 401, 500]),
                produces: Authenticated::PRODUCES,
@@ -112,7 +112,30 @@ module API
             profile_info = Persistence::Repository::Account.profile_info(id: params[:id])
             error!({ error: :PROFILE_NOT_FOUND, detail: "The requested profile does not exist or you don't have permission to see it" }, :not_found) unless profile_info
 
+            profile_info[:is_blocked] = true if Persistence::Repository::Blocks.block_info(profile_id: rodauth.session[:profile_id], target_profile_id: params[:id]).present?
             Entities::OtherProfileInfo.represent(profile_info)
+          end
+
+          desc "Creates a block against the requested profile id",
+               success: [code: 204, message: "Updated sucessfully"],
+               failure: Authenticated.failures([401, 404, 500]),
+               produces: Authenticated::PRODUCES,
+               consumes: Authenticated::CONSUMES
+          post :block do
+            Persistence::Repository::Blocks.block_profile(target_profile_id: params[:id], profile_id: rodauth.session[:profile_id])
+
+            status :no_content
+          end
+
+          desc "Deletes a block against the requested profile id, if exist",
+               success: [code: 204, message: "Updated sucessfully"],
+               failure: Authenticated.failures([401, 404, 500]),
+               produces: Authenticated::PRODUCES,
+               consumes: Authenticated::CONSUMES
+          delete :block do
+            Persistence::Repository::Blocks.unblock_profile(target_profile_id: params[:id], profile_id: rodauth.session[:profile_id])
+
+            status :no_content
           end
         end
       end

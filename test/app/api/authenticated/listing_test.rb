@@ -104,6 +104,19 @@ describe API::Authenticated::Profile do
       assert_equal expected_response, parsed_response
     end
 
+    it "With the default distance, it does not show a blocked profile" do
+      create(:profile_block, profile: @account.profile, target_profile: @etterbeek_account.profile)
+      expected_response = { profiles: [] }
+      authorized_get @auth, @endpoint
+
+      assert_predicate last_response, :ok?
+      assert_schema_conform(200)
+      parsed_response = JSON.parse(last_response.body, symbolize_names: true)
+
+      assert_equal 0, parsed_response[:profiles].size
+      assert_equal expected_response, parsed_response
+    end
+
     it "Gets a bad request with more than 400 distance" do
       authorized_get @auth, @endpoint, { max_distance: 401 }
 
