@@ -14,6 +14,8 @@ We use Rubocop for linting. To make your experience easier, it's recommended tha
 
 There's a [pronto](https://github.com/prontolabs/pronto) github action running on each pull request that will comment on any forgotten lint issues. You can also get ahead of it by enabling [lefthook](https://github.com/evilmartians/lefthook), you can do it by running locally: `lefthook install --force`. The `--force` is optional, but will override any other hooks you have in this repo only, so it should be safe to run. This will run pronto any time you try to push a branch.
 
+When contributing, you are welcome to fix pre-existing lint issues in files. But it is better if you open a separate pull request for fixing up linting issues that are not related to the code you are touching, to simplify the reviewing process.
+
 ### Setup
 
 RetroMeet requires Postgresql >= 16.0 (it might work with a lower version than that, but it is not guaranteed), PostGIS >= 3.4 (again, might work with a lower version, but not guaranteed) and the [pg_uuidv7](https://github.com/fboulnois/pg_uuidv7) extension.
