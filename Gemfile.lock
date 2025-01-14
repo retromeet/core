@@ -1,20 +1,20 @@
 GIT
+  remote: https://github.com/interagent/committee.git
+  revision: f5910087598878ff31fad8b54901a125a85d205d
+  ref: f5910087598878ff31fad8b54901a125a85d205d
+  specs:
+    committee (5.5.0)
+      json_schema (~> 0.14, >= 0.14.3)
+      openapi_parser (~> 2.0)
+      rack (>= 1.5, < 3.2)
+
+GIT
   remote: https://github.com/retromeet/address_composer.git
   revision: 9170b3fe686ac651a53ec26f59e700baa1eb5bb5
   submodules: true
   specs:
     address_composer (1.0.1)
       mustache (~> 1.1)
-
-GIT
-  remote: https://github.com/retromeet/committee.git
-  revision: 31a7e806f23f686dda6ed0ac7a0468b8d50d5f07
-  ref: 31a7e80
-  specs:
-    committee (5.5.0)
-      json_schema (~> 0.14, >= 0.14.3)
-      openapi_parser (~> 2.0)
-      rack (>= 1.5, < 3.2)
 
 GEM
   remote: https://rubygems.org/
@@ -207,7 +207,7 @@ GEM
     octokit (7.2.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
-    openapi_parser (2.2.2)
+    openapi_parser (2.2.3)
     openssl (3.2.0)
     parallel (1.26.3)
     parser (3.3.6.0)
