@@ -10,11 +10,11 @@ GIT
 
 GIT
   remote: https://github.com/retromeet/address_composer.git
-  revision: 9170b3fe686ac651a53ec26f59e700baa1eb5bb5
+  revision: 3143425c90270f5d7547d8be00cfcb992eb6abe5
   submodules: true
   specs:
     address_composer (1.0.1)
-      mustache (~> 1.1)
+      mustache (>= 1.1)
 
 GEM
   remote: https://rubygems.org/
