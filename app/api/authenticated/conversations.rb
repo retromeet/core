@@ -44,15 +44,15 @@ module API
 
         desc "Creates a conversation with another user.",
              success: { model: Entities::Conversations, message: "A list of conversations" },
-             failure: Authenticated.failures([400, 401, 500]),
+             failure: Authenticated.failures([400, 401, 404, 500]),
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         params do
           requires :other_profile_id, type: String, documentation: { format: :uuid }, regexp: Utils::UUID7_RE
         end
         post "/" do
-          conversation_id = Persistence::Repository::Messages.upsert_conversation(profile1_id: rodauth.session[:profile_id], profile2_id: params[:other_profile_id])
-          conversation = { id: conversation_id }
+          conversation = Persistence::Repository::Messages.upsert_conversation(profile1_id: rodauth.session[:profile_id], profile2_id: params[:other_profile_id])
+          conversation[:other_profile] = Persistence::Repository::Account.profile_info(id: params[:other_profile_id])
           present conversation, with: Entities::Conversation
         end
 

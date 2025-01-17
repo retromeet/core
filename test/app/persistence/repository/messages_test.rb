@@ -25,20 +25,20 @@ describe Persistence::Repository::Messages do
       profile2_id = @account2.profile.id
 
       assert_difference "Conversation.count", 1 do
-        conversation_id1 = Persistence::Repository::Messages.upsert_conversation(profile1_id:, profile2_id:)
-        conversation_id2 = Persistence::Repository::Messages.upsert_conversation(profile1_id: profile2_id, profile2_id: profile1_id)
+        conversation1 = Persistence::Repository::Messages.upsert_conversation(profile1_id:, profile2_id:)
+        conversation2 = Persistence::Repository::Messages.upsert_conversation(profile1_id: profile2_id, profile2_id: profile1_id)
 
-        assert_equal conversation_id1, conversation_id2
+        assert_equal conversation1, conversation2
       end
     end
     it "calls upsert for a conversation that already exists and gets the existing id back" do
       profile1_id = @account1.profile.id
       profile2_id = @account3.profile.id
 
-      conversation_id = assert_difference "Conversation.count", 0 do
+      conversation = assert_difference "Conversation.count", 0 do
         Persistence::Repository::Messages.upsert_conversation(profile1_id:, profile2_id:)
       end
-      assert_equal @conversation.id, conversation_id
+      assert_equal @conversation.id, conversation[:id]
     end
     it "calls upsert for a conversation with the same profile on both sides and gets an error" do
       profile1_id = @account1.profile.id

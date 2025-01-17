@@ -10,6 +10,7 @@ describe API::Authenticated::Conversations do
     @schaerbeek = create(:location, latitude: 50.8676041, longitude: 4.3737121, language: "en", name: "Schaerbeek - Schaarbeek, Brussels-Capital, Belgium", country_code: "be", osm_id: 58_260)
     @account1 = create(:account, email: @login, password: @password, profile: { location_id: @schaerbeek.id })
     @account2 = create(:account, profile: { location_id: @schaerbeek.id })
+    @account3 = create(:account, profile: { location_id: @schaerbeek.id })
     @conversation = create(:conversation, profile1: @account1.profile, profile2: @account2.profile)
     @message1 = create(:message, conversation: @conversation, sender: "profile1", content: "Message 1")
     @message2 = create(:message, conversation: @conversation, sender: "profile2", content: "Message 2")
@@ -210,6 +211,67 @@ describe API::Authenticated::Conversations do
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end
+  describe "post /conversations" do
+    before do
+      @endpoint = "/api/conversations"
+      @auth = login(login: @login, password: @password)
+    end
+    it "creates a new conversation" do
+      other_profile = @account3.profile
+      expected_response = {
+        id: nil,
+        created_at: nil,
+        last_seen_at: nil,
+        other_profile: {
+          id: other_profile.id,
+          display_name: other_profile.display_name,
+          about_me: other_profile.about_me,
+          genders: other_profile.genders,
+          orientations: other_profile.orientations,
+          languages: other_profile.languages,
+          relationship_status: other_profile.relationship_status,
+          relationship_type: other_profile.relationship_type,
+          tobacco: other_profile.tobacco,
+          alcohol: other_profile.alcohol,
+          marijuana: other_profile.marijuana,
+          other_recreational_drugs: other_profile.other_recreational_drugs,
+          pets: other_profile.pets,
+          wants_pets: other_profile.wants_pets,
+          kids: other_profile.kids,
+          wants_kids: other_profile.wants_kids,
+          religion: other_profile.religion,
+          religion_importance: other_profile.religion_importance,
+          location_display_name: other_profile.location.display_name.transform_keys(&:to_sym),
+          age: AgeHelper.age_from_date(other_profile.birth_date)
+        }
+      }
+      body = { other_profile_id: other_profile.id }
+      assert_difference "Conversation.count", 1 do
+        authorized_post @auth, @endpoint, body.to_json
+      end
+      assert_predicate last_response, :created?
+      assert_schema_conform(201)
+
+      conversation = Conversation.last
+      expected_response[:id] = conversation.id
+      expected_response[:created_at] = conversation.created_at.iso8601
+
+      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+    end
+    it "tries to create a conversation with a profile that does not exist and fails XXXXX" do
+      body = { other_profile_id: "11111111-1111-7111-b111-111111111111" }
+      assert_difference "Conversation.count", 0 do
+        authorized_post @auth, @endpoint, body.to_json
+      end
+      assert_predicate last_response, :not_found?
+      assert_schema_conform(404)
+
+      expected_response = { error: "NOT_FOUND", details: { fields: "other_profile_id", errors: "not found" } }
+
+      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+    end
+  end
+
   describe "post /conversations/:id/messages" do
     before do
       @endpoint = "/api/conversations/%<id>s/messages"

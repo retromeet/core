@@ -7,6 +7,7 @@ module Persistence
       extend Datasets
 
       ConversationNotFound = Class.new(StandardError)
+      ProfileNotFound = Class.new(StandardError)
 
       class << self
         # Either finds an existing conversation or creates a new one between the two given profiles
@@ -14,8 +15,12 @@ module Persistence
         #
         # @param profile1_id [String] The uuid for a profile
         # @param profile2_id [String] The uuid for a profile
+        # @return [Hash{Symbol => Object}] A hash containing the id and created_at
         def upsert_conversation(profile1_id:, profile2_id:)
           raise ArgumentError, "Profiles cannot be the same" if profile1_id == profile2_id
+
+          profile = profiles.where(id: profile2_id).get(:id)
+          raise ProfileNotFound, "Profile with given id was not found" if profile.nil?
 
           profile1_id, profile2_id = [profile1_id, profile2_id].sort
 
@@ -35,7 +40,7 @@ module Persistence
                        .merge_insert(profile1_id:, profile2_id:)
                        .merge
 
-          conversations.where(profile1_id:, profile2_id:).get(:id)
+          conversations.where(profile1_id:, profile2_id:).select(:id, :created_at).first
         end
 
         # @param conversation_id [String] The uuid for the conversation
