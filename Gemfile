@@ -19,9 +19,13 @@ gem "rodauth" # Used for login
 # gem "rotp" # Used by rodauth otp feature
 # gem "rqrcode" # Used by rodauth otp feature
 
+gem "mail" # Used by rodauth to send transactional emails
+
 # Database-related gems
 gem "pg" # Postgresql driver used by Sequel
 gem "sequel" # The base gem for accessing the database layer
+
+gem "tilt"
 
 # CLI-related gems
 gem "pastel" # Used for coloring the output of rake tasks
@@ -40,6 +44,8 @@ gem "aws-sdk-s3", "~> 1.180" # For S3-like storage in Shrine
 
 group :development, :test do
   gem "dotenv" # Used to load environment variables from .env files
+
+  gem "letter_opener" # Used to display email in the development environment instead of sending
 
   gem "rerun", require: false # Used to reload the server when code changes
 

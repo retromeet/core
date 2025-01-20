@@ -4,11 +4,14 @@ module API
   # middleware responsible for authentication
   class RodauthMiddleware < Roda
     plugin :middleware
+    plugin :render
     plugin :rodauth, json: :only, db: Database.connection do
       enable :login, :logout, :create_account,
              :json, # This enables the JSON API that is used to access rodauth functionality.
              :jwt, # This enables the JWT tokens
-             :active_sessions
+             :active_sessions,
+             :verify_account # Sends an email to verify the account after creation
+      verify_account_set_password? false
       jwt_secret ENV.fetch("JWT_SECRET")
       hmac_secret ENV.fetch("HMAC_SECRET")
       require_password_confirmation? false
