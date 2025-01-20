@@ -270,7 +270,7 @@ GEM
     rexml (3.4.0)
     roda (3.87.0)
       rack
-    rodauth (2.37.0)
+    rodauth (2.38.0)
       roda (>= 2.6.0)
       sequel (>= 4)
     rubocop (1.70.0)
