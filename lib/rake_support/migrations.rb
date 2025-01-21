@@ -9,7 +9,7 @@ module RakeSupport
       Sequel.migration do
         change do
           create_table(:artists) do
-            primary_key :id
+            primary_key :id, type: :Bignum
             String :name, null: false
           end
         end
