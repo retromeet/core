@@ -3,6 +3,19 @@
 
 Sequel.migration do
   change do
+    create_enum(:genders, %w[man woman non_binary genderqueer genderfluid gender_non_conforming transgender trans_man transmasculine trans_woman transfeminine transsexual agender bigender pangender two_spirit intersex androgynous questioning unsure])
+    create_enum(:orientations, %w[straight bisexual heteroflexible homoflexible gay lesbian queer pansexual omnisexual abrosexual demisexual asexual greysexual reciprosexual demiromantic aromantic greyromantic fluid fluctuating unsure questioning])
+    create_enum(:languages, %w[abk aar afr aka sqi amh ara arg hye asm ava ave aym aze bam bak eus bel ben bis bos bre bul mya cat cha che nya zho chu chv cor cos cre hrv ces dan div nld dzo eng epo est ewe fao fij fin fra fry ful gla glg lug kat deu ell kal grn guj hat hau heb her hin hmo hun isl ido ibo ind ina ile iku ipk gle ita jpn jav kan kau kas kaz khm kik kin kir kom kon kor kua kur lao lat lav lim lin lit lub ltz mkd mlg msa mal mlt glv mri mar mah mon nau nav nde nbl ndo nep nor nob nno oci oji ori orm oss pli pus fas pol por pan que ron roh run rus sme smo sag san srd srp sna snd sin slk slv som sot spa sun swa ssw swe tgl tah tgk tam tat tel tha bod tir ton tso tsn tur tuk twi uig ukr urd uzb ven vie vol wln cym wol xho iii yid yor zha zul])
+    create_enum(:relationship_type, %w[monogamous non_monogamous])
+    create_enum(:relationship_status, %w[single partnered married])
+    create_enum(:frequency, %w[never sometimes often])
+    create_enum(:haves_or_have_nots, %w[have have_not])
+    create_enum(:wants, %w[want_more do_not_want_more want_some do_not_want_any dont_know maybe])
+    create_enum(:religions, %w[agnosticism atheism buddhism candomble catholicism christianity hinduism islam judaism rastafari sikh spiritism umbanda other])
+    create_enum(:importance, %w[important not_important do_not_care])
+    create_enum(:countries_iso_3166_1_alpha2, %w[ad ae af ag ai al am ao aq ar as at au aw ax az ba bb bd be bf bg bh bi bj bl bm bn bo bq br bs bt bv bw by bz ca cc cd cf cg ch ci ck cl cm cn co cr cu cv cw cx cy cz de dj dk dm do dz ec ee eg eh er es et fi fj fk fm fo fr ga gb gd ge gf gg gh gi gl gm gn gp gq gr gs gt gu gw gy hk hm hn hr ht hu id ie il im in io iq ir is it je jm jo jp ke kg kh ki km kn kp kr kw ky kz la lb lc li lk lr ls lt lu lv ly ma mc md me mf mg mh mk ml mm mn mo mp mq mr ms mt mu mv mw mx my mz na nc ne nf ng ni nl no np nr nu nz om pa pe pf pg ph pk pl pm pn pr ps pt pw py qa re ro rs ru rw sa sb sc sd se sg sh si sj sk sl sm sn so sr ss st sv sx sy sz tc td tf tg th tj tk tl tm tn to tr tt tv tw tz ua ug um us uy uz va vc ve vg vi vn vu wf ws ye yt za zm zw])
+    create_enum(:sender_values, %w[profile1 profile2])
+
     create_table(:account_statuses) do
       column :id, "integer", null: false
       column :name, "text", null: false
@@ -266,6 +279,8 @@ Sequel.migration do
       column :created_at, "timestamp with time zone", default: Sequel::CURRENT_TIMESTAMP, null: false
       foreign_key :profile_id, :profiles, type: "uuid", null: false, key: %i[id]
       foreign_key :target_profile_id, :profiles, type: "uuid", null: false, key: %i[id]
+
+      index %i[profile_id target_profile_id], unique: true
     end
 
     create_table(:messages) do
