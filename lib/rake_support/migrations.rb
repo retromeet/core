@@ -62,7 +62,9 @@ module RakeSupport
       def dump_schema(db)
         return unless Environment.development? || Environment.test?
 
-        db.extension :schema_dumper
+        $LOAD_PATH.unshift(File.dirname(__FILE__, 2))
+
+        db.extension :schema_dumper_with_pgsql_enums
         old_loggers = db.loggers
         db.logger = nil
         schema = db.dump_schema_migration(same_db: true)
