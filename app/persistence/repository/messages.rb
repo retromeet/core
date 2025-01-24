@@ -15,6 +15,8 @@ module Persistence
         #
         # @param profile1_id [String] The uuid for a profile
         # @param profile2_id [String] The uuid for a profile
+        # @raise [ProfileNotFound] If the profile2 does not exist
+        # @raise [ArgumentError] If the two profile ids are the same
         # @return [Hash{Symbol => Object}] A hash containing the id and created_at
         def upsert_conversation(profile1_id:, profile2_id:)
           raise ArgumentError, "Profiles cannot be the same" if profile1_id == profile2_id
@@ -140,6 +142,21 @@ module Persistence
           m = m.where { Sequel[:messages][:id] < max_id } if max_id
           m = m.where { Sequel[:messages][:id] > min_id } if min_id
           m.to_a
+        end
+
+        # This is a method used to verify that message_ids belong to a given sender.
+        #
+        # @param message_ids [Array<Integer>] An array of message_ids
+        # @param profile_id (see .insert_message)
+        # @return [Array<Integer>] An array that will contain the message_ids passed as input that belong to the +profile_id+. Can be empty.
+        def find_message_ids_with_sender(message_ids, profile_id)
+          return message_ids if message_ids.empty?
+
+          messages.join(:conversations, id: :conversation_id)
+                  .select(Sequel[:messages][:id])
+                  .where(Sequel[:messages][:id] => message_ids)
+                  .where(Sequel.case({ "profile1" => { profile1_id: profile_id } }, { profile2_id: profile_id }, :sender))
+                  .map(:id)
         end
       end
     end

@@ -30,5 +30,10 @@ module Persistence
       def messages
         Database.connection[:messages]
       end
+
+      # @return [Sequel::Postgres::Dataset]
+      def reports
+        Database.connection[:reports]
+      end
   end
 end

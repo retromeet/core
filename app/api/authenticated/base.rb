@@ -29,6 +29,7 @@ module API
       mount API::Authenticated::Search
       mount API::Authenticated::Listing
       mount API::Authenticated::Conversations
+      mount API::Authenticated::Reports
 
       namespace :images do
         desc "",
