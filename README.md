@@ -18,7 +18,9 @@ When contributing, you are welcome to fix pre-existing lint issues in files. But
 
 ### Setup
 
-RetroMeet requires Postgresql >= 16.0 (it might work with a lower version than that, but it is not guaranteed), PostGIS >= 3.4 (again, might work with a lower version, but not guaranteed) and the [pg_uuidv7](https://github.com/fboulnois/pg_uuidv7) extension.
+RetroMeet requires Postgresql >= 16.0 (it might work with a lower version than that, but it is not guaranteed), PostGIS >= 3.4 (again, might work with a lower version, but not guaranteed) and the [pg_uuidv7](https://github.com/fboulnois/pg_uuidv7) extension. You can use it locally or with a Docker image, but setting up Postgresql and the extensions is currently not covered in this documentation.
+
+Before starting, you need to have Ruby installed, the same version as the one in [.ruby-version](./.ruby-version). We recommend using one of the [ruby manager](https://www.ruby-lang.org/en/documentation/installation/#managers) for that to make it easier to switch between versions if needed.
 
 To install development dependencies, run:
 
