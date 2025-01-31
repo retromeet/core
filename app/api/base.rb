@@ -19,6 +19,9 @@ module API
       error!({ error: "NOT_FOUND", details: [{ fields: %i[other_profile_id], errors: ["not found"] }], with: Entities::Error }, 404)
     end
 
+    rescue_from Persistence::Repository::Reports::ProfileNotFound do |_e|
+      error!({ error: "NOT_FOUND", details: [{ fields: %i[target_profile_id], errors: ["not found"] }], with: Entities::Error }, 404)
+    end
     rescue_from Persistence::Repository::Reports::MessagesNotFoundOrNotFromSender do |_e|
       error!({ error: "MESSAGE_NOT_FOUND_OR_NOT_FROM_SENDER", details: [{ fields: %i[message_ids], errors: ["one of the ids was not found or does not belong to the other profile"] }], with: Entities::Error }, 422)
     end

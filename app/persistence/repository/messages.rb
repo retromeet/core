@@ -24,7 +24,7 @@ module Persistence
           profile = profiles.where(id: profile2_id).get(:id)
           raise ProfileNotFound, "Profile with given id was not found" if profile.nil?
 
-          profile1_id, profile2_id = [profile1_id, profile2_id].sort
+          profile2_id, profile1_id = profile1_id, profile2_id if profile1_id > profile2_id
 
           # TODO: (renatolond, 2024-11-14) It seems .returning(:id) is only supported for merge on pg >=17
           # For now doing two operations, but fix to do only one when possible
@@ -41,6 +41,18 @@ module Persistence
                                     Sequel[:conversations][:profile2_id] => Sequel[:u][:profile2_id])
                        .merge_insert(profile1_id:, profile2_id:)
                        .merge
+
+          conversations.where(profile1_id:, profile2_id:).select(:id, :created_at).first
+        end
+
+        # @param profile1_id (see .upsert_conversation)
+        # @param profile2_id (see .upsert_conversation)
+        # @raise [ArgumentError] If the two profile ids are the same
+        # @return (see .upsert_conversation)
+        def conversation_between(profile1_id:, profile2_id:)
+          raise ArgumentError, "Profiles cannot be the same" if profile1_id == profile2_id
+
+          profile2_id, profile1_id = profile1_id, profile2_id if profile1_id > profile2_id
 
           conversations.where(profile1_id:, profile2_id:).select(:id, :created_at).first
         end

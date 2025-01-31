@@ -8,6 +8,9 @@ describe API::Authenticated::Profile do
     @login = "foo@retromeet.social"
     @password = "bogus123"
     @account = create(:account, email: @login, password: @password, profile: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
+    @account2 = create(:account)
+    @account3 = create(:account)
+    @conversation = create(:conversation, profile1: @account.profile, profile2: @account3.profile)
   end
 
   describe "get /profile/info" do
@@ -393,6 +396,62 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :not_found?
       assert_schema_conform(404)
+    end
+  end
+
+  describe "get /profile/:id/conversation" do
+    before do
+      @endpoint = "/api/profile/%<id>s/conversation"
+      @auth = login(login: @login, password: @password)
+    end
+
+    it "gets a 404 if there's no conversation between the users" do
+      expected_response = {
+        error: "NOT_FOUND",
+        details: [
+          {
+            fields: [],
+            errors: ["conversation not found"]
+          }
+        ]
+      }
+
+      authorized_get @auth, format(@endpoint, id: @account2.profile.id)
+
+      assert_predicate last_response, :not_found?
+      assert_schema_conform(404)
+      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+    end
+
+    it "gets a 422 if the user passes its own id" do
+      expected_response = {
+        error: "PROFILE_IS_THE_SAME",
+        details: [
+          {
+            fields: ["id"],
+            errors: ["the requested profile is the user's"]
+          }
+        ]
+      }
+
+      authorized_get @auth, format(@endpoint, id: @account.profile.id)
+
+      assert_predicate last_response, :unprocessable?
+      assert_schema_conform(422)
+      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+    end
+
+    it "gets the conversation between the logged in user and the profile requested" do
+      expected_response = {
+        id: @conversation.id,
+        created_at: @conversation.created_at.iso8601
+      }
+
+      authorized_get @auth, format(@endpoint, id: @account3.profile.id)
+
+      assert_predicate last_response, :ok?
+      assert_schema_conform(200)
+      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
   end
 end

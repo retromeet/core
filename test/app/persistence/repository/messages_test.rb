@@ -49,6 +49,32 @@ describe Persistence::Repository::Messages do
       end
     end
   end
+  describe ".conversation_between" do
+    it "calls for a conversation that does not exist yet" do
+      profile1_id = @account1.profile.id
+      profile2_id = @account2.profile.id
+
+      assert_nil Persistence::Repository::Messages.conversation_between(profile1_id:, profile2_id:)
+    end
+    it "calls upsert for both directions but only gets one new conversation" do
+      profile1_id = @account1.profile.id
+      profile2_id = @account3.profile.id
+
+      conversation1 = Persistence::Repository::Messages.conversation_between(profile1_id:, profile2_id:)
+      conversation2 = Persistence::Repository::Messages.conversation_between(profile1_id: profile2_id, profile2_id: profile1_id)
+
+      assert_equal @conversation.id, conversation1[:id]
+      assert_equal conversation1, conversation2
+    end
+    it "calls upsert for a conversation with the same profile on both sides and gets an error" do
+      profile1_id = @account1.profile.id
+      profile2_id = @account1.profile.id
+
+      assert_raises ArgumentError do
+        Persistence::Repository::Messages.conversation_between(profile1_id:, profile2_id:)
+      end
+    end
+  end
   describe ".insert_message" do
     it "tries to insert a message into a conversation that does not exist and fails" do
       profile_id = @account1.profile.id

@@ -137,6 +137,20 @@ module API
 
             status :no_content
           end
+
+          desc "Returns an existing conversation between the logged-in user and the user id, if it exists",
+               success: { model: API::Entities::Conversation, message: "The profile for the account id, if exists" },
+               failure: Authenticated.failures([400, 401, 404, 422, 500]),
+               produces: Authenticated::PRODUCES,
+               consumes: Authenticated::CONSUMES
+          get :conversation do
+            conversation = Persistence::Repository::Messages.conversation_between(profile1_id: rodauth.session[:profile_id], profile2_id: params[:id])
+            error!({ error: "NOT_FOUND", details: [{ fields: [], errors: ["conversation not found"] }], with: Entities::Error }, 404) unless conversation
+
+            Entities::Conversation.represent(conversation)
+          rescue ArgumentError
+            error!({ error: "PROFILE_IS_THE_SAME", details: [{ fields: %i[id], errors: ["the requested profile is the user's"] }], with: Entities::Error }, 422)
+          end
         end
       end
     end

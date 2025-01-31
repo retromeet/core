@@ -221,7 +221,6 @@ describe API::Authenticated::Conversations do
       expected_response = {
         id: nil,
         created_at: nil,
-        last_seen_at: nil,
         other_profile: {
           id: other_profile.id,
           display_name: other_profile.display_name,
