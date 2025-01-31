@@ -4,8 +4,8 @@ module API
   module Entities
     # Represents standard errors raised by grape
     class ErrorDetail < Grape::Entity
-      expose :fields, documentation: { type: [String] }
-      expose :errors, documentation: { type: [String] }
+      expose :fields, documentation: { type: String, is_array: true }
+      expose :errors, documentation: { type: String, is_array: true }
     end
   end
 end

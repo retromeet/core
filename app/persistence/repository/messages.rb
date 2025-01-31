@@ -15,6 +15,8 @@ module Persistence
         #
         # @param profile1_id [String] The uuid for a profile
         # @param profile2_id [String] The uuid for a profile
+        # @raise [ProfileNotFound] If the profile2 does not exist
+        # @raise [ArgumentError] If the two profile ids are the same
         # @return [Hash{Symbol => Object}] A hash containing the id and created_at
         def upsert_conversation(profile1_id:, profile2_id:)
           raise ArgumentError, "Profiles cannot be the same" if profile1_id == profile2_id
@@ -22,7 +24,7 @@ module Persistence
           profile = profiles.where(id: profile2_id).get(:id)
           raise ProfileNotFound, "Profile with given id was not found" if profile.nil?
 
-          profile1_id, profile2_id = [profile1_id, profile2_id].sort
+          profile2_id, profile1_id = profile1_id, profile2_id if profile1_id > profile2_id
 
           # TODO: (renatolond, 2024-11-14) It seems .returning(:id) is only supported for merge on pg >=17
           # For now doing two operations, but fix to do only one when possible
@@ -39,6 +41,18 @@ module Persistence
                                     Sequel[:conversations][:profile2_id] => Sequel[:u][:profile2_id])
                        .merge_insert(profile1_id:, profile2_id:)
                        .merge
+
+          conversations.where(profile1_id:, profile2_id:).select(:id, :created_at).first
+        end
+
+        # @param profile1_id (see .upsert_conversation)
+        # @param profile2_id (see .upsert_conversation)
+        # @raise [ArgumentError] If the two profile ids are the same
+        # @return (see .upsert_conversation)
+        def conversation_between(profile1_id:, profile2_id:)
+          raise ArgumentError, "Profiles cannot be the same" if profile1_id == profile2_id
+
+          profile2_id, profile1_id = profile1_id, profile2_id if profile1_id > profile2_id
 
           conversations.where(profile1_id:, profile2_id:).select(:id, :created_at).first
         end
@@ -140,6 +154,21 @@ module Persistence
           m = m.where { Sequel[:messages][:id] < max_id } if max_id
           m = m.where { Sequel[:messages][:id] > min_id } if min_id
           m.to_a
+        end
+
+        # This is a method used to verify that message_ids belong to a given sender.
+        #
+        # @param message_ids [Array<Integer>] An array of message_ids
+        # @param profile_id (see .insert_message)
+        # @return [Array<Integer>] An array that will contain the message_ids passed as input that belong to the +profile_id+. Can be empty.
+        def find_message_ids_with_sender(message_ids, profile_id)
+          return message_ids if message_ids.empty?
+
+          messages.join(:conversations, id: :conversation_id)
+                  .select(Sequel[:messages][:id])
+                  .where(Sequel[:messages][:id] => message_ids)
+                  .where(Sequel.case({ "profile1" => { profile1_id: profile_id } }, { profile2_id: profile_id }, :sender))
+                  .map(:id)
         end
       end
     end

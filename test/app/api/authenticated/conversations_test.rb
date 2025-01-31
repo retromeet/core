@@ -221,7 +221,6 @@ describe API::Authenticated::Conversations do
       expected_response = {
         id: nil,
         created_at: nil,
-        last_seen_at: nil,
         other_profile: {
           id: other_profile.id,
           display_name: other_profile.display_name,
@@ -266,7 +265,7 @@ describe API::Authenticated::Conversations do
       assert_predicate last_response, :not_found?
       assert_schema_conform(404)
 
-      expected_response = { error: "NOT_FOUND", details: { fields: "other_profile_id", errors: "not found" } }
+      expected_response = { error: "NOT_FOUND", details: [{ fields: ["other_profile_id"], errors: ["not found"] }] }
 
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
     end
