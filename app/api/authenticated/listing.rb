@@ -14,7 +14,7 @@ module API
       end
       namespace :listing do
         get "/" do
-          profiles = Persistence::Repository::Listing.nearby(id: rodauth.session[:profile_id], max_distance_in_meters: params[:max_distance] * 1_000)
+          profiles = Persistence::Repository::Listing.nearby(id: logged_in_profile_id, max_distance_in_meters: params[:max_distance] * 1_000)
           present profiles, with: Entities::OtherProfileInfos, only: [{ profiles: %i[display_name id age genders orientations relationship_status location_display_name location_distance] }]
         end
       end

@@ -17,7 +17,7 @@ module API
           optional :message_ids, type: [Integer], documentation: { desc: "Can include some messages by target_profile that are being reported" }, default: []
         end
         post "/" do
-          Persistence::Repository::Reports.create(profile_id: rodauth.session[:profile_id],
+          Persistence::Repository::Reports.create(profile_id: logged_in_profile_id,
                                                   target_profile_id: params[:target_profile_id],
                                                   type: params[:type],
                                                   comment: params[:comment],

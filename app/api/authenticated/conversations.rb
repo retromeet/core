@@ -10,13 +10,13 @@ module API
           # @return [Hash{Symbol => Object}] The modified conversation object
           def filter_conversation_for_current_profile!(conversation)
             sender = nil # This is used to see if there are new messages in the conversation to be notified
-            if conversation[:profile1_id] == rodauth.session[:profile_id]
+            if conversation[:profile1_id] == @logged_in_profile_id
               sender = "profile2"
               conversation[:other_profile_id] = conversation.delete(:profile2_id)
               conversation[:last_seen_at] = conversation.delete(:profile1_last_seen_at)
               conversation.delete(:profile1_id)
               conversation.delete(:profile2_last_seen_at)
-            elsif conversation[:profile2_id] == rodauth.session[:profile_id]
+            elsif conversation[:profile2_id] == @logged_in_profile_id
               sender = "profile1"
               conversation[:other_profile_id] = conversation.delete(:profile1_id)
               conversation[:last_seen_at] = conversation.delete(:profile2_last_seen_at)
@@ -35,7 +35,7 @@ module API
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         get "/" do
-          conversations = Persistence::Repository::Messages.find_conversations(profile_id: rodauth.session[:profile_id])
+          conversations = Persistence::Repository::Messages.find_conversations(profile_id: @logged_in_profile_id)
           conversations.each do |conversation|
             filter_conversation_for_current_profile!(conversation)
           end
@@ -51,7 +51,7 @@ module API
           requires :other_profile_id, type: String, documentation: { format: :uuid }, regexp: Utils::UUID7_RE
         end
         post "/" do
-          conversation = Persistence::Repository::Messages.upsert_conversation(profile1_id: rodauth.session[:profile_id], profile2_id: params[:other_profile_id])
+          conversation = Persistence::Repository::Messages.upsert_conversation(profile1_id: @logged_in_profile_id, profile2_id: params[:other_profile_id])
           conversation[:other_profile] = Persistence::Repository::Account.profile_info(id: params[:other_profile_id])
           present conversation, with: Entities::Conversation
         end
@@ -66,7 +66,7 @@ module API
                produces: Authenticated::PRODUCES,
                consumes: Authenticated::CONSUMES
           get "/" do
-            conversation = Persistence::Repository::Messages.find_conversation(profile_id: rodauth.session[:profile_id], conversation_id: params[:conversation_id])
+            conversation = Persistence::Repository::Messages.find_conversation(profile_id: @logged_in_profile_id, conversation_id: params[:conversation_id])
 
             filter_conversation_for_current_profile!(conversation)
 
@@ -79,7 +79,7 @@ module API
                produces: Authenticated::PRODUCES,
                consumes: Authenticated::CONSUMES
           put :viewed do
-            Persistence::Repository::Messages.update_view_time(conversation_id: params[:conversation_id], profile_id: rodauth.session[:profile_id])
+            Persistence::Repository::Messages.update_view_time(conversation_id: params[:conversation_id], profile_id: @logged_in_profile_id)
             status :no_content
           end
 
@@ -106,7 +106,7 @@ module API
               requires :content, type: String, documentation: { desc: "The content of the message" }
             end
             post "/" do
-              present Persistence::Repository::Messages.insert_message(conversation_id: params[:conversation_id], profile_id: rodauth.session[:profile_id], content: params[:content]), with: Entities::Message
+              present Persistence::Repository::Messages.insert_message(conversation_id: params[:conversation_id], profile_id: logged_in_profile_id, content: params[:content]), with: Entities::Message
             end
           end
         end

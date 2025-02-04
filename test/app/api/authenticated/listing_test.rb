@@ -15,6 +15,7 @@ describe API::Authenticated::Profile do
     @login = "foo@retromeet.social"
     @password = "bogus123"
     @account = create(:account, email: @login, password: @password, profile: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0), location_id: @schaerbeek.id })
+    set_oauth_grant_with_token(oauth_grant_with_token(@account))
     @etterbeek_account = create(:account, profile: { display_name: "Etterbeek account", location_id: @etterbeek.id, birth_date: Date.new(1987, 1, 1) })
     @amsterdam_account = create(:account, profile: { display_name: "Amsterdam account", location_id: @amsterdam.id, birth_date: Date.new(1997, 1, 1) })
     @cologne_account = create(:account, profile: { display_name: "Cologne account", location_id: @cologne.id, birth_date: Date.new(2004, 1, 1) })
@@ -64,13 +65,12 @@ describe API::Authenticated::Profile do
 
   describe "get /listing" do
     before do
-      @auth = login(login: @login, password: @password)
       @endpoint = "/api/listing"
     end
 
     it "With the default distance, gets only the account in Etterbeek" do
       expected_response = { profiles: [@etterbeek_profile] }
-      authorized_get @auth, @endpoint
+      authorized_get @endpoint
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
@@ -82,7 +82,7 @@ describe API::Authenticated::Profile do
 
     it "With 200 kms, gets a few profiles around" do
       expected_response = { profiles: [@etterbeek_profile, @amsterdam_profile, @cologne_profile] }
-      authorized_get @auth, @endpoint, { max_distance: 200 }
+      authorized_get @endpoint, { max_distance: 200 }
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
@@ -94,7 +94,7 @@ describe API::Authenticated::Profile do
 
     it "With 400 kms, gets all profiles" do
       expected_response = { profiles: [@etterbeek_profile, @amsterdam_profile, @cologne_profile, @paris_profile] }
-      authorized_get @auth, @endpoint, { max_distance: 400 }
+      authorized_get @endpoint, { max_distance: 400 }
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
@@ -107,7 +107,7 @@ describe API::Authenticated::Profile do
     it "With the default distance, it does not show a blocked profile" do
       create(:profile_block, profile: @account.profile, target_profile: @etterbeek_account.profile)
       expected_response = { profiles: [] }
-      authorized_get @auth, @endpoint
+      authorized_get @endpoint
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
@@ -118,7 +118,7 @@ describe API::Authenticated::Profile do
     end
 
     it "Gets a bad request with more than 400 distance" do
-      authorized_get @auth, @endpoint, { max_distance: 401 }
+      authorized_get @endpoint, { max_distance: 401 }
 
       assert_predicate last_response, :bad_request?
       assert_response_schema_confirm(400)

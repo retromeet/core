@@ -9,12 +9,12 @@ describe API::Authenticated::Search do
     @login = "foo@retromeet.social"
     @password = "bogus123"
     @account = create(:account, email: @login, password: @password, profile: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
+    set_oauth_grant_with_token(oauth_grant_with_token(@account))
   end
 
   describe "GET /api/search/address" do
     before do
       @endpoint = "/api/search/address"
-      @auth = login(login: @login, password: @password)
     end
 
     it "gets a few search address results" do
@@ -32,7 +32,7 @@ describe API::Authenticated::Search do
       stub_request(:get, "https://photon.komoot.io/api?q=M%C3%A9ier&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
         .to_return(webfixture_json_file("photon.meier"))
 
-      authorized_post @auth, @endpoint, body.to_json
+      authorized_post @endpoint, body.to_json
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)

@@ -11,7 +11,7 @@ module API
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         get :info do
-          profile_info = Persistence::Repository::Account.basic_profile_info(account_id: rodauth.session[:account_id])
+          profile_info = Persistence::Repository::Account.basic_profile_info(account_id: logged_in_account_id)
           Entities::BasicProfileInfo.represent(profile_info)
         end
 
@@ -21,7 +21,7 @@ module API
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         get :complete do
-          profile_info = Persistence::Repository::Account.profile_info(id: rodauth.session[:profile_id])
+          profile_info = Persistence::Repository::Account.profile_info(id: logged_in_profile_id)
           Entities::ProfileInfo.represent(profile_info)
         end
 
@@ -58,8 +58,8 @@ module API
           coerce_empty_array_param_to_nil(declared_params, :languages)
           error!({ error: :AT_LEAST_ONE_PARAMETER_NEEDED, detail: "You need to provide at least one parameter to be changed, none given" }, :bad_request) if declared_params.empty?
 
-          Persistence::Repository::Account.update_profile_info(account_id: rodauth.session[:account_id], **declared_params)
-          profile_info = Persistence::Repository::Account.profile_info(id: rodauth.session[:profile_id])
+          Persistence::Repository::Account.update_profile_info(account_id: logged_in_account_id, **declared_params)
+          profile_info = Persistence::Repository::Account.profile_info(id: logged_in_profile_id)
           status :ok
           Entities::ProfileInfo.represent(profile_info, only: declared_params.keys.map(&:to_sym))
         end
@@ -78,8 +78,8 @@ module API
           results.select! { |r| r.osm_id == params[:osm_id] }
           error!({ error: :UNEXPECTED_RESULTS_SIZE, detail: "Expected to have exactly one location with the given name, had #{results.size} instead" }, :unprocessable_content) if results.size != 1
 
-          Persistence::Repository::Account.update_profile_location(account_id: rodauth.session[:account_id], location_result: results.first)
-          profile_info = Persistence::Repository::Account.profile_info(id: rodauth.session[:profile_id])
+          Persistence::Repository::Account.update_profile_location(account_id: logged_in_account_id, location_result: results.first)
+          profile_info = Persistence::Repository::Account.profile_info(id: logged_in_profile_id)
           status :ok
           Entities::ProfileInfo.represent(profile_info, only: %i[location_display_name])
         end
@@ -92,10 +92,10 @@ module API
           requires :profile_picture, type: File
         end
         post :picture do
-          attacher = ImageUploader::Attacher.from_data(Persistence::Repository::Account.profile_picture(account_id: rodauth.session[:account_id]))
-          attacher.assign(params[:profile_picture], metadata: { type: :profile_picture, profile_id: rodauth.session[:profile_id] })
+          attacher = ImageUploader::Attacher.from_data(Persistence::Repository::Account.profile_picture(account_id: logged_in_account_id))
+          attacher.assign(params[:profile_picture], metadata: { type: :profile_picture, profile_id: logged_in_profile_id })
           attacher.finalize
-          Persistence::Repository::Account.update_profile_picture(account_id: rodauth.session[:account_id], picture: attacher.data)
+          Persistence::Repository::Account.update_profile_picture(account_id: logged_in_account_id, picture: attacher.data)
           status :no_content
         end
 
@@ -112,7 +112,7 @@ module API
             profile_info = Persistence::Repository::Account.profile_info(id: params[:id])
             error!({ error: :PROFILE_NOT_FOUND, detail: "The requested profile does not exist or you don't have permission to see it" }, :not_found) unless profile_info
 
-            profile_info[:is_blocked] = true if Persistence::Repository::Blocks.block_info(profile_id: rodauth.session[:profile_id], target_profile_id: params[:id]).present?
+            profile_info[:is_blocked] = true if Persistence::Repository::Blocks.block_info(profile_id: logged_in_profile_id, target_profile_id: params[:id]).present?
             Entities::OtherProfileInfo.represent(profile_info)
           end
 
@@ -122,7 +122,7 @@ module API
                produces: Authenticated::PRODUCES,
                consumes: Authenticated::CONSUMES
           post :block do
-            Persistence::Repository::Blocks.block_profile(target_profile_id: params[:id], profile_id: rodauth.session[:profile_id])
+            Persistence::Repository::Blocks.block_profile(target_profile_id: params[:id], profile_id: logged_in_profile_id)
 
             status :no_content
           end
@@ -133,7 +133,7 @@ module API
                produces: Authenticated::PRODUCES,
                consumes: Authenticated::CONSUMES
           delete :block do
-            Persistence::Repository::Blocks.unblock_profile(target_profile_id: params[:id], profile_id: rodauth.session[:profile_id])
+            Persistence::Repository::Blocks.unblock_profile(target_profile_id: params[:id], profile_id: logged_in_profile_id)
 
             status :no_content
           end
@@ -144,7 +144,7 @@ module API
                produces: Authenticated::PRODUCES,
                consumes: Authenticated::CONSUMES
           get :conversation do
-            conversation = Persistence::Repository::Messages.conversation_between(profile1_id: rodauth.session[:profile_id], profile2_id: params[:id])
+            conversation = Persistence::Repository::Messages.conversation_between(profile1_id: logged_in_profile_id, profile2_id: params[:id])
             error!({ error: "NOT_FOUND", details: [{ fields: [], errors: ["conversation not found"] }], with: Entities::Error }, 404) unless conversation
 
             Entities::Conversation.represent(conversation)

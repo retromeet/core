@@ -1,21 +1,32 @@
 # frozen_string_literal: true
 
 module API
+  OAUTH_VALID_URI_SCHEMES = if Environment.test? || Environment.development?
+    %w[http https]
+  else
+    %w[https]
+  end.freeze
+
+  OAUTH_APPLICATION_SCOPES = %w[
+    profile
+  ].freeze
   # middleware responsible for authentication
   class RodauthMiddleware < Roda
     plugin :middleware
     plugin :render
+    plugin :sessions, secret: ENV.fetch("SESSION_SECRET"), key: "retromeet-core.session"
     plugin :rodauth, json: :only, db: Database.connection do
       enable :login, :logout, :create_account,
-             :json, # This enables the JSON API that is used to access rodauth functionality.
-             :jwt, # This enables the JWT tokens
-             :active_sessions,
+             :oauth_authorization_code_grant, :oauth_client_credentials_grant,
+             :oauth_application_management, :oauth_grant_management, :oauth_token_revocation,
+             :oauth_dynamic_client_registration, :oauth_token_introspection,
              :verify_account # Sends an email to verify the account after creation
+      login_return_to_requested_location? true
       verify_account_set_password? false
-      jwt_secret ENV.fetch("JWT_SECRET")
-      hmac_secret ENV.fetch("HMAC_SECRET")
-      require_password_confirmation? false
       require_login_confirmation? false
+
+      oauth_application_scopes OAUTH_APPLICATION_SCOPES
+      oauth_valid_uri_schemes OAUTH_VALID_URI_SCHEMES
 
       before_create_account do
         unless (birth_date = param_or_nil("birth_date"))

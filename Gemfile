@@ -16,6 +16,7 @@ gem "bcrypt" # Used by rodauth for password hashing
 gem "jwt" # Used by rodauth jwt
 gem "roda" # Used for the login middleware
 gem "rodauth" # Used for login
+gem "rodauth-oauth" # Provides the oauth implementation to rodauth
 # gem "rotp" # Used by rodauth otp feature
 # gem "rqrcode" # Used by rodauth otp feature
 
@@ -73,7 +74,7 @@ group :test do
   gem "database_cleaner-sequel" # Cleans the database between tests
 
   gem "committee", # Used to test the swagger documentation in the tests
-      github: "interagent/committee", ref: "f5910087598878ff31fad8b54901a125a85d205d" # This adds extra validation to OpenAPI 2, should be replaced as soon as new version is cut
+      github: "retromeet/committee", ref: "ad2c31011987b2db935b6c950bfeccc501d65fba" # This adds extra validation to OpenAPI 2, should be replaced as soon as new version is cut
 
   gem "factory_bot" # makes it easier to create objects for tests
   gem "faker" # provides fake data for tests
