@@ -34,13 +34,8 @@ module API
     end
 
     route do |r|
-      unless (Environment.development? || Environment.test?) && r.path == "/api/swagger_doc"
-        r.rodauth
-        rodauth.require_authentication
-        rodauth.check_active_session
-        rodauth.session[:profile_id] = Persistence::Repository::Account.profile_id_from_account_id(account_id: rodauth.session[:account_id])
-        env["rodauth"] = rodauth
-      end
+      r.rodauth
+      env["rodauth"] = rodauth
     end
   end
 end

@@ -11,6 +11,14 @@ module API
           env["rodauth"]
         end
 
+        # Sets up things in rodauth for this request
+        # These are done here so they are only done in case of being in an Authenticated route
+        # @return [void]
+        def rodauth_setup
+          rodauth.check_active_session
+          rodauth.session[:profile_id] = Persistence::Repository::Account.profile_id_from_account_id(account_id: rodauth.session[:account_id])
+        end
+
         # If the user is not authenticated, returns a 401 error
         # @return [void]
         def authenticate!
@@ -23,7 +31,10 @@ module API
         end
       end
 
-      before { authenticate! }
+      before do
+        rodauth_setup
+        authenticate!
+      end
 
       mount API::Authenticated::Profile
       mount API::Authenticated::Search
