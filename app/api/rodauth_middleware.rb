@@ -24,7 +24,7 @@ module API
 
     plugin :route_csrf
     plugin :middleware, next_if_not_found: true
-    plugin :rodauth, db: Database.connection do
+    plugin :rodauth, json: true, db: Database.connection do
       enable :login, :logout, :create_account,
              :oauth_authorization_code_grant, :oauth_client_credentials_grant,
              :oauth_application_management, :oauth_grant_management, :oauth_token_revocation,
@@ -40,6 +40,10 @@ module API
 
       field_error_attributes { |field| "class='is-danger input is-large' aria-invalid=\"true\" aria-describedby=\"#{field}_error_message\"" }
       formatted_field_error { |field, reason| "<p id=\"#{field}_error_message\" class='help is-danger'>#{reason}.</p>" }
+
+      before_register do
+        nil
+      end
       before_create_account do
         unless (birth_date = param_or_nil("birth_date"))
           throw_error_status(422, "birth_date", R18n.t.birth_date.required)
@@ -63,8 +67,14 @@ module API
       r.assets
       r.public
 
+      r.root do
+        view("root")
+      end
       r.rodauth
       check_csrf! unless r.content_type&.include?("application/json")
+      rodauth.load_oauth_application_management_routes
+      rodauth.load_oauth_grant_management_routes
+      rodauth.load_oauth_server_metadata_route
 
       env["rodauth"] = rodauth
     end
