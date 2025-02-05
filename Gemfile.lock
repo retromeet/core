@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/HParker/mustache.git
+  revision: 28cb499d4744131f9579b14890787068cff2450d
+  ref: 28cb499d4744131f9579b14890787068cff2450d
+  specs:
+    mustache (1.1.1)
+
+GIT
   remote: https://github.com/retromeet/address_composer.git
   revision: 9e0b6938dff28bd6f2dc402517091dcbee321fef
   submodules: true
@@ -228,7 +235,6 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
-    mustache (1.1.1)
     mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
     mustermann-grape (1.1.0)
@@ -412,6 +418,7 @@ DEPENDENCIES
   minitest
   minitest-hooks
   mocha
+  mustache!
   pastel
   pg
   pronto (~> 0.11)

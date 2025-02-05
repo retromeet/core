@@ -42,6 +42,8 @@ gem "async-http" # Used for making requests towards other APIs
 
 gem "address_composer", # Used for taking components of the address from the Photon/Nominatim response and making it into a user-friendly address
     github: "retromeet/address_composer", submodules: true # A fork that only deals with symbols for reduced memory usage
+gem "mustache",
+    github: "HParker/mustache", ref: "28cb499d4744131f9579b14890787068cff2450d" # solves the mutable strings warnings. is a dep of address_composer and should be removed when a new version is cut
 
 gem "shrine" # Used for file uploads
 
