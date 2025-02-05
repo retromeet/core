@@ -1,0 +1,29 @@
+%footer.section
+  .box.cta
+    .container
+      .pb-5.is-flex.is-flex-wrap-wrap.is-justify-content-between.is-align-items-center
+        .mr-auto.mb-2
+          %a.is-inline-block{:href => "#"}
+            %img.image{:alt => "", :src => "https://bulma.io/images/bulma-logo.png", :width => "96px"}/
+        %div
+          %ul.is-flex.is-flex-wrap-wrap.is-align-items-center.is-justify-content-center
+            %li.mr-4
+              %a{href: "/about"}= t.about
+            %li.mr-4
+              %a{href: "/terms"}= t.terms
+            %li.mr-4
+              %a{href: "/privacy"}= t.privacy_policy
+    %hr
+    .container
+      .is-flex-tablet.is-justify-content-between.is-align-items-center
+        %p
+          Powered by
+          %a{href: "https://join.retromeet.social", target: "_blank"}
+            RetroMeet #{RetroMeet::Version}
+          &#169; 2024, RetroMeet contributors.
+        .py-2.is-hidden-tablet
+        .ml-auto
+          %a.mr-4.is-inline-block{href: "https://github.com/retromeet", target: "_blank"}
+            %i.fa.fa-github{ "aria-hidden": true }
+          %a.mr-4.is-inline-block{href: "https://masto.donte.com.br/@retromeet", target: "_blank"}
+            %i.fa.fa-mastodon{ "aria-hidden": true }

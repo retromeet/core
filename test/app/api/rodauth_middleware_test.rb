@@ -57,9 +57,10 @@ describe API::RodauthMiddleware do
       body = { login:, password: Faker::Internet.password, birth_date: }
       assert_difference("Profile.count", 1) do
         json_post "/create-account", body.to_json
+
+        assert_predicate last_response, :ok?
       end
 
-      assert_predicate last_response, :ok?
       assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
       inserted = Profile.last
 

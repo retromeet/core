@@ -1,0 +1,67 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css";
+@import "https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css";
+
+:root {
+  --bulma-primary-h: 31deg;
+  --bulma-primary-s: 84%;
+  --bulma-primary-l: 53%;
+  --bulma-link-h: 176deg;
+  --bulma-link-s: 46%;
+  --bulma-link-l: 59%;
+  --bulma-info-h: 16deg;
+  --bulma-info-s: 88%;
+  --bulma-info-l: 56%;
+  --bulma-success-h: 58deg;
+  --bulma-success-s: 65%;
+  --bulma-success-l: 48%;
+  --bulma-danger-h: 358deg;
+  --bulma-danger-s: 71%;
+  --bulma-danger-l: 49%;
+  --bulma-body-background-color: #E7D8B7;
+  --bulma-skeleton-background: #E7D8B7;
+}
+.navbar {
+  --bulma-navbar-background-color: #E7D8B7;
+}
+
+.hero-body .subtitle {
+  padding-top: 2rem;
+  line-height: 1.5;
+}
+
+.card-image > .fa {
+  font-size: 5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.conversations-list .list a.box:hover,
+.conversations-list .list a.box:focus,
+.conversations-list .list a.box:active {
+  box-shadow: none;
+  background-color: #f9f9f9;
+}
+
+.chat-right {
+  justify-content: flex-end;
+}
+
+.chat .message {
+  --bulma-message-border-style: none;
+  width: 300px;
+}
+
+.chat .media {
+ margin-bottom: 5px;
+}
+
+.chat .media+.media {
+ border-top: none;
+ padding-top: 0px;
+ margin-top: 0px;
+}
+
+.image.is-256x256 {
+    height: 256px;
+    width: 256px;
+}

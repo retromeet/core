@@ -1,0 +1,2 @@
+%p.has-text-grey
+  != rodauth.login_form_footer_links.map { |_i, path, text| next if path == env["REQUEST_PATH"]; render("login_footer_link", locals: { path: path, text: text }) }.compact.join("&nbsp;·&nbsp;")

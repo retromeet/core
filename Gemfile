@@ -14,7 +14,8 @@ gem "falcon" # The app server
 
 gem "bcrypt" # Used by rodauth for password hashing
 gem "jwt" # Used by rodauth jwt
-gem "roda" # Used for the login middleware
+gem "roda" # Used for the authorization/authentication as middleware
+gem "roda-i18n"
 gem "rodauth" # Used for login
 gem "rodauth-oauth" # Provides the oauth implementation to rodauth
 # gem "rotp" # Used by rodauth otp feature
@@ -26,7 +27,10 @@ gem "mail" # Used by rodauth to send transactional emails
 gem "pg" # Postgresql driver used by Sequel
 gem "sequel" # The base gem for accessing the database layer
 
-gem "tilt"
+# View-related gems
+gem "haml" # To use haml as the rendering engine
+gem "sass-embedded" # To serve .scss
+gem "tilt" # Used by roda to serve teh views
 
 # CLI-related gems
 gem "pastel" # Used for coloring the output of rake tasks
