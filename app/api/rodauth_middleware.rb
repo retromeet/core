@@ -70,6 +70,12 @@ module API
       r.root do
         view("root")
       end
+      r.is("terms") do
+        view(:terms)
+      end
+      r.is("privacy") do
+        view(:privacy)
+      end
       r.rodauth
       check_csrf! unless r.content_type&.include?("application/json")
       rodauth.load_oauth_application_management_routes

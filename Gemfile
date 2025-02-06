@@ -30,7 +30,7 @@ gem "sequel" # The base gem for accessing the database layer
 # View-related gems
 gem "haml" # To use haml as the rendering engine
 gem "sass-embedded" # To serve .scss
-gem "tilt" # Used by roda to serve teh views
+gem "tilt" # Used by roda to serve the views
 
 # CLI-related gems
 gem "pastel" # Used for coloring the output of rake tasks
