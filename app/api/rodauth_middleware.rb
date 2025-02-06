@@ -68,7 +68,7 @@ module API
       r.public
 
       r.root do
-        view("root")
+        view(template: "root", layout: "hero")
       end
       r.is("terms") do
         view(:terms)
