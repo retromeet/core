@@ -15,7 +15,7 @@
           .navbar-item
             %form{action: "/logout", method: :post}
               = csrf_tag("/logout")
-              %input{type: "submit", class: "button is-link is-light", value: t.logout}
+              %input{type: "submit", class: "button is-link is-light", value: rodauth.logout_button}
         - else
           .navbar-item
-            %a{href: "/create-account"}= t.sign_up
+            %a{href: "/create-account"}= I18n.t("sign_up")

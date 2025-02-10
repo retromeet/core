@@ -10,6 +10,6 @@
               = rodauth.input_field_string(rodauth.login_param, "login", type: rodauth.login_input_type, class: "input is-large", autocomplete: rodauth.login_field_autocomplete_value, attr: "placeholder='email@example.com'")
           .field
             .control
-              = rodauth.input_field_string(rodauth.password_param, "password", type: "password", class: "input is-large", autocomplete: rodauth.password_field_autocomplete_value, attr: "placeholder='#{t.create_account.password}'")
-          = rodauth.button(t.login, class: "button is-block is-info is-large is-fullwidth")
+              = rodauth.input_field_string(rodauth.password_param, "password", type: "password", class: "input is-large", autocomplete: rodauth.password_field_autocomplete_value, attr: "placeholder='#{rodauth.password_label}'")
+          = rodauth.button(rodauth.login_button, class: "button is-block is-info is-large is-fullwidth")
       = render "login-form-footer"

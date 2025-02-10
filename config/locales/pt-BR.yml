@@ -1,0 +1,8 @@
+---
+pt-BR:
+  about: "Sobre"
+  terms: "Terms de uso"
+  privacy_policy: Política de Privacidade
+  sign_up: "Criar uma conta"
+  create_account:
+    birth_date_help: Precisamos da sua data de nascimento para garantir que você pode acessar nosso serviço, de acordo com nossos termos de uso. Você <strong>NÃO PODE</strong> mudar essa informação depois, mas você pode esconder a sua idade se você quiser.

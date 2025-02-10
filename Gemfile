@@ -12,12 +12,13 @@ gem "grape-swagger-entity"
 
 gem "falcon" # The app server
 
+gem "i18n" # Used for translating strings in the views
+
 gem "bcrypt" # Used by rodauth for password hashing
 gem "jwt" # Used by rodauth jwt
 gem "roda" # Used for the authorization/authentication as middleware
-gem "roda-i18n"
-gem "rodauth-i18n" # Used for localizing stuff
 gem "rodauth" # Used for login
+gem "rodauth-i18n" # Uses the i18n gem for rodauth's "translatable_method"s
 gem "rodauth-oauth" # Provides the oauth implementation to rodauth
 # gem "rotp" # Used by rodauth otp feature
 # gem "rqrcode" # Used by rodauth otp feature
