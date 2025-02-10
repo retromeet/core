@@ -217,7 +217,7 @@ GEM
     openapi_parser (2.2.3)
     openssl (3.3.0)
     parallel (1.26.3)
-    parser (3.3.7.0)
+    parser (3.3.7.1)
       ast (~> 2.4.1)
       racc
     pastel (0.8.0)
@@ -274,7 +274,7 @@ GEM
     rodauth (2.38.0)
       roda (>= 2.6.0)
       sequel (>= 4)
-    rubocop (1.71.1)
+    rubocop (1.71.2)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
