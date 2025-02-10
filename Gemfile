@@ -16,6 +16,7 @@ gem "bcrypt" # Used by rodauth for password hashing
 gem "jwt" # Used by rodauth jwt
 gem "roda" # Used for the authorization/authentication as middleware
 gem "roda-i18n"
+gem "rodauth-i18n" # Used for localizing stuff
 gem "rodauth" # Used for login
 gem "rodauth-oauth" # Provides the oauth implementation to rodauth
 # gem "rotp" # Used by rodauth otp feature

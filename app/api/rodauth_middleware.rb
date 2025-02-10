@@ -25,7 +25,7 @@ module API
     plugin :route_csrf
     plugin :middleware, next_if_not_found: true
     plugin :rodauth, json: true, db: Database.connection do
-      enable :login, :logout, :create_account,
+      enable :i18n, :login, :logout, :create_account,
              :oauth_authorization_code_grant, :oauth_client_credentials_grant,
              :oauth_application_management, :oauth_grant_management, :oauth_token_revocation,
              :oauth_dynamic_client_registration, :oauth_token_introspection,
