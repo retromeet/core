@@ -102,6 +102,20 @@ You can run all tests with:
 bundle exec rake test
 ```
 
+This will execute unit tests followed by capybara tests (simulating a browser sesssion). If any unit tests fail, it will stop before executing any capybara tests.
+
+If you want to execute those individually, you can run one of the following commands:
+
+```sh
+bundle exec rake test_unit
+bundle exec rake test_capybara
+```
+
+By default capybara tests execute using a Chrome browser in headless mode (in other words, without showing you what's happening). If you want to check what is happening, you can use `HEADLESS=false`, like so:
+```sh
+HEADLESS=false bundle exec rake test_capybara
+```
+
 Or a single test by running it directly:
 ```sh
 bundle exec ruby test/to/run.rb

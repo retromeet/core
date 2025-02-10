@@ -2,7 +2,15 @@
 
 require "minitest/test_task"
 
-Minitest::TestTask.create
+Minitest::TestTask.create(:test_unit) do |t|
+  t.test_globs = ["test/app/**/*_test.rb"]
+end
+Minitest::TestTask.create(:test_capybara) do |t|
+  t.test_globs = ["test/capybara/**/*_test.rb"]
+end
+task test: %i[test_unit test_capybara] do
+  # Does nothing, only calls the other two tasks
+end
 task default: :test # Make testing the default task
 
 require "grape-swagger/rake/oapi_tasks"

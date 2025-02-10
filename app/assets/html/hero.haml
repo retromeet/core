@@ -11,6 +11,12 @@
     %link{:href => "/icon.png", :rel => "apple-touch-icon"}/
     = assets(:css)
   %body
+    - if flash["error"]
+      .notification.is-danger
+        = flash["error"]
+    - if flash["notice"]
+      .notification.is-info
+        = flash["notice"]
     %section.hero.is-medium.is-bold
       = yield
     = render "footer"

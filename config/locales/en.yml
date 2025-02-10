@@ -6,3 +6,7 @@ en:
   sign_up: "Sign up"
   create_account:
     birth_date_help: We need your birth date to guarantee that you are allowed access to our service, according to our terms of service. You <strong>CANNOT</strong> change this at a later time, but you can make your age private if you wish.
+    birth_date:
+      invalid_date: "must be a valid date"
+      over_18_required: "You need to be at least 18 years old to join."
+      required: "must be present"

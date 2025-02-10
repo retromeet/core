@@ -3,7 +3,7 @@
 module RackHelper
   include Rack::Test::Methods
 
-  def app
+  def self.app
     app = Rack::Builder.parse_file("config.ru")
     # TODO: need a less hacky way to do this, maybe.
     app.instance_variable_get(:@app).instance_variable_get(:@mid).rodauth.configure do
@@ -12,6 +12,10 @@ module RackHelper
       oauth_applications_client_secret_hash_column nil
     end
     app
+  end
+
+  def app
+    RackHelper.app
   end
 
   def oauth_application(params = {})

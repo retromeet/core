@@ -66,6 +66,7 @@ group :development, :test do
   gem "pronto-rubocop", require: false # pronto-rubocop extends pronto for rubocop
 
   gem "rubocop", require: false # A static code analyzer and formatter
+  gem "rubocop-capybara", require: false # Extension for capybara tests
   gem "rubocop-factory_bot", require: false # A rubocop extension for factory bot
   gem "rubocop-minitest", require: false # A rubocop extension for minitest
   gem "rubocop-performance", require: false # A rubocop extension with performance suggestions
@@ -78,6 +79,10 @@ group :test do
   gem "minitest" # The test framework
   gem "minitest-hooks", require: "minitest/hooks/default" # Adds before(:all) hooks to improve test time
   gem "rack-test" # Adds functionality to test Rack apps
+
+  gem "capybara"
+  gem "falcon-capybara"
+  gem "selenium-webdriver"
 
   gem "database_cleaner-sequel" # Cleans the database between tests
 
