@@ -25,7 +25,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 
@@ -65,7 +65,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 
@@ -165,7 +165,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
     it "sets all nullable fields to null" do
       body = {
@@ -192,7 +192,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       # assert_response_schema_confirm(200) # (renatolond, 2024-11-26) since oapi2 has no nullable possibility, this cannot be checked. see if https://github.com/interagent/committee/pull/400 can make this work
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     ###
@@ -222,7 +222,7 @@ describe API::Authenticated::Profile do
 
           assert_predicate last_response, :ok?
           assert_schema_conform(200)
-          assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+          assert_equal expected_response, last_response_json_body
         end
         )
       end
@@ -267,7 +267,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     it "gets the user information without age if user requested it" do
@@ -297,7 +297,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     it "gets the user information_with_picture" do
@@ -330,7 +330,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 
@@ -415,7 +415,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :not_found?
       assert_schema_conform(404)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     it "gets a 422 if the user passes its own id" do
@@ -433,7 +433,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :unprocessable?
       assert_schema_conform(422)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     it "gets the conversation between the logged in user and the profile requested" do
@@ -446,7 +446,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 end

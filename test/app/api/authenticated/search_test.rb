@@ -36,7 +36,7 @@ describe API::Authenticated::Search do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 end

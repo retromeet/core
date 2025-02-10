@@ -61,7 +61,7 @@ describe API::Authenticated::Conversations do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 
@@ -81,7 +81,7 @@ describe API::Authenticated::Conversations do
 
       assert_predicate last_response, :bad_request?
       assert_response_schema_confirm(400)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
     it "gets the single conversation" do
       other_profile = @account2.profile
@@ -116,7 +116,7 @@ describe API::Authenticated::Conversations do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
     it "gets the single conversation with an unseen message" do
       other_profile = @account2.profile
@@ -154,7 +154,7 @@ describe API::Authenticated::Conversations do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
   describe "get /conversations/:id/viewed" do
@@ -190,7 +190,7 @@ describe API::Authenticated::Conversations do
 
       assert_predicate last_response, :bad_request?
       assert_response_schema_confirm(400)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     it "gets the user information" do
@@ -205,7 +205,7 @@ describe API::Authenticated::Conversations do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
   describe "post /conversations" do
@@ -253,7 +253,7 @@ describe API::Authenticated::Conversations do
       expected_response[:id] = conversation.id
       expected_response[:created_at] = conversation.created_at.iso8601
 
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
     it "tries to create a conversation with a profile that does not exist and fails" do
       body = { other_profile_id: "11111111-1111-7111-b111-111111111111" }
@@ -267,7 +267,7 @@ describe API::Authenticated::Conversations do
 
       expected_response = { error: "NOT_FOUND", details: [{ fields: ["other_profile_id"], errors: ["not found"] }] }
 
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 
@@ -293,7 +293,7 @@ describe API::Authenticated::Conversations do
       expected_response[:sent_at] = @message.sent_at.iso8601
 
       assert_schema_conform(201)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 end

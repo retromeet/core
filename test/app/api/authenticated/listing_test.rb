@@ -74,7 +74,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      parsed_response = JSON.parse(last_response.body, symbolize_names: true)
+      parsed_response = last_response_json_body
 
       assert_equal 1, parsed_response[:profiles].size
       assert_equal expected_response, parsed_response
@@ -86,7 +86,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      parsed_response = JSON.parse(last_response.body, symbolize_names: true)
+      parsed_response = last_response_json_body
 
       assert_equal 3, parsed_response[:profiles].size
       assert_equal expected_response, parsed_response
@@ -98,7 +98,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      parsed_response = JSON.parse(last_response.body, symbolize_names: true)
+      parsed_response = last_response_json_body
 
       assert_equal 4, parsed_response[:profiles].size
       assert_equal expected_response, parsed_response
@@ -111,7 +111,7 @@ describe API::Authenticated::Profile do
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      parsed_response = JSON.parse(last_response.body, symbolize_names: true)
+      parsed_response = last_response_json_body
 
       assert_equal 0, parsed_response[:profiles].size
       assert_equal expected_response, parsed_response
@@ -130,7 +130,7 @@ describe API::Authenticated::Profile do
         ]
       }
 
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 end
