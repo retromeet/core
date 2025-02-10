@@ -91,7 +91,7 @@ module API
         view(:privacy)
       end
       r.rodauth
-      check_csrf! unless r.content_type&.include?("application/json")
+      check_csrf! unless r.content_type&.include?("application/json") || r.path.start_with?("/api/")
       # rodauth.load_oauth_application_management_routes
       # rodauth.load_oauth_grant_management_routes
       rodauth.load_oauth_server_metadata_route # Loads .well-known/oauth-authorization-server path
