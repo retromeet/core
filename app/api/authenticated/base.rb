@@ -25,7 +25,7 @@ module API
         # If the user is not authenticated, returns a 401 error
         # @return [void]
         def authenticate!
-          error!("401 Unauthorized", 401) unless rodauth.authorization_token
+          error!({ error: "UNAUTHORIZED", details: [{ fields: nil, errors: "Missing or invalid authorization token" }], with: Entities::Error }, 401) unless rodauth.authorization_token
           # TODO: validate scopes
           # token_scopes = authorization_token[oauth_grants_scopes_column].split(oauth_scope_separator)
           # authorization_required unless scopes.any? { |scope| token_scopes.include?(scope) }

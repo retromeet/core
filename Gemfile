@@ -91,6 +91,6 @@ group :test do
 
   gem "factory_bot" # makes it easier to create objects for tests
   gem "faker" # provides fake data for tests
-  gem "mocha" # adds mocking capabilities
-  gem "webmock" # Used for avoiding real requests in the test enviroment
+  gem "mocha", require: "mocha/minitest" # adds mocking capabilities
+  gem "webmock", require: "webmock/minitest" # Used for avoiding real requests in the test enviroment
 end

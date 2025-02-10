@@ -43,6 +43,10 @@ module SwaggerHelper
       [last_response.status, last_response.headers, last_response.body]
     end
 
+    def last_response_json_body
+      JSON.parse(last_response.body, symbolize_names: true)
+    end
+
     def committee_options
       SwaggerHelper.committee_options
     end
