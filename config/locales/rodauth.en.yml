@@ -1,0 +1,4 @@
+---
+en:
+  rodauth:
+    verify_account_email_sent_notice_flash: "Your account has been created and an email has been sent to you with a link to verify your account"

@@ -11,10 +11,24 @@ module API
           env["rodauth"]
         end
 
+        # Sets up things in rodauth for this request
+        # These are done here so they are only done in case of being in an Authenticated route
+        # @return [void]
+        def rodauth_setup
+          @logged_in_account_id = rodauth.authorization_token[:account_id]
+          @logged_in_profile_id = Persistence::Repository::Account.profile_id_from_account_id(account_id: @logged_in_account_id)
+        end
+
+        attr_reader :logged_in_profile_id
+        attr_reader :logged_in_account_id
+
         # If the user is not authenticated, returns a 401 error
         # @return [void]
         def authenticate!
-          error!("401 Unauthorized", 401) unless authenticated?
+          error!({ error: "UNAUTHORIZED", details: [{ fields: nil, errors: "Missing or invalid authorization token" }], with: Entities::Error }, 401) unless rodauth.authorization_token
+          # TODO: validate scopes
+          # token_scopes = authorization_token[oauth_grants_scopes_column].split(oauth_scope_separator)
+          # authorization_required unless scopes.any? { |scope| token_scopes.include?(scope) }
         end
 
         # @return [Boolean]
@@ -23,7 +37,10 @@ module API
         end
       end
 
-      before { authenticate! }
+      before do
+        authenticate!
+        rodauth_setup
+      end
 
       mount API::Authenticated::Profile
       mount API::Authenticated::Search

@@ -1,0 +1,61 @@
+.container.has-text-centered
+  .columns
+    .column.is-6.is-offset-2
+      %h3.title.has-text-grey= @page_title
+      .box
+        .content
+          = rodauth.authorize_page_lead(name: rodauth.oauth_application[rodauth.oauth_applications_name_column])
+        .card
+          .card.content
+            .media
+              .media-left
+                - if rodauth.oauth_application[rodauth.oauth_applications_logo_uri_column]
+                  %figure.image.is-48x48
+                    %img{src: h(rodauth.oauth_application[rodauth.oauth_applications_logo_uri_column])}
+              .media-content
+                .title.is-4
+                  - if rodauth.oauth_application[rodauth.oauth_applications_homepage_url_column]
+                    %a{href: h(rodauth.oauth_application[rodauth.oauth_applications_homepage_url_column]), target: "_blank"}= h(rodauth.oauth_application[rodauth.oauth_applications_name_column])
+                  - else
+                    = rodauth.oauth_application[rodauth.oauth_applications_name_column]
+                - if rodauth.oauth_application[rodauth.oauth_applications_contacts_column]
+                  .subtitle.is-6
+                    - rodauth.oauth_application[rodauth.oauth_applications_contacts_column].split(/ +/).each do |contact|
+                      = contact
+                      %br/
+            .content
+              - if rodauth.oauth_application[rodauth.oauth_applications_tos_uri_column]
+                %a{target: "_blank", href: rodauth.oauth_application[rodauth.oauth_applications_tos_uri_column]}= rodauth.oauth_applications_tos_uri_label
+                %br/
+              - if rodauth.oauth_application[rodauth.oauth_applications_policy_uri_column]
+                %a{target: "_blank", href: rodauth.oauth_application[rodauth.oauth_applications_policy_uri_column]}= rodauth.oauth_applications_policy_uri_label
+                %br/
+        %form{method: :post}
+          = rodauth.csrf_tag(rodauth.authorize_path)
+          .field
+            %label.label= rodauth.oauth_grants_scopes_label
+            .checkboxes
+              - rodauth.authorize_scopes.each do |scope|
+                %label.checkbox
+                  %input.checkbox{id: scope, value: h(scope), name: "scope[]", type: :checkbox}
+                  = h(scope)
+
+          %input{type: :hidden, name: :client_id, value: rodauth.param("client_id")}
+          - if rodauth.param_or_nil("access_type")
+            %input{type: :hidden, name: :access_type, value: rodauth.param("access_type")}
+          - if rodauth.param_or_nil("response_type")
+            %input{type: :hidden, name: :response_type, value: rodauth.param("response_type")}
+          - if rodauth.param_or_nil("response_mode")
+            %input{type: :hidden, name: :response_mode, value: rodauth.param("response_mode")}
+          - if rodauth.param_or_nil("state")
+            %input{type: :hidden, name: :state, value: rodauth.param("state")}
+          - if rodauth.param_or_nil("redirect_uri")
+            %input{type: :hidden, name: :redirect_uri, value: rodauth.param("redirect_uri")}
+          - if rodauth.features.include?(:oauth_pkce) && rodauth.param_or_nil("code_challenge")
+            %input{type: :hidden, name: :code_challenge, value: rodauth.param("code_challenge")}
+          - if rodauth.features.include?(:oauth_pkce) && rodauth.param_or_nil("code_challenge_method")
+            %input{type: :hidden, name: :code_challenge_method, value: rodauth.param("code_challenge_method")}
+
+          = rodauth.button(rodauth.oauth_authorize_button, class: "button is-block is-info is-large is-fullwidth")
+          %a.button.is-block.is-large.is-fullwidth.is-warning{href: "#{rodauth.redirect_uri}?error=access_denied&error_description=The+resource+owner+or+authorization+server+denied+the+request#{ "&state=#{rodauth.param("state")}" if rodauth.param_or_nil("state")}"}= rodauth.oauth_cancel_button
+      = render "login-form-footer"

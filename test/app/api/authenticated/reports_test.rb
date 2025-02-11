@@ -8,12 +8,12 @@ describe API::Authenticated::Reports do
     @login = "foo@retromeet.social"
     @password = "bogus123"
     @account = create(:account, email: @login, password: @password, profile: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
+    set_oauth_grant_with_token(oauth_grant_with_token(@account))
   end
 
   describe "post /reports" do
     before do
       @endpoint = "/api/reports"
-      @auth = login(login: @login, password: @password)
       @target_profile = create(:profile)
       @conversation = create(:conversation, profile1: @account.profile, profile2: @target_profile)
       @message = create(:message, sender: "profile2", conversation: @conversation)
@@ -21,7 +21,7 @@ describe API::Authenticated::Reports do
     end
 
     it "Gets a bad request when not providing a target profile" do
-      authorized_post @auth, @endpoint
+      authorized_post @endpoint
 
       assert_predicate last_response, :bad_request?
       assert_response_schema_confirm(400)
@@ -35,7 +35,7 @@ describe API::Authenticated::Reports do
         message_ids: [-999]
       }
       assert_difference "Report.count", 0 do
-        authorized_post @auth, @endpoint, body.to_json
+        authorized_post @endpoint, body.to_json
 
         assert_predicate last_response, :unprocessable?
         assert_schema_conform(422)
@@ -49,7 +49,7 @@ describe API::Authenticated::Reports do
         comment: "They are trying to trick users!!"
       }
       assert_difference "Report.count", 1 do
-        authorized_post @auth, @endpoint, body.to_json
+        authorized_post @endpoint, body.to_json
 
         assert_predicate last_response, :no_content?
       end
@@ -70,7 +70,7 @@ describe API::Authenticated::Reports do
         message_ids: [@message.id, @message2.id]
       }
       assert_difference "Report.count", 1 do
-        authorized_post @auth, @endpoint, body.to_json
+        authorized_post @endpoint, body.to_json
 
         assert_predicate last_response, :no_content?
       end

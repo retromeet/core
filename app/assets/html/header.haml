@@ -1,0 +1,21 @@
+%nav.navbar
+  .container
+    .navbar-brand
+      .navbar-item
+        %a{href: "/"}
+          %img.image{alt: "RetroMeet logo", src: "retromeet_long.png"}/
+      %a.navbar-burger{role: "button", aria: { label: "menu", expanded: false}, "data-target": "navbarMenu" }
+        %span{"aria-hidden": true}
+        %span{"aria-hidden": true}
+        %span{"aria-hidden": true}
+        %span{"aria-hidden": true}
+    #navbarMenu.navbar-menu
+      .navbar-end
+        - if rodauth.logged_in?
+          .navbar-item
+            %form{action: "/logout", method: :post}
+              = csrf_tag("/logout")
+              %input{type: "submit", class: "button is-link is-light", value: rodauth.logout_button}
+        - else
+          .navbar-item
+            %a{href: "/create-account"}= I18n.t("sign_up")

@@ -1,0 +1,15 @@
+.container.has-text-centered
+  .columns
+    .column.is-4.is-offset-4
+      %h3.title.has-text-grey= @page_title
+      .box
+        %form{method: :post}
+          = rodauth.csrf_tag
+          .field
+            .control
+              = rodauth.input_field_string(rodauth.login_param, "login", type: rodauth.login_input_type, class: "input is-large", autocomplete: rodauth.login_field_autocomplete_value, attr: "placeholder='email@example.com'")
+          .field
+            .control
+              = rodauth.input_field_string(rodauth.password_param, "password", type: "password", class: "input is-large", autocomplete: rodauth.password_field_autocomplete_value, attr: "placeholder='#{rodauth.password_label}'")
+          = rodauth.button(rodauth.login_button, class: "button is-block is-info is-large is-fullwidth")
+      = render "login-form-footer"

@@ -9,6 +9,7 @@ describe API::Authenticated::Conversations do
     @password = "bogus123"
     @schaerbeek = create(:location, latitude: 50.8676041, longitude: 4.3737121, language: "en", name: "Schaerbeek - Schaarbeek, Brussels-Capital, Belgium", country_code: "be", osm_id: 58_260)
     @account1 = create(:account, email: @login, password: @password, profile: { location_id: @schaerbeek.id })
+    set_oauth_grant_with_token(oauth_grant_with_token(@account1))
     @account2 = create(:account, profile: { location_id: @schaerbeek.id })
     @account3 = create(:account, profile: { location_id: @schaerbeek.id })
     @conversation = create(:conversation, profile1: @account1.profile, profile2: @account2.profile)
@@ -22,7 +23,6 @@ describe API::Authenticated::Conversations do
   describe "get /conversations" do
     before do
       @endpoint = "/api/conversations"
-      @auth = login(login: @login, password: @password)
     end
     it "gets all conversations" do
       other_profile = @account2.profile
@@ -57,18 +57,17 @@ describe API::Authenticated::Conversations do
           }
         ]
       }
-      authorized_get @auth, format(@endpoint)
+      authorized_get format(@endpoint)
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 
   describe "get /conversations/:id" do
     before do
       @endpoint = "/api/conversations/%<id>s"
-      @auth = login(login: @login, password: @password)
     end
     it "gets a 400 if the id is not valid" do
       expected_response = {
@@ -78,11 +77,11 @@ describe API::Authenticated::Conversations do
         ]
       }
 
-      authorized_get @auth, format(@endpoint, id: "boo!")
+      authorized_get format(@endpoint, id: "boo!")
 
       assert_predicate last_response, :bad_request?
       assert_response_schema_confirm(400)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
     it "gets the single conversation" do
       other_profile = @account2.profile
@@ -113,11 +112,11 @@ describe API::Authenticated::Conversations do
           age: AgeHelper.age_from_date(other_profile.birth_date)
         }
       }
-      authorized_get @auth, format(@endpoint, id: @conversation.id)
+      authorized_get format(@endpoint, id: @conversation.id)
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
     it "gets the single conversation with an unseen message" do
       other_profile = @account2.profile
@@ -151,21 +150,20 @@ describe API::Authenticated::Conversations do
           age: AgeHelper.age_from_date(other_profile.birth_date)
         }
       }
-      authorized_get @auth, format(@endpoint, id: @conversation.id)
+      authorized_get format(@endpoint, id: @conversation.id)
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
   describe "get /conversations/:id/viewed" do
     before do
       @endpoint = "/api/conversations/%<id>s/viewed"
-      @auth = login(login: @login, password: @password)
     end
     it "Updates the time for the first user" do
       last_seen_at = @conversation.profile1_last_seen_at
-      authorized_put @auth, format(@endpoint, id: @conversation.id)
+      authorized_put format(@endpoint, id: @conversation.id)
 
       assert_predicate last_response, :no_content?
       assert_schema_conform(204)
@@ -178,7 +176,6 @@ describe API::Authenticated::Conversations do
   describe "get /conversations/:id/messages" do
     before do
       @endpoint = "/api/conversations/%<id>s/messages"
-      @auth = login(login: @login, password: @password)
     end
 
     it "gets a 400 if min_id and max_id are not valid" do
@@ -189,11 +186,11 @@ describe API::Authenticated::Conversations do
           { fields: ["max_id"], errors: ["is invalid"] }
         ]
       }
-      authorized_get @auth, "#{format(@endpoint, id: @conversation.id)}?min_id=a&max_id=b"
+      authorized_get "#{format(@endpoint, id: @conversation.id)}?min_id=a&max_id=b"
 
       assert_predicate last_response, :bad_request?
       assert_response_schema_confirm(400)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     it "gets the user information" do
@@ -204,17 +201,16 @@ describe API::Authenticated::Conversations do
         { id: @message2.id, sender: @account2.profile.id, sent_at: @message2.sent_at.iso8601, content: "Message 2" },
         { id: @message1.id, sender: @account1.profile.id, sent_at: @message1.sent_at.iso8601, content: "Message 1" }
       ] }
-      authorized_get @auth, format(@endpoint, id: @conversation.id)
+      authorized_get format(@endpoint, id: @conversation.id)
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
   describe "post /conversations" do
     before do
       @endpoint = "/api/conversations"
-      @auth = login(login: @login, password: @password)
     end
     it "creates a new conversation" do
       other_profile = @account3.profile
@@ -246,35 +242,38 @@ describe API::Authenticated::Conversations do
       }
       body = { other_profile_id: other_profile.id }
       assert_difference "Conversation.count", 1 do
-        authorized_post @auth, @endpoint, body.to_json
+        authorized_post @endpoint, body.to_json
+
+        assert_predicate last_response, :created?
       end
-      assert_predicate last_response, :created?
+
       assert_schema_conform(201)
 
       conversation = Conversation.last
       expected_response[:id] = conversation.id
       expected_response[:created_at] = conversation.created_at.iso8601
 
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
-    it "tries to create a conversation with a profile that does not exist and fails XXXXX" do
+    it "tries to create a conversation with a profile that does not exist and fails" do
       body = { other_profile_id: "11111111-1111-7111-b111-111111111111" }
       assert_difference "Conversation.count", 0 do
-        authorized_post @auth, @endpoint, body.to_json
+        authorized_post @endpoint, body.to_json
+
+        assert_predicate last_response, :not_found?
       end
-      assert_predicate last_response, :not_found?
+
       assert_schema_conform(404)
 
       expected_response = { error: "NOT_FOUND", details: [{ fields: ["other_profile_id"], errors: ["not found"] }] }
 
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 
   describe "post /conversations/:id/messages" do
     before do
       @endpoint = "/api/conversations/%<id>s/messages"
-      @auth = login(login: @login, password: @password)
     end
 
     it "gets the user information" do
@@ -282,7 +281,9 @@ describe API::Authenticated::Conversations do
       expected_response = { sender: @account1.profile.id, content: content }
       body = { content: }
       assert_difference "Message.count", 1 do
-        authorized_post @auth, format(@endpoint, id: @conversation.id), body.to_json
+        authorized_post format(@endpoint, id: @conversation.id), body.to_json
+
+        assert_predicate last_response, :created?
       end
 
       # There's probably better ways to do this, but for now I'm getting the last message and replacing the id and sent_at to avoid issues
@@ -291,9 +292,8 @@ describe API::Authenticated::Conversations do
       expected_response[:id] = @message.id
       expected_response[:sent_at] = @message.sent_at.iso8601
 
-      assert_predicate last_response, :created?
       assert_schema_conform(201)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 end

@@ -8,6 +8,7 @@ describe API::Authenticated::Profile do
     @login = "foo@retromeet.social"
     @password = "bogus123"
     @account = create(:account, email: @login, password: @password, profile: { display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) })
+    set_oauth_grant_with_token(oauth_grant_with_token(@account))
     @account2 = create(:account)
     @account3 = create(:account)
     @conversation = create(:conversation, profile1: @account.profile, profile2: @account3.profile)
@@ -15,23 +16,22 @@ describe API::Authenticated::Profile do
 
   describe "get /profile/info" do
     before do
-      @auth = login(login: @login, password: @password)
+      @endpoint = "/api/profile/info"
     end
 
     it "has the information expected" do
       expected_response = { id: @account.profile.id, display_name: "Foo", created_at: Time.new(2024, 9, 20, 16, 50, 0) }
-      authorized_get @auth, "/api/profile/info"
+      authorized_get @endpoint
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 
   describe "get /profile/complete" do
     before do
       @endpoint = "/api/profile/complete"
-      @auth = login(login: @login, password: @password)
     end
 
     it "gets the user information" do
@@ -61,18 +61,17 @@ describe API::Authenticated::Profile do
         age: AgeHelper.age_from_date(profile.birth_date),
         hide_age: profile.hide_age
       }
-      authorized_get @auth, @endpoint
+      authorized_get @endpoint
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 
   describe "post /profile/location" do
     before do
       @endpoint = "/api/profile/location"
-      @auth = login(login: @login, password: @password)
     end
 
     it "sends a non-sensical location and gets no results back" do
@@ -84,7 +83,7 @@ describe API::Authenticated::Profile do
       stub_request(:get, "https://photon.komoot.io/api?q=askdjlasjdklasjdlasjdljasdlk&layer=state&layer=county&layer=city&layer=district&limit=10&lang=en")
         .to_return(webfixture_json_file("photon.no_results"))
 
-      authorized_post @auth, @endpoint, body.to_json
+      authorized_post @endpoint, body.to_json
 
       assert_predicate last_response, :unprocessable?
       assert_schema_conform(422)
@@ -100,11 +99,12 @@ describe API::Authenticated::Profile do
         .to_return(webfixture_json_file("photon.meier"))
 
       assert_difference "Location.count", 1 do
-        authorized_post @auth, @endpoint, body.to_json
+        authorized_post @endpoint, body.to_json
+
+        assert_schema_conform(200)
       end
 
       assert_predicate last_response, :ok?
-      assert_schema_conform(200)
     end
 
     it "sends a location that has exactly one result and updates the location for the user" do
@@ -117,22 +117,22 @@ describe API::Authenticated::Profile do
         .to_return(webfixture_json_file("photon.meier_single_result"))
 
       assert_difference "Location.count", 1 do
-        authorized_post @auth, @endpoint, body.to_json
+        authorized_post @endpoint, body.to_json
+
+        assert_schema_conform(200)
       end
 
       assert_predicate last_response, :ok?
-      assert_schema_conform(200)
     end
   end
 
   describe "post /profile/complete" do
     before do
       @endpoint = "/api/profile/complete"
-      @auth = login(login: @login, password: @password)
     end
 
     it "gets a bad request if there's no body" do
-      authorized_post @auth, @endpoint, {}.to_json
+      authorized_post @endpoint, {}.to_json
 
       assert_predicate last_response, :bad_request?
       assert_schema_conform(400)
@@ -159,13 +159,13 @@ describe API::Authenticated::Profile do
         religion_importance: profile.religion_importance,
         display_name: profile.display_name
       }
-      authorized_post @auth, @endpoint, body.to_json
+      authorized_post @endpoint, body.to_json
 
       expected_response = body
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
     it "sets all nullable fields to null" do
       body = {
@@ -186,13 +186,13 @@ describe API::Authenticated::Profile do
         religion: nil,
         religion_importance: nil
       }
-      authorized_post @auth, @endpoint, body.to_json
+      authorized_post @endpoint, body.to_json
 
       expected_response = body
 
       assert_predicate last_response, :ok?
       # assert_response_schema_confirm(200) # (renatolond, 2024-11-26) since oapi2 has no nullable possibility, this cannot be checked. see if https://github.com/interagent/committee/pull/400 can make this work
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     ###
@@ -216,13 +216,13 @@ describe API::Authenticated::Profile do
             #{param}: #{value.is_a?(Array) ? value : "\"#{value}\""}
           }
 
-          authorized_post @auth, @endpoint, body.to_json
+          authorized_post @endpoint, body.to_json
 
           expected_response = body
 
           assert_predicate last_response, :ok?
           assert_schema_conform(200)
-          assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+          assert_equal expected_response, last_response_json_body
         end
         )
       end
@@ -237,7 +237,6 @@ describe API::Authenticated::Profile do
   describe "get /profile/:id/complete" do
     before do
       @endpoint = "/api/profile/%<id>s/complete"
-      @auth = login(login: @login, password: @password)
     end
 
     it "gets the user information" do
@@ -264,11 +263,11 @@ describe API::Authenticated::Profile do
         location_display_name: profile.location.display_name.transform_keys(&:to_sym),
         age: AgeHelper.age_from_date(profile.birth_date)
       }
-      authorized_get @auth, format(@endpoint, id: @account.profile.id)
+      authorized_get format(@endpoint, id: @account.profile.id)
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     it "gets the user information without age if user requested it" do
@@ -294,11 +293,11 @@ describe API::Authenticated::Profile do
         display_name: profile.display_name,
         location_display_name: profile.location.display_name.transform_keys(&:to_sym)
       }
-      authorized_get @auth, format(@endpoint, id: profile.id)
+      authorized_get format(@endpoint, id: profile.id)
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     it "gets the user information_with_picture" do
@@ -327,22 +326,21 @@ describe API::Authenticated::Profile do
         picture: ImageUploader::Attacher.from_data(profile.picture.to_h).file.download_url
 
       }
-      authorized_get @auth, format(@endpoint, id: profile.id)
+      authorized_get format(@endpoint, id: profile.id)
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 
   describe "post /api/profile/picture" do
     before do
       @endpoint = "/api/profile/picture"
-      @auth = login(login: @login, password: @password)
     end
 
     it "posts a picture and the picture gets saved" do
-      authorized_post @auth, @endpoint, profile_picture: Rack::Test::UploadedFile.new("test/files/retromeet_128.png")
+      authorized_post @endpoint, profile_picture: Rack::Test::UploadedFile.new("test/files/retromeet_128.png")
 
       assert_predicate last_response, :no_content?
       @account.reload
@@ -355,20 +353,19 @@ describe API::Authenticated::Profile do
   describe "post /profile/:id/block" do
     before do
       @endpoint = "/api/profile/%<id>s/block"
-      @auth = login(login: @login, password: @password)
     end
 
     it "blocks a profile" do
       profile = create(:profile)
       assert_difference "ProfileBlock.count", 1 do
-        authorized_post @auth, format(@endpoint, id: profile.id)
+        authorized_post format(@endpoint, id: profile.id)
       end
 
       assert_predicate last_response, :no_content?
     end
 
     it "gets a 404 for a non existing uuid" do
-      authorized_post @auth, format(@endpoint, id: "11111111-1111-7111-b111-111111111111")
+      authorized_post format(@endpoint, id: "11111111-1111-7111-b111-111111111111")
 
       assert_predicate last_response, :not_found?
       assert_schema_conform(404)
@@ -378,21 +375,20 @@ describe API::Authenticated::Profile do
   describe "delete /profile/:id/block" do
     before do
       @endpoint = "/api/profile/%<id>s/block"
-      @auth = login(login: @login, password: @password)
       @target_profile = create(:profile)
       create(:profile_block, profile: @account.profile, target_profile: @target_profile)
     end
 
     it "unblocks a profile" do
       assert_difference "ProfileBlock.count", -1 do
-        authorized_delete @auth, format(@endpoint, id: @target_profile.id)
+        authorized_delete format(@endpoint, id: @target_profile.id)
       end
 
       assert_predicate last_response, :no_content?
     end
 
     it "gets a 404 for a non existing uuid" do
-      authorized_delete @auth, format(@endpoint, id: "11111111-1111-7111-b111-111111111111")
+      authorized_delete format(@endpoint, id: "11111111-1111-7111-b111-111111111111")
 
       assert_predicate last_response, :not_found?
       assert_schema_conform(404)
@@ -402,7 +398,6 @@ describe API::Authenticated::Profile do
   describe "get /profile/:id/conversation" do
     before do
       @endpoint = "/api/profile/%<id>s/conversation"
-      @auth = login(login: @login, password: @password)
     end
 
     it "gets a 404 if there's no conversation between the users" do
@@ -416,11 +411,11 @@ describe API::Authenticated::Profile do
         ]
       }
 
-      authorized_get @auth, format(@endpoint, id: @account2.profile.id)
+      authorized_get format(@endpoint, id: @account2.profile.id)
 
       assert_predicate last_response, :not_found?
       assert_schema_conform(404)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     it "gets a 422 if the user passes its own id" do
@@ -434,11 +429,11 @@ describe API::Authenticated::Profile do
         ]
       }
 
-      authorized_get @auth, format(@endpoint, id: @account.profile.id)
+      authorized_get format(@endpoint, id: @account.profile.id)
 
       assert_predicate last_response, :unprocessable?
       assert_schema_conform(422)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
 
     it "gets the conversation between the logged in user and the profile requested" do
@@ -447,11 +442,11 @@ describe API::Authenticated::Profile do
         created_at: @conversation.created_at.iso8601
       }
 
-      authorized_get @auth, format(@endpoint, id: @account3.profile.id)
+      authorized_get format(@endpoint, id: @account3.profile.id)
 
       assert_predicate last_response, :ok?
       assert_schema_conform(200)
-      assert_equal expected_response, JSON.parse(last_response.body, symbolize_names: true)
+      assert_equal expected_response, last_response_json_body
     end
   end
 end
