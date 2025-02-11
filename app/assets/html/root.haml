@@ -33,3 +33,12 @@
             %h4 Open-source
             %p
               The code for RetroMeet is available and can be modified by many hands to improve
+  - if rodauth.logged_in?
+    .box.content
+      %h3.is-title Client applications
+      %p
+        You can't use RetroMeet directly from here, you need a client application.
+      %p
+        - if CompanionApplication.name
+          We suggest that you try
+          %a{href: CompanionApplication.url}= CompanionApplication.name
