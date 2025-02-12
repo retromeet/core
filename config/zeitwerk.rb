@@ -9,4 +9,7 @@ loader.collapse "./app/objects/"
 loader.inflector.inflect("api" => "API")
 loader.inflector.inflect("authenticated_api" => "AuthenticatedAPI")
 loader.inflector.inflect("retromeet" => "RetroMeet")
+loader.ignore("#{__dir__}/locales.rb")
 loader.setup
+
+loader.eager_load if Environment.current == :production
