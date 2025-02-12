@@ -6,11 +6,11 @@
         .content
           = rodauth.authorize_page_lead(name: rodauth.oauth_application[rodauth.oauth_applications_name_column])
         .card
-          .card.content
+          .card-content
             .media
               .media-left
                 - if rodauth.oauth_application[rodauth.oauth_applications_logo_uri_column]
-                  %figure.image.is-48x48
+                  %figure.image.is-96x96
                     %img{src: h(rodauth.oauth_application[rodauth.oauth_applications_logo_uri_column])}
               .media-content
                 .title.is-4
