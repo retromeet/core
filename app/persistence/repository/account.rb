@@ -176,6 +176,7 @@ module Persistence
         end
 
         # @param id (see .profile_info)
+        # @return [String] The email for the profile
         def find_email_for(id:)
           profiles.where(Sequel[:profiles][:id] => id)
                   .inner_join(:accounts, id: :account_id)
@@ -184,7 +185,17 @@ module Persistence
 
         # @return [Array<String>]
         def admin_account_emails
-          accounts.where(type: "admin").map(:email)
+          accounts.where(type: "admin")
+                  .map(:email)
+        end
+
+        # @param email [String]
+        # @return [void]
+        def make_admin(email:)
+          raise "Account with email=#{email} not found" unless accounts.where(email:).get(:id)
+
+          accounts.where(email:)
+                  .update(type: "admin")
         end
       end
     end

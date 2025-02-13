@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "minitest/test_task"
+require_relative "lib/tasks/retromeet"
 
 Minitest::TestTask.create(:test_unit) do |t|
   t.test_globs = ["test/app/**/*_test.rb"]
