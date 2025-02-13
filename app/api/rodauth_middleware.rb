@@ -58,7 +58,7 @@ module API
       formatted_field_error { |field, reason| "<p id=\"#{field}_error_message\" class='help is-danger'>#{reason}.</p>" }
 
       domain do
-        EnvironmentConfig.smtp_outgoing_domain
+        EnvironmentConfig.retromeet_core_host
       end
 
       email_from do
