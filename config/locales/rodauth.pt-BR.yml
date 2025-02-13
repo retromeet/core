@@ -208,6 +208,7 @@ pt-BR:
     verify_account_email_sent_notice_flash: Foi-lhe enviado um email com um link para verificar a sua conta
     verify_account_email_subject: Verificar Conta
     verify_account_error_flash: Não foi possível verificar a conta
+    verify_account_help_text: "Sua conta está quase verificada. Clique no botão abaixo para terminar a verificação."
     verify_account_notice_flash: A sua conta foi verificada
     verify_account_page_title: Verificar Conta
     verify_account_resend_button: Reenviar email de verificação
