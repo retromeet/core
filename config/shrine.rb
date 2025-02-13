@@ -9,15 +9,15 @@ SHRINE_STORAGE_TYPE = if Environment.test?
     store: Shrine::Storage::Memory.new
   }
   :memory
-elsif DryTypes::Params::Bool[ENV.fetch("S3_ENABLED", false)]
+elsif EnvironmentConfig.shrine_s3_enabled?
   require "shrine/storage/s3"
 
   s3_options = {
-    bucket: ENV.fetch("S3_BUCKET"),
-    region: ENV.fetch("S3_REGION", "eu-west-1"),
-    access_key_id: ENV.fetch("AWS_ACCESS_KEY_ID"),
-    secret_access_key: ENV.fetch("AWS_SECRET_ACCESS_KEY"),
-    endpoint: ENV.fetch("S3_ENDPOINT", nil),
+    bucket: EnvironmentConfig.shrine_s3_bucket,
+    region: EnvironmentConfig.shrine_s3_region,
+    access_key_id: EnvironmentConfig.shrine_aws_access_key_id,
+    secret_access_key: EnvironmentConfig.shrine_aws_secret_access_key,
+    endpoint: EnvironmentConfig.shrine_s3_endpoint,
     force_path_style: true
   }
 

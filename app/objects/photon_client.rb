@@ -81,12 +81,12 @@ module PhotonClient
 
       # @return [Array<String>]
       def supported_languages
-        @supported_languages ||= ENV.fetch("PHOTON_SUPPORTED_LANGUAGES", "en,fr,de").split(",")
+        @supported_languages ||= EnvironmentConfig.photon_api_supported_languages
       end
 
       # Returns the photon host to be used for requests
       # @return [Async::HTTP::Endpoint]
-      def photon_host = @photon_host ||= Async::HTTP::Endpoint.parse(ENV.fetch("PHOTON_API_HOST", "https://photon.komoot.io"))
+      def photon_host = @photon_host ||= Async::HTTP::Endpoint.parse(EnvironmentConfig.photon_api_host)
 
       # @return [Hash] Base headers to be used for requests
       def base_headers = @base_headers ||= { "Content-Type" => "application/json", "User-Agent": RetroMeet::Version.user_agent }.freeze

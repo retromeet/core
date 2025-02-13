@@ -50,7 +50,7 @@ module NominatimClient
 
       # Returns the retromeet-core base host to be used for requests based off the environment variables
       # @return [Async::HTTP::Endpoint]
-      def nominatim_host = @nominatim_host ||= Async::HTTP::Endpoint.parse(ENV.fetch("NOMINATIM_API_HOST", "https://nominatim.openstreetmap.org"))
+      def nominatim_host = @nominatim_host ||= Async::HTTP::Endpoint.parse(EnvironmentConfig.nominatim_api_host)
 
       # @return [Hash] Base headers to be used for requests
       def base_headers = @base_headers ||= { "Content-Type" => "application/json", "User-Agent": RetroMeet::Version.user_agent }.freeze

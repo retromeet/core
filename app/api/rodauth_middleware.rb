@@ -18,7 +18,8 @@ module API
     plugin :assets, css: "layout.scss", path: File.expand_path("../assets", __dir__)
 
     plugin :render, views: File.expand_path("../assets/html", __dir__), engine: "haml", engine_opts: { "haml" => { escape_html: false } }, template_opts: { default_encoding: "UTF-8" }
-    plugin :sessions, secret: ENV.delete("SESSION_SECRET"), key: "retromeet-core.session"
+
+    plugin :sessions, secret: EnvironmentConfig.session_secret, key: "retromeet-core.session"
 
     plugin :route_csrf
     plugin :middleware, next_if_not_found: true
