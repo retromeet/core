@@ -3,6 +3,8 @@
 module Mails
   # Sends a notification for a sent message
   module MessageNotification
+    extend Mails::Base
+
     class << self
       # Send a notification email about a new message in a conversation
       def deliver!(conversation_id:, message:)
@@ -14,7 +16,7 @@ module Mails
         end
         to = Persistence::Repository::Account.find_email_for(id: receiver_id)
         sender = Persistence::Repository::Account.basic_profile_info(id: message[:sender])
-        notification_link = "/"
+        notification_link = generate_notification_link(notification_info: { type: :message, conversation_id: conversation_id })
 
         template = Tilt.new("#{File.expand_path("../../mail/html", __dir__)}/message_received.erb")
         body = template.render(Object.new, sender:, message:, notification_link:)
