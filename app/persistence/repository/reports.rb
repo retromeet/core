@@ -24,7 +24,7 @@ module Persistence
         # @param comment [String,nil] The reason for report
         # @param message_ids [Array<Integer>,nil] Messages to be attached to the report
         # @raise [ProfileNotFound] If the target profile does not exist
-        # @return [void]
+        # @return [Integer] The report id
         def create(profile_id:, target_profile_id:, type:, comment: nil, message_ids: [])
           raise ProfileNotFound unless profiles.where(id: target_profile_id).get(:id)
 
@@ -34,6 +34,17 @@ module Persistence
 
           message_ids = Sequel.pg_array(message_ids, :bigint)
           reports.insert(profile_id:, target_profile_id:, type:, comment:, message_ids:)
+        end
+
+        # Finds a report and all associated information
+        def find_full_report(id:)
+          report = reports.where(id:)
+                          .first
+
+          report[:messages] = messages.where(id: report[:message_ids].to_a).select(:id, :content).to_a
+          report[:reporter] = Account.basic_profile_info(id: report[:profile_id])
+          report[:target] = Account.basic_profile_info(id: report[:target_profile_id])
+          report
         end
       end
     end

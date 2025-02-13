@@ -181,6 +181,11 @@ module Persistence
                   .inner_join(:accounts, id: :account_id)
                   .get(Sequel[:accounts][:email])
         end
+
+        def admin_accounts
+          # TODO: actually implement admins properly
+          [accounts.order(:id).get(:email)]
+        end
       end
     end
   end
