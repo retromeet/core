@@ -276,7 +276,7 @@ describe API::Authenticated::Conversations do
       @endpoint = "/api/conversations/%<id>s/messages"
     end
 
-    it "gets the user information" do
+    it "Sends a message" do
       content = "NEW MESSAGE NOW!"
       expected_response = { sender: @account1.profile.id, content: content }
       body = { content: }

@@ -39,6 +39,6 @@
       %p
         You can't use RetroMeet directly from here, you need a client application.
       %p
-        - if CompanionApplication.name
+        - if EnvironmentConfig.companion_application_name
           We suggest that you try
-          %a{href: CompanionApplication.url}= CompanionApplication.name
+          %a{href: EnvironmentConfig.companion_application_url}= EnvironmentConfig.companion_application_name

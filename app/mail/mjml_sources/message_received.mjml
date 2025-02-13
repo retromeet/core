@@ -1,0 +1,40 @@
+<mjml>
+  <mj-head>
+    <mj-style>
+      a { color: hsl(176deg,46%,56%) } ;
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#E7D8B7">
+    <mj-section>
+      <mj-column>
+
+        <mj-image width="200px" src="<%= RetroMeet::Url.to_s %>retromeet_long.png"></mj-image>
+
+        <mj-divider border-color="#D6D9E0"></mj-divider>
+    </mj-section>
+    <mj-section background-color="#fff">
+      <mj-column>
+        <mj-text font-size="24px" color="#000000" font-family="Roboto, Ubuntu">New message</mj-text>
+        <mj-text font-size="16px" color="#000000" font-family="Roboto, Ubuntu"><%= sender[:display_name] %> sent you a message!</mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#fff">
+      <mj-column background-color="#f0f9f9">
+        <mj-text font-size="16px" color="#63c5bf" font-family="Roboto, Ubuntu"><%= message[:content] %></mj-text>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#fff">
+      <mj-column>
+        <mj-button font-family="Helvetica" background-color="#2BCA5D" color="white" href="<%= notification_link %>">
+          Reply to their message
+         </mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section background-color="#fff">
+      <mj-column>
+        <mj-text font-size="16px" color="#000" font-family="Roboto, Ubuntu" align="center">Sent by RetroMeet at <a href="<%= RetroMeet::Url.to_s %>"><%= RetroMeet::Url.to_s %></a></mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
+

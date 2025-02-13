@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "environment_config"
+
 # This module is responsible for checking which environment we're using (development, test and so on)
 # and also in the case of test or development, loading the environment variables from .env files
 module Environment
@@ -11,12 +13,13 @@ module Environment
     def load
       bundle_config
 
-      return unless development? || test?
-      return if @dotenv_loaded
+      if (development? || test?) && !@dotenv_loaded
+        files = [".env.#{current}.local", ".env.#{current}"]
+        Dotenv.load(*files)
+        @dotenv_loaded = true
+      end
 
-      files = [".env.#{current}.local", ".env.#{current}"]
-      Dotenv.load(*files)
-      @dotenv_loaded = true
+      EnvironmentConfig.load_values
     end
 
     # Will load gems from bundle

@@ -99,9 +99,7 @@ module Persistence
         # @param conversation_id (see .insert_message)
         # @return [Array<Hash>]
         def find_conversation(profile_id:, conversation_id:)
-          conversations.where(profile1_id: profile_id)
-                       .or(profile2_id: profile_id)
-                       .where(id: conversation_id)
+          conversations.where(id: conversation_id)
                        .first
         end
 

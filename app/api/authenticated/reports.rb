@@ -17,11 +17,13 @@ module API
           optional :message_ids, type: [Integer], documentation: { desc: "Can include some messages by target_profile that are being reported" }, default: []
         end
         post "/" do
-          Persistence::Repository::Reports.create(profile_id: logged_in_profile_id,
+          report_id = Persistence::Repository::Reports.create(profile_id: logged_in_profile_id,
                                                   target_profile_id: params[:target_profile_id],
                                                   type: params[:type],
                                                   comment: params[:comment],
                                                   message_ids: params[:message_ids])
+
+          Mails::ReportNotification.deliver!(report_id:)
           status :no_content
         end
       end

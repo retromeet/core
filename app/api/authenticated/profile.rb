@@ -11,7 +11,7 @@ module API
              produces: Authenticated::PRODUCES,
              consumes: Authenticated::CONSUMES
         get :info do
-          profile_info = Persistence::Repository::Account.basic_profile_info(account_id: logged_in_account_id)
+          profile_info = Persistence::Repository::Account.basic_profile_info(id: logged_in_profile_id)
           Entities::BasicProfileInfo.represent(profile_info)
         end
 

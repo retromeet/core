@@ -7,6 +7,11 @@ module Persistence
     private
 
       # @return [Sequel::Postgres::Dataset]
+      def accounts
+        Database.connection[:accounts]
+      end
+
+      # @return [Sequel::Postgres::Dataset]
       def locations
         Database.connection[:locations]
       end

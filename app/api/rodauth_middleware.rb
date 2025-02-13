@@ -18,12 +18,16 @@ module API
     plugin :assets, css: "layout.scss", path: File.expand_path("../assets", __dir__)
 
     plugin :render, views: File.expand_path("../assets/html", __dir__), engine: "haml", engine_opts: { "haml" => { escape_html: false } }, template_opts: { default_encoding: "UTF-8" }
-    plugin :sessions, secret: ENV.delete("SESSION_SECRET"), key: "retromeet-core.session"
+    plugin :additional_view_directories, [File.expand_path("../mail/html", __dir__)]
+    plugin :additional_render_engines, ["erb"]
+
+    plugin :sessions, secret: EnvironmentConfig.session_secret, key: "retromeet-core.session"
 
     plugin :route_csrf
     plugin :middleware, next_if_not_found: true
     plugin :rodauth, json: true, db: Database.connection do
       enable :login, :logout, :create_account, # Enables the basic rodauth functionality: login, logout, and creating account
+             :reset_password,
              :i18n, # Enables translation for fields around the app
              :oauth_authorization_code_grant, # Enable base oauth authorization (i.e /authorize flow)
              :oauth_client_credentials_grant, # Enables applications to fetch a token after initial authorization (i.e /token endpoint)
@@ -52,6 +56,34 @@ module API
 
       field_error_attributes { |field| "class='is-danger input is-large' aria-invalid=\"true\" aria-describedby=\"#{field}_error_message\"" }
       formatted_field_error { |field, reason| "<p id=\"#{field}_error_message\" class='help is-danger'>#{reason}.</p>" }
+
+      domain do
+        EnvironmentConfig.smtp_outgoing_domain
+      end
+
+      email_from do
+        EnvironmentConfig.smtp_from_address
+      end
+
+      create_email do |subject, body|
+        mail = super(subject, body)
+        # TODO: Make this multipart, simplified with text and all
+        mail.content_type = "text/html; charset=utf-8"
+        mail
+      end
+      email_subject_prefix do
+        "RetroMeet: "
+      end
+      already_logged_in do
+        redirect "/"
+      end
+
+      verify_account_email_body do
+        render "verify_account"
+      end
+      reset_password_email_body do
+        render "reset_password"
+      end
 
       before_register do
         # Before registering, rodauth allows to authorize the client. Currently we allow any client to register, since the idea is that anyone could make a client.

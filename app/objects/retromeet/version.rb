@@ -32,14 +32,14 @@ module RetroMeet
       # The prerelease name, takes the +RETROMEET_VERSION_PRERELEASE+ environment variable into consideration
       # @return [String]
       def prerelease
-        ENV["RETROMEET_VERSION_PRERELEASE"].presence || default_prerelease
+        EnvironmentConfig.retromeet_version_prerelease.presence || default_prerelease
       end
 
       # The build metadata, should be used to indicate a fork or other special build condition
       # Takes the +RETROMEET_VERSION_METADATA+ environment variable into consideration
       # @return [String,nil]
       def build_metadata
-        ENV.fetch("RETROMEET_VERSION_METADATA", nil)
+        EnvironmentConfig.retromeet_version_metadata
       end
 
       # @return [Array<String>]
@@ -57,8 +57,7 @@ module RetroMeet
 
       # @return [String]
       def user_agent
-        # TODO: (renatolond, 2024-10-31): properly build the address of the server
-        @user_agent ||= "RetroMeet-core/#{Version} (async-http #{Async::HTTP::VERSION}; +http#{false ? "s" : ""}://localhost:3000/)"
+        @user_agent ||= "RetroMeet-core/#{Version} (async-http #{Async::HTTP::VERSION}; +#{RetroMeet::Url})"
       end
     end
   end
