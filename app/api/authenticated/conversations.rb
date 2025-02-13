@@ -106,7 +106,9 @@ module API
               requires :content, type: String, documentation: { desc: "The content of the message" }
             end
             post "/" do
-              present Persistence::Repository::Messages.insert_message(conversation_id: params[:conversation_id], profile_id: logged_in_profile_id, content: params[:content]), with: Entities::Message
+              message = Persistence::Repository::Messages.insert_message(conversation_id: params[:conversation_id], profile_id: logged_in_profile_id, content: params[:content])
+              Mails::MessageNotification.deliver!(conversation_id: params[:conversation_id], message: message)
+              present message, with: Entities::Message
             end
           end
         end

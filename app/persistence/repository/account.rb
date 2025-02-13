@@ -114,10 +114,12 @@ module Persistence
 
         # Returns basic profile information for a given account
         #
-        # @param account_id (see .profile_id_from_account_id)
+        # @param id (see .profile_info)
         # @return [Hash{Symbol => Object}] A record containing +profile_id+, +created_at+ and +display_name+
-        def basic_profile_info(account_id:)
-          profiles.where(account_id:).select(:created_at, :display_name, :id).first
+        def basic_profile_info(id:)
+          profiles.where(id:)
+                  .select(:created_at, :display_name, :id)
+                  .first
         end
 
         # Updates the profile information for a given account
@@ -171,6 +173,13 @@ module Persistence
         def update_profile_picture(account_id:, picture:)
           profiles.where(account_id:)
                   .update(picture: Sequel.pg_jsonb_wrap(picture))
+        end
+
+        # @param id (see .profile_info)
+        def find_email_for(id:)
+          profiles.where(Sequel[:profiles][:id] => id)
+                  .inner_join(:accounts, id: :account_id)
+                  .get(Sequel[:accounts][:email])
         end
       end
     end
