@@ -57,6 +57,14 @@ module API
       field_error_attributes { |field| "class='is-danger input is-large' aria-invalid=\"true\" aria-describedby=\"#{field}_error_message\"" }
       formatted_field_error { |field, reason| "<p id=\"#{field}_error_message\" class='help is-danger'>#{reason}.</p>" }
 
+      domain do
+        EnvironmentConfig.smtp_outgoing_domain
+      end
+
+      email_from do
+        EnvironmentConfig.smtp_from_address
+      end
+
       create_email do |subject, body|
         mail = super(subject, body)
         # TODO: Make this multipart, simplified with text and all

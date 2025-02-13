@@ -4,9 +4,10 @@
 # It is loaded here so that if a environment variable is needed at runtime, it will fail fast, and not eventually fail at runtime when needed.
 module EnvironmentConfig
   class << self
+    # @raise [Dry::Types::CoercionError] If the value of the variable cannot be coerced correctly
     # @return [Boolean]
     def use_https?
-      @use_https ||= Environment.current == :production || ENV["LOCAL_HTTPS"] == "true"
+      @use_https ||= Environment.current == :production || DryTypes::Params::Bool[ENV.fetch("LOCAL_HTTPS", false)]
     end
 
     # @return [String]
@@ -35,6 +36,7 @@ module EnvironmentConfig
       @nominatim_api_host ||= ENV.fetch("NOMINATIM_API_HOST", "https://nominatim.openstreetmap.org")
     end
 
+    # @raise [Dry::Types::CoercionError] If the value of the variable cannot be coerced correctly
     # @return [Boolean]
     def shrine_s3_enabled?
       @shrine_s3_enabled ||= DryTypes::Params::Bool[ENV.fetch("S3_ENABLED", false)]
@@ -122,6 +124,82 @@ module EnvironmentConfig
       @pgsql_ph_password ||= ENV.fetch("PGSQL_PH_PASSWORD", nil)
     end
 
+    # @raise [Dry::Types::CoercionError] If the value of the variable cannot be coerced correctly
+    # @return [Boolean]
+    def use_smtp?
+      DryTypes::Params::Bool[ENV.fetch("USE_SMTP", false)]
+    end
+
+    # @return [String, nil]
+    def smtp_port
+      @smtp_port ||= ENV.fetch("SMTP_PORT", nil)
+    end
+
+    # @return [String, nil]
+    def smtp_server
+      @smtp_server ||= ENV.fetch("SMTP_SERVER", nil)
+    end
+
+    # @return [String, nil]
+    def smtp_login
+      @smtp_login ||= ENV.fetch("SMTP_LOGIN", nil)
+    end
+
+    # @return [String, nil]
+    def smtp_password
+      @smtp_password ||= ENV.fetch("SMTP_PASSWORD", nil)
+    end
+
+    # @return [String, nil]
+    def smtp_domain
+      @smtp_domain ||= ENV.fetch("SMTP_DOMAIN", nil)
+    end
+
+    # @return [String, nil]
+    def smtp_auth_method
+      @smtp_auth_method ||= ENV.fetch("SMTP_AUTH_METHOD", nil)
+    end
+
+    # @return [String, nil]
+    def smtp_ca_file
+      @smtp_ca_file ||= ENV.fetch("SMTP_CA_FILE", nil)
+    end
+
+    # @return [String, nil]
+    def smtp_openssl_verify_mode
+      @smtp_openssl_verify_mode ||= ENV.fetch("SMTP_OPENSSL_VERIFY_MODE", nil)
+    end
+
+    # @return [Boolean,nil]
+    def smtp_tls
+      @smtp_tls ||= ENV["SMTP_TLS"].present? ? DryTypes::Params::Bool[ENV.fetch("SMTP_TLS", false)] : nil
+    end
+
+    # @return [Boolean,nil]
+    def smtp_ssl
+      @smtp_ssl ||= ENV["SMTP_SSL"].present? ? DryTypes::Params::Bool[ENV.fetch("SMTP_SSL", false)] : nil
+    end
+
+    # @return [String, nil]
+    def smtp_enable_starttls
+      @smtp_enable_starttls ||= ENV.fetch("SMTP_ENABLE_STARTTLS", nil)
+    end
+
+    # @return [Boolean]
+    def smtp_enable_starttls_auto
+      @smtp_enable_starttls_auto ||= DryTypes::Params::Bool[ENV.fetch("SMTP_ENABLE_STARTTLS_AUTO", false)]
+    end
+
+    # @return [String]
+    def smtp_from_address
+      @smtp_from_address ||= ENV.fetch("SMTP_FROM_ADDRESS", "notifications@localhost")
+    end
+
+    # @return [String]
+    def smtp_outgoing_domain
+      @smtp_outgoing_domain ||= Mail::Address.new(smtp_from_address).domain
+    end
+
     # Calls all the functions in the module so that any missing variables fail early
     # @raise [KeyError] If any of the variables is missing the keys
     # @raise [RuntimeError] on any other errors
@@ -157,6 +235,23 @@ module EnvironmentConfig
       pgsql_password
       pgsql_ph_username
       pgsql_ph_password
+
+      return unless use_smtp?
+
+      smtp_port
+      smtp_server
+      smtp_login
+      smtp_password
+      smtp_domain
+      smtp_auth_method
+      smtp_ca_file
+      smtp_openssl_verify_mode
+      smtp_tls
+      smtp_ssl
+      smtp_enable_starttls
+      smtp_enable_starttls_auto
+      smtp_from_address
+      smtp_outgoing_domain
     end
   end
 end
