@@ -182,9 +182,9 @@ module Persistence
                   .get(Sequel[:accounts][:email])
         end
 
-        def admin_accounts
-          # TODO: actually implement admins properly
-          [accounts.order(:id).get(:email)]
+        # @return [Array<String>]
+        def admin_account_emails
+          accounts.where(type: "admin").map(:email)
         end
       end
     end

@@ -6,7 +6,7 @@ module Mails
     class << self
       # Send a notification email about a new message in a conversation
       def deliver!(report_id:)
-        admin_accounts = Persistence::Repository::Account.admin_accounts
+        admin_account_emails = Persistence::Repository::Account.admin_account_emails
         report = Persistence::Repository::Reports.find_full_report(id: report_id)
         notification_link = "/"
 
@@ -14,7 +14,7 @@ module Mails
         body = template.render(Object.new, report:, notification_link:)
 
         email_subject_prefix = "RetroMeet: "
-        admin_accounts.each do |to|
+        admin_account_emails.each do |to|
           m = Mail.new do
             from EnvironmentConfig.smtp_from_address
             to to
