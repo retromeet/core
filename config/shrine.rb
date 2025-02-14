@@ -21,7 +21,7 @@ elsif EnvironmentConfig.shrine_s3_enabled?
     force_path_style: true
   }
 
-  plugin :url_options, store: { host: EnvironmentConfig.shrine_s3_cloudfront_host } if EnvironmentConfig.shrine_s3_cloudfront_host
+  Shrine.plugin :url_options, store: { host: EnvironmentConfig.shrine_s3_cloudfront_host } if EnvironmentConfig.shrine_s3_cloudfront_host
 
   Shrine.storages = {
     cache: Shrine::Storage::S3.new(prefix: "cache", **s3_options),

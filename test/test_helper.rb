@@ -6,10 +6,7 @@ require "minitest/autorun"
 require "rack/test"
 require "webmock/minitest"
 
-require_relative "../config/environment"
-Environment.load
-
-require_relative "../config/zeitwerk"
+require_relative "../preload"
 
 require_relative "db_helper"
 require_relative "rack_helper"
