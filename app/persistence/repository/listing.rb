@@ -25,7 +25,7 @@ module Persistence
                                                  .select(:target_profile_id)
 
           accounts = profiles.inner_join(location_subquery, id: :location_id)
-                             .select(:display_name, Sequel[:profiles][:id], :birth_date, :genders, :orientations, :relationship_status, :location_display_name, Sequel[:dist].as(:location_distance))
+                             .select(:display_name, Sequel[:profiles][:id], :birth_date, :genders, :orientations, :relationship_status, :location_display_name, :picture, Sequel[:dist].as(:location_distance))
                              .exclude(Sequel[:profiles][:id] => id)
                              .exclude(Sequel[:profiles][:id] => blocked_profiles_query)
 
