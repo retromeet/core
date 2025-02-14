@@ -71,6 +71,11 @@ module EnvironmentConfig
     end
 
     # @return [String, nil]
+    def shrine_s3_cloudfront_host
+      @shrine_s3_cloudfront_host ||= ENV.fetch("S3_CLOUDFRONT_HOST", nil)
+    end
+
+    # @return [String, nil]
     def retromeet_version_prerelease
       @retromeet_version_prerelease ||= ENV.fetch("RETROMEET_VERSION_PRERELEASE", nil)
     end
@@ -221,6 +226,7 @@ module EnvironmentConfig
         shrine_aws_access_key_id
         shrine_aws_secret_access_key
         shrine_s3_endpoint
+        shrine_s3_cloudfront_host
       end
 
       retromeet_version_prerelease
