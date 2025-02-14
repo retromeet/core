@@ -26,7 +26,7 @@ module RetroMeet
       # The default prerelease name
       # @return [String]
       def default_prerelease
-        "alpha.1"
+        ""
       end
 
       # The prerelease name, takes the +RETROMEET_VERSION_PRERELEASE+ environment variable into consideration
