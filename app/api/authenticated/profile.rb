@@ -48,6 +48,7 @@ module API
           optional :wants_kids, type: String, values: Persistence::Repository::Account::WANTS_VALUES
           optional :pets, type: String, values: Persistence::Repository::Account::HAVES_OR_HAVE_NOTS_VALUES
           optional :wants_pets, type: String, values: Persistence::Repository::Account::WANTS_VALUES
+          optional :pronouns, type: String
           optional :hide_age, type: Boolean
         end
         post :complete do

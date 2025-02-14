@@ -52,6 +52,7 @@ describe API::Authenticated::Conversations do
               religion: other_profile.religion,
               religion_importance: other_profile.religion_importance,
               location_display_name: other_profile.location.display_name.transform_keys(&:to_sym),
+              pronouns: other_profile.pronouns,
               age: AgeHelper.age_from_date(other_profile.birth_date)
             }
           }
@@ -109,6 +110,7 @@ describe API::Authenticated::Conversations do
           religion: other_profile.religion,
           religion_importance: other_profile.religion_importance,
           location_display_name: other_profile.location.display_name.transform_keys(&:to_sym),
+          pronouns: other_profile.pronouns,
           age: AgeHelper.age_from_date(other_profile.birth_date)
         }
       }
@@ -147,6 +149,7 @@ describe API::Authenticated::Conversations do
           religion: other_profile.religion,
           religion_importance: other_profile.religion_importance,
           location_display_name: other_profile.location.display_name.transform_keys(&:to_sym),
+          pronouns: other_profile.pronouns,
           age: AgeHelper.age_from_date(other_profile.birth_date)
         }
       }
@@ -237,6 +240,7 @@ describe API::Authenticated::Conversations do
           religion: other_profile.religion,
           religion_importance: other_profile.religion_importance,
           location_display_name: other_profile.location.display_name.transform_keys(&:to_sym),
+          pronouns: other_profile.pronouns,
           age: AgeHelper.age_from_date(other_profile.birth_date)
         }
       }

@@ -47,6 +47,7 @@ module API
       expose :birth_date, format_with: :age_formatter, as: :age, documentation: { type: Integer }, if: ->(object, _options) { !object[:hide_age] }
       expose :is_blocked, documentation: { type: "boolean" }, expose_nil: false
       expose :picture, format_with: :picture_formatter, documentation: { type: String }, expose_nil: false
+      expose :pronouns, documentation: { type: String }
     end
   end
 end

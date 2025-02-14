@@ -58,6 +58,7 @@ describe API::Authenticated::Profile do
         religion_importance: profile.religion_importance,
         display_name: profile.display_name,
         location_display_name: profile.location.display_name.transform_keys(&:to_sym),
+        pronouns: profile.pronouns,
         age: AgeHelper.age_from_date(profile.birth_date),
         hide_age: profile.hide_age
       }
@@ -157,7 +158,8 @@ describe API::Authenticated::Profile do
         wants_kids: profile.wants_kids,
         religion: profile.religion,
         religion_importance: profile.religion_importance,
-        display_name: profile.display_name
+        display_name: profile.display_name,
+        pronouns: profile.pronouns
       }
       authorized_post @endpoint, body.to_json
 
@@ -184,7 +186,8 @@ describe API::Authenticated::Profile do
         kids: nil,
         wants_kids: nil,
         religion: nil,
-        religion_importance: nil
+        religion_importance: nil,
+        pronouns: nil
       }
       authorized_post @endpoint, body.to_json
 
@@ -261,6 +264,7 @@ describe API::Authenticated::Profile do
         religion_importance: profile.religion_importance,
         display_name: profile.display_name,
         location_display_name: profile.location.display_name.transform_keys(&:to_sym),
+        pronouns: profile.pronouns,
         age: AgeHelper.age_from_date(profile.birth_date)
       }
       authorized_get format(@endpoint, id: @account.profile.id)
@@ -291,7 +295,8 @@ describe API::Authenticated::Profile do
         religion: profile.religion,
         religion_importance: profile.religion_importance,
         display_name: profile.display_name,
-        location_display_name: profile.location.display_name.transform_keys(&:to_sym)
+        location_display_name: profile.location.display_name.transform_keys(&:to_sym),
+        pronouns: profile.pronouns
       }
       authorized_get format(@endpoint, id: profile.id)
 
@@ -322,6 +327,7 @@ describe API::Authenticated::Profile do
         religion_importance: profile.religion_importance,
         display_name: profile.display_name,
         location_display_name: profile.location.display_name.transform_keys(&:to_sym),
+        pronouns: profile.pronouns,
         age: AgeHelper.age_from_date(profile.birth_date),
         picture: ImageUploader::Attacher.from_data(profile.picture.to_h).file.download_url
 

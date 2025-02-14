@@ -27,6 +27,7 @@ FactoryBot.define do
     religion_importance { "not_important" }
     display_name { Faker::Twitter.screen_name }
     created_at { Time.now }
+    pronouns { "They/them" }
 
     trait :with_picture do
       picture { image_data }
