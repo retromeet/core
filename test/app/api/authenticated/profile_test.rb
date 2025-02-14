@@ -157,7 +157,8 @@ describe API::Authenticated::Profile do
         wants_kids: profile.wants_kids,
         religion: profile.religion,
         religion_importance: profile.religion_importance,
-        display_name: profile.display_name
+        display_name: profile.display_name,
+        pronouns: profile.pronouns
       }
       authorized_post @endpoint, body.to_json
 
@@ -184,7 +185,8 @@ describe API::Authenticated::Profile do
         kids: nil,
         wants_kids: nil,
         religion: nil,
-        religion_importance: nil
+        religion_importance: nil,
+        pronouns: nil
       }
       authorized_post @endpoint, body.to_json
 
