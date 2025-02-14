@@ -18,7 +18,7 @@ There's a [pronto](https://github.com/prontolabs/pronto) github action running o
 
 When contributing, you are welcome to fix pre-existing lint issues in files. But it is better if you open a separate pull request for fixing up linting issues that are not related to the code you are touching, to simplify the reviewing process.
 
-### Setup
+### Development Setup
 
 RetroMeet requires Postgresql >= 16.0 (it might work with a lower version than that, but it is not guaranteed), PostGIS >= 3.4 (again, might work with a lower version, but not guaranteed) and the [pg_uuidv7](https://github.com/fboulnois/pg_uuidv7) extension. You can use it locally or with a Docker image, but setting up Postgresql and the extensions is currently not covered in this documentation.
 
@@ -82,6 +82,33 @@ Finally, run the API with:
 
 ```sh
 ./bin/dev
+```
+
+### Deploying to production
+
+RetroMeet requires Postgresql >= 16.0 (it might work with a lower version than that, but it is not guaranteed), PostGIS >= 3.4 (again, might work with a lower version, but not guaranteed) and the [pg_uuidv7](https://github.com/fboulnois/pg_uuidv7) extension. You can use it locally or with a Docker image, but setting up Postgresql and the extensions is currently not covered in this documentation.
+
+Before starting, you need to have Ruby installed, the same version as the one in [.ruby-version](./.ruby-version). We recommend using one of the [ruby manager](https://www.ruby-lang.org/en/documentation/installation/#managers) for that to make it easier to switch between versions if needed.
+
+First, you want to configure bundler to ignore test and development dependencies:
+
+```sh
+bundle config set without 'development test'
+```
+
+Then, install dependencies with:
+
+```sh
+bundle install -j$(getconf _NPROCESSORS_ONLN)
+```
+
+You need to then fill up all of the environment variables on the `.env.production`. You can see an example on `.env.template`. At the very least, you need: `APP_ENV=production`, `LOCAL_DOMAIN`, `PGSQL_*`, `SESSION_SECRET` and `SMTP_*`
+
+
+Configure a reverse proxy and run the server with:
+
+```sh
+bundle exec falcon host falcon_host.rb
 ```
 
 ### Database migrations
