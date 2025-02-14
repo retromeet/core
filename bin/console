@@ -3,11 +3,8 @@
 
 require "bundler"
 
-require_relative "../config/environment"
+require_relative "../preload"
 
-Environment.load
 require "irb"
 
-require_relative "../config/zeitwerk"
-require_relative "../config/mail"
 IRB.start(__FILE__)
