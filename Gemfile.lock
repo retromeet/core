@@ -458,6 +458,7 @@ DEPENDENCIES
   rack-test
   rake
   rerun
+  rexml
   roda
   rodauth
   rodauth-i18n

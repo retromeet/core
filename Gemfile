@@ -50,6 +50,7 @@ gem "mustache",
 gem "shrine" # Used for file uploads
 
 gem "aws-sdk-s3", "~> 1.180" # For S3-like storage in Shrine
+gem "rexml" # needed by S3
 
 group :development, :test do
   gem "dotenv" # Used to load environment variables from .env files
