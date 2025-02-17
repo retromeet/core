@@ -11,3 +11,6 @@ en:
       invalid_date: "must be a valid date"
       over_18_required: "You need to be at least 18 years old to join."
       required: "must be present"
+  emails:
+    message_notification:
+      subject: "You got a new message!"
