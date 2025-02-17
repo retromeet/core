@@ -18,4 +18,6 @@
               %input{type: "submit", class: "button is-link is-light", value: rodauth.logout_button}
         - else
           .navbar-item
-            %a{href: "/create-account"}= I18n.t("sign_up")
+            %a.button.is-link.is-inverted{href: "/login"}= I18n.t("login")
+          .navbar-item
+            %a.button.is-link.is-inverted{href: "/create-account"}= I18n.t("sign_up")
