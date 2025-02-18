@@ -9,9 +9,6 @@ port = ENV["PORT"] || 3000
 service hostname do
   include Falcon::Environment::Rack
 
-  # Insert an in-memory cache in front of the application (using async-http-cache).
-  cache true
-
   preload "preload.rb"
 
   # TODO: Does it make sense to allow falcon http2 directly? Currently reverse proxy needed.
