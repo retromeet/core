@@ -1,9 +1,11 @@
-require:
-  - rubocop-capybara
-  - rubocop-factory_bot
+plugins:
   - rubocop-minitest
   - rubocop-performance
   - rubocop-rake
+
+require:
+  - rubocop-capybara
+  - rubocop-factory_bot
   - rubocop-sequel
   - rubocop-yard
 
