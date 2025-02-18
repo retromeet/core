@@ -12,6 +12,7 @@
     = assets(:css)
     = assets(:js)
   %body
+    = render "header"
     - if flash["error"]
       .notification.is-danger
         = flash["error"]
