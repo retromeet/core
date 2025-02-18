@@ -1,0 +1,23 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title RetromeetWeb
+    %meta{:content => "width=device-width,initial-scale=1", :name => "viewport"}/
+    %meta{:content => "yes", :name => "apple-mobile-web-app-capable"}/
+    %meta{:content => "yes", :name => "mobile-web-app-capable"}/
+    %link{:href => "/icon.png", :rel => "icon", :type => "image/png"}/
+    %link{:href => "/icon.svg", :rel => "icon", :type => "image/svg+xml"}/
+    %link{:href => "/icon.png", :rel => "apple-touch-icon"}/
+    = assets(:css)
+    = assets(:js)
+  %body
+    = render "header"
+    %section.section
+      .box
+        .container
+          %h1.title 404
+          %p.subtitle
+            %strong Page not found :(
+          %p The requested page could not be found. Go back to the <a href="/">main page</a>?
+    = render "footer"

@@ -25,6 +25,16 @@ module API
 
     plugin :route_csrf
     plugin :middleware, next_if_not_found: true
+    plugin :error_handler
+
+    error do |e|
+      if Environment.test? || Environment.development?
+        puts e
+        puts e.backtrace
+      end
+      render(:"500")
+    end
+
     plugin :rodauth, json: true, db: Database.connection do
       enable :login, :logout, :create_account, # Enables the basic rodauth functionality: login, logout, and creating account
              :reset_password,
@@ -123,11 +133,19 @@ module API
         view(:privacy)
       end
       r.rodauth
+
       check_csrf! unless r.content_type&.include?("application/json") || r.path.start_with?("/api/")
       # rodauth.load_oauth_application_management_routes
       # rodauth.load_oauth_grant_management_routes
       rodauth.load_oauth_server_metadata_route # Loads .well-known/oauth-authorization-server path
 
+      # Supposed to catch any non-api paths that are not in rodauth
+      # Should be the last one, otherwise other routes will also 404
+      # The regex is supposed to mean:
+      #   anything that is not api/somethingelse OR api(something that is not a /)+anything else
+      r.is(%r{(?!api/).+|api[^/].+}) do
+        render(:"404")
+      end
       env["rodauth"] = rodauth
     end
   end
