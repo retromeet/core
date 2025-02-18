@@ -205,6 +205,23 @@ module EnvironmentConfig
       @smtp_outgoing_domain ||= Mail::Address.new(smtp_from_address).domain
     end
 
+    # @return [Regexp]
+    def rack_trusted_ips_re
+      @rack_trusted_ips_re ||= begin
+        proxy_ips = ENV.fetch("PROXY_IPS", "")
+        valid_ipv4_octet = /\.(25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])/
+        regexes = [/\A127#{valid_ipv4_octet}{3}\z/, # localhost IPv4 range 127.x.x.x, per RFC-3330
+                   /\A::1\z/,                                                # localhost IPv6 ::1
+                   /\Af[cd][0-9a-f]{2}(?::[0-9a-f]{0,4}){0,7}\z/i,           # private IPv6 range fc00 .. fdff
+                   /\A10#{valid_ipv4_octet}{3}\z/,                           # private IPv4 range 10.x.x.x
+                   /\A172\.(1[6-9]|2[0-9]|3[01])#{valid_ipv4_octet}{2}\z/,   # private IPv4 range 172.16.0.0 .. 172.31.255.255
+                   /\A192\.168#{valid_ipv4_octet}{2}\z/,                     # private IPv4 range 192.168.x.x
+                   /\Alocalhost\z|\Aunix(\z|:)/i]                            # localhost hostname, and unix domain sockets
+        regexes += proxy_ips.split(",").map { |v| /\A#{Regexp.escape(v)}\z/ } if proxy_ips.present?
+        Regexp.union(*regexes)
+      end
+    end
+
     # Calls all the functions in the module so that any missing variables fail early
     # @raise [KeyError] If any of the variables is missing the keys
     # @raise [RuntimeError] on any other errors
@@ -242,22 +259,24 @@ module EnvironmentConfig
       pgsql_ph_username
       pgsql_ph_password
 
-      return unless use_smtp?
+      if use_smtp?
+        smtp_port
+        smtp_server
+        smtp_login
+        smtp_password
+        smtp_domain
+        smtp_auth_method
+        smtp_ca_file
+        smtp_openssl_verify_mode
+        smtp_tls
+        smtp_ssl
+        smtp_enable_starttls
+        smtp_enable_starttls_auto
+        smtp_from_address
+        smtp_outgoing_domain
+      end
 
-      smtp_port
-      smtp_server
-      smtp_login
-      smtp_password
-      smtp_domain
-      smtp_auth_method
-      smtp_ca_file
-      smtp_openssl_verify_mode
-      smtp_tls
-      smtp_ssl
-      smtp_enable_starttls
-      smtp_enable_starttls_auto
-      smtp_from_address
-      smtp_outgoing_domain
+      rack_trusted_ips_re
     end
   end
 end
