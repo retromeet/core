@@ -17,8 +17,8 @@ class AccountCreationTest < CapybaraTestCase
 
     login = fill_in_fields
 
-    assert_instance_of Account, Account.find(email: login)
     assert_text("Your account has been created")
+    assert_instance_of Account, Account.find(email: login)
   end
   it "creating a new account, fails because it exists" do
     account = create(:account)
@@ -35,16 +35,16 @@ class AccountCreationTest < CapybaraTestCase
 
     login = fill_in_fields(login: "bad.email")
 
-    assert_nil Account.find(email: login)
     assert_text("invalid login, does not meet requirements (not a valid email address)")
+    assert_nil Account.find(email: login)
   end
   it "creating a new account, fails because it's too young" do
     visit "/create-account"
 
     login = fill_in_fields(birth_date: Date.today)
 
-    assert_nil Account.find(email: login)
     assert_text("You need to be at least 18 years old to join")
+    assert_nil Account.find(email: login)
   end
   it "creating a new account, fails because it's too young" do
     Capybara.current_driver = :rack_test
@@ -52,7 +52,7 @@ class AccountCreationTest < CapybaraTestCase
 
     login = fill_in_fields(birth_date: "2009-99-99")
 
-    assert_nil Account.find(email: login)
     assert_text("must be a valid date")
+    assert_nil Account.find(email: login)
   end
 end
