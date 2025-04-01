@@ -46,7 +46,7 @@ class AccountCreationTest < CapybaraTestCase
     assert_text("You need to be at least 18 years old to join")
     assert_nil Account.find(email: login)
   end
-  it "creating a new account, fails because it's too young" do
+  it "creating a new account, fails because the date is invalid" do
     Capybara.current_driver = :rack_test
     visit "/create-account"
 
