@@ -1,12 +1,12 @@
 plugins:
+  - rubocop-capybara
+  - rubocop-factory_bot
   - rubocop-minitest
   - rubocop-performance
   - rubocop-rake
+  - rubocop-sequel
 
 require:
-  - rubocop-capybara
-  - rubocop-factory_bot
-  - rubocop-sequel
   - rubocop-yard
 
 AllCops:
