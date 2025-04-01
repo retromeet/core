@@ -20,7 +20,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }} # checkout HEAD commit instead of merge commit
           fetch-depth: 50
       - run: git fetch origin main
-      - uses: renatolond/pronto-ruby@v4.2-r
+      - uses: renatolond/pronto-ruby@v4.3-r
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
