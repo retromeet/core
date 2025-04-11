@@ -5,8 +5,8 @@ module RackHelper
 
   def self.app
     app = Rack::Builder.parse_file("config.ru")
-    # TODO: need a less hacky way to do this, maybe.
-    app.instance_variable_get(:@app).instance_variable_get(:@mid).rodauth.configure do
+    # TODO: need a less hacky way to do this, maybe. 😅
+    app.instance_variable_get(:@app).instance_variable_get(:@app).instance_variable_get(:@mid).rodauth.configure do
       oauth_grants_token_hash_column nil
       oauth_grants_refresh_token_hash_column nil
       oauth_applications_client_secret_hash_column nil

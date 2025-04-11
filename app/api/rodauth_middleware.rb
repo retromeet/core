@@ -123,6 +123,9 @@ module API
       r.assets
       r.public
 
+      r.rodauth
+      I18n.locale = env["rack.locale"]
+
       r.root do
         view(template: "root", layout: "hero")
       end
@@ -132,7 +135,6 @@ module API
       r.is("privacy") do
         view(:privacy)
       end
-      r.rodauth
 
       check_csrf! unless r.content_type&.include?("application/json") || r.path.start_with?("/api/")
       # rodauth.load_oauth_application_management_routes
