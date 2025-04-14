@@ -11,12 +11,14 @@ FactoryBot.define do
     transient do
       password { "password" }
       profile { {} }
+      profile_preference { {} }
     end
     email { Faker::Internet.email }
     account_status { AccountStatus.verified }
     after(:create) do |account, evaluator|
       create(:account_password_hash, account:, password: evaluator.password)
-      create(:profile, account:, **evaluator.profile)
+      profile = create(:profile, account:, **evaluator.profile)
+      create(:profile_preference, profile:, **evaluator.profile_preference)
     end
   end
 end

@@ -27,6 +27,11 @@ module Persistence
       end
 
       # @return [Sequel::Postgres::Dataset]
+      def profile_preferences
+        Database.connection[:profile_preferences]
+      end
+
+      # @return [Sequel::Postgres::Dataset]
       def conversations
         Database.connection[:conversations]
       end
