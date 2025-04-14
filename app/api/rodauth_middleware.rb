@@ -124,7 +124,8 @@ module API
       r.public
 
       r.rodauth
-      I18n.locale = env["rack.locale"]
+      profile_preferences = Persistence::Repository::Account.profile_preferences_from_account_id(account_id: rodauth.account!&.dig(:id))
+      I18n.locale = profile_preferences&.dig("locale") || env["rack.locale"]
 
       r.root do
         view(template: "root", layout: "hero")
