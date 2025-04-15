@@ -18,3 +18,14 @@
       - else
         %a.navbar-item{href: "/login"}= I18n.t("login")
         %a.navbar-item{href: "/create-account"}= I18n.t("sign_up")
+        .navbar-item.has-dropdown.is-hoverable
+          .navbar-link
+            Language selection
+          .navbar-dropdown.is-right
+            - I18n.available_locales.each do |locale|
+              .navbar-item
+                %form{action: "/language", method: :post}
+                  = csrf_tag("/language")
+                  %input{type: "hidden", name: "locale", value: locale}
+                  - I18n.with_locale(locale) do
+                    %input{type: "submit", class: "button is-link is-light", value: I18n.t("language_name")}

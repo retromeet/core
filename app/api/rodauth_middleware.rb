@@ -124,7 +124,7 @@ module API
 
       r.rodauth
       profile_preferences = Persistence::Repository::Account.profile_preferences_from_account_id(account_id: rodauth.account!&.dig(:id))
-      I18n.locale = profile_preferences&.dig("locale") || env["rack.locale"]
+      I18n.locale = profile_preferences&.dig("locale") || session["locale"] || env["rack.locale"]
 
       r.root do
         view(template: "root", layout: "hero")
@@ -140,6 +140,13 @@ module API
       # rodauth.load_oauth_application_management_routes
       # rodauth.load_oauth_grant_management_routes
       rodauth.load_oauth_server_metadata_route # Loads .well-known/oauth-authorization-server path
+
+      r.is("language") do
+        r.post do
+          session["locale"] = r.params["locale"] if I18n.available_locales.include?(r.params["locale"].to_sym)
+          r.redirect("/")
+        end
+      end
 
       # Supposed to catch any non-api paths that are not in rodauth
       # Should be the last one, otherwise other routes will also 404
