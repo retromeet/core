@@ -14,7 +14,6 @@ module API
   class RodauthMiddleware < Roda
     plugin :public, root: File.expand_path("../assets/images", __dir__)
     plugin :flash
-    # plugin :middleware
     plugin :assets, css: "layout.scss", js: "base.js", path: File.expand_path("../assets", __dir__)
 
     plugin :render, views: File.expand_path("../assets/html", __dir__), engine: "haml", engine_opts: { "haml" => { escape_html: false } }, template_opts: { default_encoding: "UTF-8" }
@@ -123,6 +122,10 @@ module API
       r.assets
       r.public
 
+      r.rodauth
+      profile_preferences = Persistence::Repository::Account.profile_preferences_from_account_id(account_id: rodauth.account!&.dig(:id))
+      I18n.locale = profile_preferences&.dig("locale") || session["locale"] || env["rack.locale"]
+
       r.root do
         view(template: "root", layout: "hero")
       end
@@ -132,12 +135,18 @@ module API
       r.is("privacy") do
         view(:privacy)
       end
-      r.rodauth
 
       check_csrf! unless r.content_type&.include?("application/json") || r.path.start_with?("/api/")
       # rodauth.load_oauth_application_management_routes
       # rodauth.load_oauth_grant_management_routes
       rodauth.load_oauth_server_metadata_route # Loads .well-known/oauth-authorization-server path
+
+      r.is("language") do
+        r.post do
+          session["locale"] = r.params["locale"] if I18n.available_locales.include?(r.params["locale"].to_sym)
+          r.redirect("/")
+        end
+      end
 
       # Supposed to catch any non-api paths that are not in rodauth
       # Should be the last one, otherwise other routes will also 404
