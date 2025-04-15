@@ -14,7 +14,6 @@ module API
   class RodauthMiddleware < Roda
     plugin :public, root: File.expand_path("../assets/images", __dir__)
     plugin :flash
-    # plugin :middleware
     plugin :assets, css: "layout.scss", js: "base.js", path: File.expand_path("../assets", __dir__)
 
     plugin :render, views: File.expand_path("../assets/html", __dir__), engine: "haml", engine_opts: { "haml" => { escape_html: false } }, template_opts: { default_encoding: "UTF-8" }
