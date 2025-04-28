@@ -221,7 +221,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.10.2)
+    json (2.11.3)
     json_schema (0.21.0)
     jwt (2.10.1)
       base64
@@ -283,8 +283,8 @@ GEM
       sawyer (~> 0.9)
     openapi_parser (2.2.3)
     openssl (3.3.0)
-    parallel (1.26.3)
-    parser (3.3.7.4)
+    parallel (1.27.0)
+    parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
     pastel (0.8.0)
@@ -344,7 +344,7 @@ GEM
     rodauth-oauth (1.6.3)
       base64
       rodauth (~> 2.0)
-    rubocop (1.75.2)
+    rubocop (1.75.3)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -355,7 +355,7 @@ GEM
       rubocop-ast (>= 1.44.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.44.0)
+    rubocop-ast (1.44.1)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
     rubocop-capybara (2.22.1)
