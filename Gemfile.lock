@@ -318,6 +318,8 @@ GEM
     public_suffix (6.0.2)
     racc (1.8.1)
     rack (3.1.15)
+    rack-contrib (2.5.0)
+      rack (< 4)
     rack-test (2.2.0)
       rack (>= 1.3)
     rainbow (3.1.1)
@@ -469,6 +471,7 @@ DEPENDENCIES
   pg
   pronto (~> 0.11)
   pronto-rubocop
+  rack-contrib
   rack-test
   rake
   rerun
