@@ -5,8 +5,6 @@ plugins:
   - rubocop-performance
   - rubocop-rake
   - rubocop-sequel
-
-require:
   - rubocop-yard
 
 AllCops:
