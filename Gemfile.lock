@@ -7,10 +7,10 @@ GIT
 
 GIT
   remote: https://github.com/retromeet/address_composer.git
-  revision: 9e0b6938dff28bd6f2dc402517091dcbee321fef
+  revision: 2c698e9aac92db20783de449b3c7605a505f0a41
   submodules: true
   specs:
-    address_composer (1.0.1)
+    address_composer (2.0.0)
       mustache (>= 1.1)
 
 GIT
