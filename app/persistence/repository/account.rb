@@ -197,6 +197,15 @@ module Persistence
           accounts.where(email:)
                   .update(type: "admin")
         end
+
+        # @return [Hash]
+        def profile_preferences_from_account_id(account_id:)
+          return {} unless account_id
+
+          profile_preferences.where(profile_id: profiles.where(account_id:)
+                                                        .select(:id))
+                             .get(:preferences)
+        end
       end
     end
   end
