@@ -148,7 +148,7 @@ GEM
     erb (5.0.1)
     factory_bot (6.5.4)
       activesupport (>= 6.1.0)
-    faker (3.5.1)
+    faker (3.5.2)
       i18n (>= 1.8.11, < 2)
     falcon (0.51.1)
       async
