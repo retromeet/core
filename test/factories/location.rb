@@ -13,7 +13,7 @@ FactoryBot.define do
     end
     display_name { Sequel.pg_jsonb_wrap({ language => name }) }
     country_code { Faker::Address.country_code.downcase }
-    osm_id { rand(1..10_000) }
+    sequence(:osm_id) { |n| n }
     geom { Sequel.lit("POINT(#{longitude}, #{latitude})::geometry") }
   end
 end
