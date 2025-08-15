@@ -56,9 +56,9 @@ GEM
       io-endpoint
       io-stream
       memory-leak (~> 0.5)
-    async-http (0.89.0)
+    async-http (0.90.1)
       async (>= 2.10.2)
-      async-pool (~> 0.9)
+      async-pool (~> 0.11)
       io-endpoint (~> 0.14)
       io-stream (~> 0.6)
       metrics (~> 0.12)
@@ -311,7 +311,7 @@ GEM
       pronto (~> 0.11.0)
       rubocop (>= 0.63.1, < 2.0)
     protocol-hpack (1.5.1)
-    protocol-http (0.51.0)
+    protocol-http (0.51.1)
     protocol-http1 (0.34.1)
       protocol-http (~> 0.22)
     protocol-http2 (0.22.1)
