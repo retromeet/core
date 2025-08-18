@@ -5,7 +5,7 @@ module API
     # Represents a collection of conversations
     class Conversations < Grape::Entity
       present_collection true
-      expose :items, as: "conversations", using: API::Entities::Conversation, documentation: { is_array: true }
+      expose :items, as: "conversations", using: API::Entities::Conversation, documentation: { is_array: true, required: false }
     end
   end
 end
