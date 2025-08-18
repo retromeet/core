@@ -42,7 +42,7 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.3)
-    async (2.27.2)
+    async (2.27.3)
       console (~> 1.29)
       fiber-annotation
       io-event (~> 1.11)
@@ -70,7 +70,7 @@ GEM
       async-http (~> 0.56)
     async-pool (0.11.0)
       async (>= 2.0)
-    async-service (0.13.0)
+    async-service (0.14.1)
       async
       async-container (~> 0.16)
     aws-eventstream (1.4.0)
@@ -152,7 +152,7 @@ GEM
       activesupport (>= 6.1.0)
     faker (3.5.2)
       i18n (>= 1.8.11, < 2)
-    falcon (0.52.2)
+    falcon (0.52.3)
       async
       async-container (~> 0.20)
       async-container-supervisor (~> 0.5.0)
@@ -426,7 +426,7 @@ GEM
     thor (1.4.0)
     tilt (2.6.1)
     timeout (0.4.3)
-    traces (0.16.2)
+    traces (0.17.0)
     tty-color (0.6.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
