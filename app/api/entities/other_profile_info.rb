@@ -24,30 +24,30 @@ module API
           upload.file.download_url
         end
       end
-      expose :id, documentation: { type: String }
-      expose :display_name, documentation: { type: String }
-      expose :about_me, documentation: { type: String }
-      expose :genders, documentation: { type: String, is_array: true }
-      expose :orientations, documentation: { type: String, is_array: true }
-      expose :languages, documentation: { type: String, is_array: true }
-      expose :relationship_status, documentation: { type: String }
-      expose :relationship_type, documentation: { type: String }
-      expose :tobacco, documentation: { type: String }
-      expose :alcohol, documentation: { type: String }
-      expose :marijuana, documentation: { type: String }
-      expose :other_recreational_drugs, documentation: { type: String }
-      expose :pets, documentation: { type: String }
-      expose :wants_pets, documentation: { type: String }
-      expose :kids, documentation: { type: String }
-      expose :wants_kids, documentation: { type: String }
-      expose :religion, documentation: { type: String }
-      expose :religion_importance, documentation: { type: String }
-      expose :location_display_name, documentation: { type: Hash }
+      expose :id, documentation: { type: String, required: false }
+      expose :display_name, documentation: { type: String, required: false }
+      expose :about_me, documentation: { type: String, required: false }
+      expose :genders, documentation: { type: String, is_array: true, required: false }
+      expose :orientations, documentation: { type: String, is_array: true, required: false }
+      expose :languages, documentation: { type: String, is_array: true, required: false }
+      expose :relationship_status, documentation: { type: String, required: false }
+      expose :relationship_type, documentation: { type: String, required: false }
+      expose :tobacco, documentation: { type: String, required: false }
+      expose :alcohol, documentation: { type: String, required: false }
+      expose :marijuana, documentation: { type: String, required: false }
+      expose :other_recreational_drugs, documentation: { type: String, required: false }
+      expose :pets, documentation: { type: String, required: false }
+      expose :wants_pets, documentation: { type: String, required: false }
+      expose :kids, documentation: { type: String, required: false }
+      expose :wants_kids, documentation: { type: String, required: false }
+      expose :religion, documentation: { type: String, required: false }
+      expose :religion_importance, documentation: { type: String, required: false }
+      expose :location_display_name, documentation: { type: Hash, required: false }
       expose :location_distance, format_with: :distance_in_km, documentation: { type: Float }, expose_nil: false
-      expose :birth_date, format_with: :age_formatter, as: :age, documentation: { type: Integer }, if: ->(object, _options) { !object[:hide_age] }
+      expose :birth_date, format_with: :age_formatter, as: :age, documentation: { type: Integer, required: false }, if: ->(object, _options) { !object[:hide_age] }
       expose :is_blocked, documentation: { type: "boolean" }, expose_nil: false
       expose :picture, format_with: :picture_formatter, documentation: { type: String }, expose_nil: false
-      expose :pronouns, documentation: { type: String }
+      expose :pronouns, documentation: { type: String, required: false }
     end
   end
 end
