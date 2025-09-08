@@ -49,7 +49,7 @@ gem "mustache",
 
 gem "shrine" # Used for file uploads
 
-gem "aws-sdk-s3", "~> 1.197" # For S3-like storage in Shrine
+gem "aws-sdk-s3", "~> 1.198" # For S3-like storage in Shrine
 gem "rexml" # needed by S3
 
 group :development, :test do
