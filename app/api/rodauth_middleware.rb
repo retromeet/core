@@ -12,9 +12,27 @@ module API
   ].freeze
   # middleware responsible for authentication
   class RodauthMiddleware < Roda
+    class << self
+      # This function will choose the request locale.
+      # It use the +request_locale+ key in the +env+ variable if available, otherwise, it checks if the request
+      # is authenticated and if so takes the locale from the profile preferences. If not, will take from the session and lastly
+      # from the rack.locale
+      # It also memoizes the result to the env
+      #
+      # @param env [Hash] the env variable for the request
+      # @param session [Object] the session object from roda for the current request
+      # @param rodauth [Rodauth] the rodauth object for the current request
+      # @return [String] The request locale
+      def choose_request_locale(env, session, rodauth)
+        return env["request_locale"] if env["request_locale"]
+
+        profile_preferences = Persistence::Repository::Account.profile_preferences_from_account_id(account_id: rodauth.account!&.dig(:id))
+        profile_locale = profile_preferences["locale"] if profile_preferences&.key?("locale")
+        env["request_locale"] = profile_locale || session["locale"] || env["rack.locale"]
+      end
+    end
     plugin :public, root: File.expand_path("../assets/images", __dir__)
     plugin :flash
-    # plugin :middleware
     plugin :assets, css: "layout.scss", js: "base.js", path: File.expand_path("../assets", __dir__)
 
     plugin :render, views: File.expand_path("../assets/html", __dir__), engine: "haml", engine_opts: { "haml" => { escape_html: false } }, template_opts: { default_encoding: "UTF-8" }
@@ -95,6 +113,10 @@ module API
         render "reset_password"
       end
 
+      before_rodauth do
+        I18n.locale = RodauthMiddleware.choose_request_locale(request.env, session, self)
+      end
+
       before_register do
         # Before registering, rodauth allows to authorize the client. Currently we allow any client to register, since the idea is that anyone could make a client.
         # This is why the nil, but probably should verify for a logged in user in some cases.
@@ -123,6 +145,9 @@ module API
       r.assets
       r.public
 
+      r.rodauth
+      I18n.locale = RodauthMiddleware.choose_request_locale(env, session, rodauth)
+
       r.root do
         view(template: "root", layout: "hero")
       end
@@ -132,12 +157,18 @@ module API
       r.is("privacy") do
         view(:privacy)
       end
-      r.rodauth
 
       check_csrf! unless r.content_type&.include?("application/json") || r.path.start_with?("/api/")
       # rodauth.load_oauth_application_management_routes
       # rodauth.load_oauth_grant_management_routes
       rodauth.load_oauth_server_metadata_route # Loads .well-known/oauth-authorization-server path
+
+      r.is("language") do
+        r.post do
+          session["locale"] = r.params["locale"] if I18n.available_locales.include?(r.params["locale"].to_sym)
+          r.redirect("/")
+        end
+      end
 
       # Supposed to catch any non-api paths that are not in rodauth
       # Should be the last one, otherwise other routes will also 404

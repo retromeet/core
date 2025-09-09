@@ -1,0 +1,7 @@
+---
+fr:
+  language_name: "Français"
+  login: Se connecter
+  sign_up: Créer un compte
+  create_account:
+    birth_date_help: Nous avons besoin de votre date de naissance pour garantir que vous êtes autorisé à accéder à notre service, conformément à nos conditions d'utilisation. Vous <strong>NE POUVEZ</strong> pas modifier cette date ultérieurement, mais vous pouvez rendre votre âge privé si vous le souhaitez.

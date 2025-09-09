@@ -13,6 +13,7 @@ gem "grape-swagger-entity"
 gem "falcon" # The app server
 
 gem "i18n" # Used for translating strings in the views
+gem "rack-contrib" # Used for parsing the user's language into a locale
 
 gem "bcrypt" # Used by rodauth for password hashing
 gem "jwt" # Used by rodauth jwt
