@@ -95,7 +95,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.20)
     benchmark (0.4.1)
-    bigdecimal (3.2.3)
+    bigdecimal (3.3.1)
     capybara (3.40.0)
       addressable
       matrix
@@ -326,7 +326,7 @@ GEM
       stringio
     public_suffix (6.0.2)
     racc (1.8.1)
-    rack (3.1.17)
+    rack (3.1.18)
     rack-test (2.2.0)
       rack (>= 1.3)
     rainbow (3.1.1)
@@ -345,7 +345,7 @@ GEM
     rexml (3.4.4)
     roda (3.96.0)
       rack
-    rodauth (2.40.0)
+    rodauth (2.41.0)
       roda (>= 2.6.0)
       sequel (>= 4)
     rodauth-i18n (0.8.0)
@@ -527,7 +527,7 @@ CHECKSUMS
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bcrypt (3.1.20) sha256=8410f8c7b3ed54a3c00cd2456bf13917d695117f033218e2483b2e40b0784099
   benchmark (0.4.1) sha256=d4ef40037bba27f03b28013e219b950b82bace296549ec15a78016552f8d2cce
-  bigdecimal (3.2.3) sha256=ffd11d1ac67a0d3b2f44aec0a6487210b3f813f363dd11f1fcccf5ba00da4e1b
+  bigdecimal (3.3.1) sha256=eaa01e228be54c4f9f53bf3cc34fe3d5e845c31963e7fcc5bedb05a4e7d52218
   capybara (3.40.0) sha256=42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
   childprocess (5.1.0) sha256=9a8d484be2fd4096a0e90a0cd3e449a05bc3aa33f8ac9e4d6dcef6ac1455b6ec
   committee (5.5.0)
@@ -631,7 +631,7 @@ CHECKSUMS
   psych (5.2.6) sha256=814328aa5dcb6d604d32126a20bc1cbcf05521a5b49dbb1a8b30a07e580f316e
   public_suffix (6.0.2) sha256=bfa7cd5108066f8c9602e0d6d4114999a5df5839a63149d3e8b0f9c1d3558394
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
-  rack (3.1.17) sha256=99b718e98f2cc4a68a08078ec4f0b64bc3f76f67a51785cb0044cc30429d05d1
+  rack (3.1.18) sha256=669d707f768ef7b953c4495a1db5e776607f7f9c9a8bb32d42ccccc14d098444
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
   rake (13.3.0) sha256=96f5092d786ff412c62fde76f793cc0541bd84d2eb579caa529aa8a059934493
@@ -643,7 +643,7 @@ CHECKSUMS
   rerun (0.14.0) sha256=996a5af2b2b34dcb30146c6c728addab9113e07c119003370daa9bf27feb88fd
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
   roda (3.96.0) sha256=e89397269a2713c3ce8e95156c7579309e514e808dc124b50657c7bdadff90df
-  rodauth (2.40.0) sha256=b0877c80616cea6d76cc4ac0c0d8afd52a2a9794be96a391637955d3589e00f6
+  rodauth (2.41.0) sha256=235ee0e72d9506e484c80e2ef1db4e667a3314dac444fc8311e368f5e4bf5119
   rodauth-i18n (0.8.0) sha256=a1d60e571a68db5faf80ed6e4f8094b581322e2b0e7f068930f30f6519b298d4
   rodauth-oauth (1.6.3) sha256=dd39a02bad2329cbf1a9359af9c51ce324d98f96c7bab8e6764bc746113e6eec
   rubocop (1.81.1) sha256=352a9a6f314a4312f6c305f1f72bc466254d221c95445cd49e1b65d1f9411635
