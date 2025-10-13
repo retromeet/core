@@ -254,7 +254,7 @@ GEM
     metrics (0.13.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.25.5)
+    minitest (5.26.0)
     minitest-hooks (1.5.2)
       minitest (> 5.3)
     mocha (2.7.1)
@@ -595,7 +595,7 @@ CHECKSUMS
   metrics (0.13.0) sha256=139f3172d196827881a42b90e0b11f1388a530b7d4560728ad6856205757b313
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
-  minitest (5.25.5) sha256=391b6c6cb43a4802bfb7c93af1ebe2ac66a210293f4a3fb7db36f2fc7dc2c756
+  minitest (5.26.0) sha256=f5817ad09f863a4f7eac917707c1ca5c09cdc4a35e17d91171760178324d2c30
   minitest-hooks (1.5.2) sha256=c5fdd168b5295a6670f1a470ac44360624d5ce0514f73707f577cd425b184b86
   mocha (2.7.1) sha256=8f7d538d5d3ebc75fc788b3d92fbab913a93a78462d2a3ce99d1bdde7af7f851
   multi_json (1.17.0) sha256=76581f6c96aebf2e85f8a8b9854829e0988f335e8671cd1a56a1036eb75e4a1b
