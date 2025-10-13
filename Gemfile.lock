@@ -416,7 +416,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)
-    sequel (5.96.0)
+    sequel (5.97.0)
       bigdecimal
     shrine (3.6.0)
       content_disposition (~> 1.0)
@@ -665,7 +665,7 @@ CHECKSUMS
   sawyer (0.9.2) sha256=fa3a72d62a4525517b18857ddb78926aab3424de0129be6772a8e2ba240e7aca
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   selenium-webdriver (4.36.0) sha256=da222898011772280908d511750f387d45b5323f6f9c7c19cb77ec4dcbe71c9f
-  sequel (5.96.0) sha256=8e1ac79ce8bc1fa0a061d3bd9eb44605346025eb359f93d7f67efcfef7070e45
+  sequel (5.97.0) sha256=1b29c6f7d2747d1097b1405b265edfe2f2d72041153cd8d56f6f440d64e57f8d
   shrine (3.6.0) sha256=d361b7e5a452d65d900f3326ed99fe343d0d3b2ce17e012fc04ae85b0373358c
   stringio (3.1.7) sha256=5b78b7cb242a315fb4fca61a8255d62ec438f58da2b90be66048546ade4507fa
   temple (0.10.3) sha256=df3145fe6577af1e25387eb7f7122d32ed51bdb6f2e7bb0f4fbf07b66151913b
