@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     # Checkout the landing repository
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
       with:
         repository: "retromeet/landing"
         path: "landing"
