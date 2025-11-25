@@ -201,7 +201,7 @@ describe API::Authenticated::Profile do
     ###
     # This is a bit of meta programming to guarantee that the all the values the database supports are correctly declared in the endpoint documentation
     # We iterate through all the params that the endpoint supports and for each we get possible values in the database and update it
-    post_endpoint = API::Authenticated::Profile.routes.find { |v| v.request_method == "POST" && v.path == "/api/profile/complete(.json)" }
+    post_endpoint = API::Authenticated::Profile.routes.find { |v| v.request_method == "POST" && v.path == "/profile/complete(.:format)" }
     post_endpoint.params.each_key do |param|
       next if %w[text date].include? Profile.db_schema[param.to_sym][:db_type]
 
