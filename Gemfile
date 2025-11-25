@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby file: ".ruby-version"
 
 # The API framework-related gems
-gem "grape", "~> 2.4"
+gem "grape", "~> 3.0"
 gem "grape-entity", "~> 1.0"
 gem "grape-swagger"
 gem "grape-swagger-entity"
@@ -51,6 +51,8 @@ gem "shrine" # Used for file uploads
 
 gem "aws-sdk-s3", "~> 1.201" # For S3-like storage in Shrine
 gem "rexml" # needed by S3
+
+gem "dry-types" # Used by the environment config for casting values
 
 group :development, :test do
   gem "dotenv" # Used to load environment variables from .env files

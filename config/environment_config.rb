@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
+require "dry-types"
+
 # This module contains all configuration that is loaded from ENV variables to be available to the rest of the app.
 # It is loaded here so that if a environment variable is needed at runtime, it will fail fast, and not eventually fail at runtime when needed.
 module EnvironmentConfig
+  # Dry types is a module that contains the dry-types param types used below for casting booleans
+  module DryTypes
+    include ::Dry.Types(:params)
+  end
+
   class << self
     # @raise [Dry::Types::CoercionError] If the value of the variable cannot be coerced correctly
     # @return [Boolean]
