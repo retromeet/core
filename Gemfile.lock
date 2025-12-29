@@ -373,7 +373,7 @@ GEM
     rodauth-i18n (0.8.0)
       i18n (~> 1.0)
       rodauth (~> 2.19)
-    rodauth-oauth (1.6.3)
+    rodauth-oauth (1.6.4)
       base64
       rodauth (~> 2.0)
     rubocop (1.82.1)
@@ -674,7 +674,7 @@ CHECKSUMS
   roda (3.99.0) sha256=05d0f44bd3431bd429f8dd799d8eb5136f04abf469776ce722d6f8c94950d42f
   rodauth (2.42.0) sha256=71ecd43af09499567d3022a2070e5aa0c5de49f7db99fb04bc7abd2602acdb20
   rodauth-i18n (0.8.0) sha256=a1d60e571a68db5faf80ed6e4f8094b581322e2b0e7f068930f30f6519b298d4
-  rodauth-oauth (1.6.3) sha256=dd39a02bad2329cbf1a9359af9c51ce324d98f96c7bab8e6764bc746113e6eec
+  rodauth-oauth (1.6.4) sha256=d2911da7967c3e37a36f0a8c48e2cc556f9846e9ff7534c338ee690c60395b3a
   rubocop (1.82.1) sha256=09f1a6a654a960eda767aebea33e47603080f8e9c9a3f019bf9b94c9cab5e273
   rubocop-ast (1.49.0) sha256=49c3676d3123a0923d333e20c6c2dbaaae2d2287b475273fddee0c61da9f71fd
   rubocop-capybara (2.22.1) sha256=ced88caef23efea53f46e098ff352f8fc1068c649606ca75cb74650970f51c0c
