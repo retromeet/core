@@ -349,7 +349,7 @@ GEM
     rerun (0.14.0)
       listen (~> 3.0)
     rexml (3.4.4)
-    roda (3.98.0)
+    roda (3.99.0)
       rack
     rodauth (2.41.0)
       roda (>= 2.6.0)
@@ -650,7 +650,7 @@ CHECKSUMS
   reline (0.6.1) sha256=1afcc9d7cb1029cdbe780d72f2f09251ce46d3780050f3ec39c3ccc6b60675fb
   rerun (0.14.0) sha256=996a5af2b2b34dcb30146c6c728addab9113e07c119003370daa9bf27feb88fd
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
-  roda (3.98.0) sha256=c1147d42322305168df91f9a13b7dcadf4b1fe7171fb9598ca444e7618362428
+  roda (3.99.0) sha256=05d0f44bd3431bd429f8dd799d8eb5136f04abf469776ce722d6f8c94950d42f
   rodauth (2.41.0) sha256=235ee0e72d9506e484c80e2ef1db4e667a3314dac444fc8311e368f5e4bf5119
   rodauth-i18n (0.8.0) sha256=a1d60e571a68db5faf80ed6e4f8094b581322e2b0e7f068930f30f6519b298d4
   rodauth-oauth (1.6.3) sha256=dd39a02bad2329cbf1a9359af9c51ce324d98f96c7bab8e6764bc746113e6eec
