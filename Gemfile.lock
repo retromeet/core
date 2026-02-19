@@ -191,10 +191,10 @@ GEM
     gitlab (4.20.1)
       httparty (~> 0.20)
       terminal-table (>= 1.5.1)
-    google-protobuf (4.33.2)
+    google-protobuf (4.33.5)
       bigdecimal
       rake (>= 13)
-    google-protobuf (4.33.2-x86_64-linux-gnu)
+    google-protobuf (4.33.5-x86_64-linux-gnu)
       bigdecimal
       rake (>= 13)
     grape (3.1.1)
@@ -421,10 +421,10 @@ GEM
     samovar (2.4.1)
       console (~> 1.0)
       mapping (~> 1.0)
-    sass-embedded (1.97.1)
+    sass-embedded (1.97.3)
       google-protobuf (~> 4.31)
       rake (>= 13)
-    sass-embedded (1.97.1-x86_64-linux-gnu)
+    sass-embedded (1.97.3-x86_64-linux-gnu)
       google-protobuf (~> 4.31)
     sawyer (0.9.3)
       addressable (>= 2.3.5)
@@ -585,8 +585,8 @@ CHECKSUMS
   fiber-local (1.1.0) sha256=c885f94f210fb9b05737de65d511136ea602e00c5105953748aa0f8793489f06
   fiber-storage (1.0.1) sha256=f48e5b6d8b0be96dac486332b55cee82240057065dc761c1ea692b2e719240e1
   gitlab (4.20.1) sha256=08bb40fcbcb54817bb1a5067308afe2445a4919c86212fc072d24d1e4784145c
-  google-protobuf (4.33.2) sha256=748150d6c642fd655ef39efa23ecf2abe6d616020039a6d1c1764be1da530315
-  google-protobuf (4.33.2-x86_64-linux-gnu) sha256=73cba041477afcac92ff383fcbdec195ea28d96b994876d1deaa944d18f91786
+  google-protobuf (4.33.5) sha256=1b64fb774c101b23ac3f6923eca24be04fd971635d235c4cd4cfe0d752620da0
+  google-protobuf (4.33.5-x86_64-linux-gnu) sha256=a782adf86bfba207740b49d7bb9ccdc25c4fb8f800fe222af62bce951149338a
   grape (3.1.1) sha256=774f16782d917a90e69de0499dfaab571e5ad967569ac066a2b0b918af12de69
   grape-entity (1.0.1) sha256=e00f9e94e407aff77aa2945d741f544d07e48501927942988799913151d02634
   grape-swagger (2.1.4) sha256=3279351bebafbca24e0331b9f7c6dbfefb262042a1f3d224ed41cf2be4aee35b
@@ -689,8 +689,8 @@ CHECKSUMS
   rubyzip (3.2.2) sha256=c0ed99385f0625415c8f05bcae33fe649ed2952894a95ff8b08f26ca57ea5b3c
   rugged (1.9.0) sha256=7faaa912c5888d6e348d20fa31209b6409f1574346b1b80e309dbc7e8d63efac
   samovar (2.4.1) sha256=c3b91dd0580771e3bc600621c1111f29542529dcffafaac3b6bf068b3f309e80
-  sass-embedded (1.97.1) sha256=112ee8895854e7a8ea985937f7458f649fed8df255ed61e189f8a4b185e768d9
-  sass-embedded (1.97.1-x86_64-linux-gnu) sha256=9a294bb0acb1a539ed19f0e511098a9740b4aab4389e169585e8da1337fbd8b4
+  sass-embedded (1.97.3) sha256=c4136da69ae3acfa7b0809f4ec10891125edf57df214a2d1ab570f721f96f7a6
+  sass-embedded (1.97.3-x86_64-linux-gnu) sha256=173a4d0dbe2fffdf7482bd3e82fb597dfc658c18d1e8fd746aa7d5077ed4e850
   sawyer (0.9.3) sha256=0d0f19298408047037638639fe62f4794483fb04320269169bd41af2bdcf5e41
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   selenium-webdriver (4.40.0) sha256=16ef7aa9853c1d4b9d52eac45aafa916e3934c5c83cb4facb03f250adfd15e5b
