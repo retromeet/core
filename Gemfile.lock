@@ -270,7 +270,7 @@ GEM
       prism (~> 1.5)
     minitest-hooks (1.5.3)
       minitest (> 5.3)
-    mocha (3.0.1)
+    mocha (3.0.2)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.8.0)
     multi_json (1.19.1)
@@ -622,7 +622,7 @@ CHECKSUMS
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
   minitest (6.0.1) sha256=7854c74f48e2e975969062833adc4013f249a4b212f5e7b9d5c040bf838d54bb
   minitest-hooks (1.5.3) sha256=ef50dd3bf47e6d1646befc358c640c71ca41f5650f0036b4c69929a44d6f32c4
-  mocha (3.0.1) sha256=74f82c5959e3df6cfa2757d60aa420dcb151ac7c5eb61dcebf1cd4e368ed7469
+  mocha (3.0.2) sha256=3d8029531d8b71bff5ae07040758f77fdf578174189ffda1bef7749a59e92df8
   msgpack (1.8.0) sha256=e64ce0212000d016809f5048b48eb3a65ffb169db22238fb4b72472fecb2d732
   multi_json (1.19.1) sha256=7aefeff8f2c854bf739931a238e4aea64592845e0c0395c8a7d2eea7fdd631b7
   multi_xml (0.8.1) sha256=addba0290bac34e9088bfe73dc4878530297a82a7bbd66cb44dcd0a4b86edf5a
