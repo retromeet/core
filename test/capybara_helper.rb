@@ -14,7 +14,7 @@ def selenium_request?(request)
     # The selenium driver sends a final "shutdown" request where the user
     # agent header is wrong, so allow that too.
     request.uri.host == "127.0.0.1" &&
-    ["/shutdown", "/__identify__"].include?(request.uri.path) &&
+    ["/shutdown", "/__identify__", "/status"].include?(request.uri.path) &&
     request.headers["User-Agent"] == "Ruby"
   )
 end
