@@ -157,7 +157,7 @@ GEM
     erb (6.0.1)
     factory_bot (6.5.6)
       activesupport (>= 6.1.0)
-    faker (3.5.3)
+    faker (3.6.0)
       i18n (>= 1.8.11, < 2)
     falcon (0.53.1)
       async
@@ -574,7 +574,7 @@ CHECKSUMS
   dry-types (1.9.1) sha256=baebeecdb9f8395d6c9d227b62011279440943e3ef2468fe8ccc1ba11467f178
   erb (6.0.1) sha256=28ecdd99c5472aebd5674d6061e3c6b0a45c049578b071e5a52c2a7f13c197e5
   factory_bot (6.5.6) sha256=12beb373214dccc086a7a63763d6718c49769d5606f0501e0a4442676917e077
-  faker (3.5.3) sha256=b961482dc0bb15ccb9a98ea7878b925669e9ae8f5e59b607da540b768137d765
+  faker (3.6.0) sha256=4ce80bf91c8d09bbfff4c5596690bf862d60eac420f86737ca8ce12a54dc464a
   falcon (0.53.1) sha256=2c2c096463c61d4620bf5519ac6b6358d590ec8db38b26e4cde8bc9ded408f04
   falcon-capybara (1.6.1) sha256=8d8561eb0113145e4d626a2cfa51b47a50212c7b40486cd72daddd33471ea6bc
   faraday (2.14.0) sha256=8699cfe5d97e55268f2596f9a9d5a43736808a943714e3d9a53e6110593941cd
