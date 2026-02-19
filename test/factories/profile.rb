@@ -25,7 +25,7 @@ FactoryBot.define do
     wants_kids { "do_not_want_any" }
     religion { "atheism" }
     religion_importance { "not_important" }
-    display_name { Faker::Twitter.screen_name }
+    display_name { Faker::X.screen_name }
     created_at { Time.now }
     pronouns { "They/them" }
 
