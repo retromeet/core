@@ -12,6 +12,8 @@ gem "grape-swagger-entity"
 
 gem "falcon" # The app server
 
+gem "async-service-supervisor" # Used by falcon.rb to start and supervise falcon
+
 gem "i18n" # Used for translating strings in the views
 
 gem "bcrypt" # Used by rodauth for password hashing

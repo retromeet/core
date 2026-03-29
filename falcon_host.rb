@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require "falcon/environment/rack"
-require "falcon/environment/supervisor"
+require "async/service/supervisor"
 
 hostname = File.basename(__dir__)
 port = ENV["PORT"] || 3000
@@ -18,5 +18,5 @@ service hostname do
 end
 
 service "supervisor" do
-  include Falcon::Environment::Supervisor
+  include Async::Service::Supervisor::Environment
 end
