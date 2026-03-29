@@ -50,11 +50,11 @@ GEM
       traces (~> 0.18)
     async-container (0.34.2)
       async (~> 2.22)
-    async-container-supervisor (0.9.3)
+    async-container-supervisor (0.10.1)
       async-service
       io-endpoint
       memory (~> 0.7)
-      memory-leak (~> 0.5)
+      memory-leak (~> 0.10)
       process-metrics
     async-http (0.94.2)
       async (>= 2.10.2)
@@ -159,7 +159,7 @@ GEM
       activesupport (>= 6.1.0)
     faker (3.6.0)
       i18n (>= 1.8.11, < 2)
-    falcon (0.54.2)
+    falcon (0.54.3)
       async
       async-container (~> 0.20)
       async-container-supervisor (~> 0.6)
@@ -267,8 +267,8 @@ GEM
       bake (~> 0.15)
       console
       msgpack
-    memory-leak (0.9.2)
-      process-metrics (~> 0.10)
+    memory-leak (0.10.3)
+      process-metrics (>= 0.10.1)
     metrics (0.15.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
@@ -320,10 +320,9 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.9.0)
-    process-metrics (0.10.1)
+    process-metrics (0.11.0)
       console (~> 1.8)
       json (~> 2)
-      samovar (~> 2.1)
     pronto (0.11.5)
       gitlab (>= 4.4.0, < 5.0)
       httparty (>= 0.13.7, < 1.0)
@@ -543,7 +542,7 @@ CHECKSUMS
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   async (2.36.0) sha256=090623f4c65706664355c9efa6c7bfb86771a513e65cd681c51cb27747530550
   async-container (0.34.2) sha256=83ac767e74a832c42e156110c14e10b1fb3fd7583fa1beb3dfe45269e3554746
-  async-container-supervisor (0.9.3) sha256=7bccbba92d84f6f19cbcea058a7f124511e828b39387b4bd257a0d12104f4a6d
+  async-container-supervisor (0.10.1) sha256=97a4c7b8514c22753e72647cc09fc89ab1a2659cfe7ece563ca3ae65b5e875cb
   async-http (0.94.2) sha256=c5ca94b337976578904a373833abe5b8dfb466a2946af75c4ae38c409c5c78b2
   async-http-cache (0.4.6) sha256=2038d1f093182f16b50b4db271c25085e3938da10bfcfc2904cadb0530fddfd6
   async-pool (0.11.1) sha256=98e1583e199a75f7dc70f8e65fc8d0d3b28636c3f256595d43e206642ad8fbda
@@ -582,7 +581,7 @@ CHECKSUMS
   erb (6.0.1) sha256=28ecdd99c5472aebd5674d6061e3c6b0a45c049578b071e5a52c2a7f13c197e5
   factory_bot (6.5.6) sha256=12beb373214dccc086a7a63763d6718c49769d5606f0501e0a4442676917e077
   faker (3.6.0) sha256=4ce80bf91c8d09bbfff4c5596690bf862d60eac420f86737ca8ce12a54dc464a
-  falcon (0.54.2) sha256=ab35a702466f318d6b3189e638e4aee53290261a5404c9f681115f4a8aca153e
+  falcon (0.54.3) sha256=18f0ee921c36b68ddb18d68b2203ceaed4089db7c75266d1e003c08546076c90
   falcon-capybara (1.6.1) sha256=8d8561eb0113145e4d626a2cfa51b47a50212c7b40486cd72daddd33471ea6bc
   faraday (2.14.1) sha256=a43cceedc1e39d188f4d2cdd360a8aaa6a11da0c407052e426ba8d3fb42ef61c
   faraday-net_http (3.4.2) sha256=f147758260d3526939bf57ecf911682f94926a3666502e24c69992765875906c
@@ -625,7 +624,7 @@ CHECKSUMS
   matrix (0.4.2) sha256=71083ccbd67a14a43bfa78d3e4dc0f4b503b9cc18e5b4b1d686dc0f9ef7c4cc0
   mcp (0.7.1) sha256=fa967895d6952bad0d981ea907731d8528d2c246d2079d56a9c8bae83d14f1c7
   memory (0.12.0) sha256=786a14d84cec8e5667a491da02ebbf492b9ec3d19d35161131ac9d47abb684b4
-  memory-leak (0.9.2) sha256=d5c93fa30c26617b6ce8506dda19450f505aff2b7965cf27b17e21f0b29e5032
+  memory-leak (0.10.3) sha256=6874744ed6abc153feeb901118fa5848e7b5883e1c58cbe6cc0b5431f9001a45
   metrics (0.15.0) sha256=61ded5bac95118e995b1bc9ed4a5f19bc9814928a312a85b200abbdac9039072
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   mini_portile2 (2.8.9) sha256=0cd7c7f824e010c072e33f68bc02d85a00aeb6fce05bb4819c03dfd3c140c289
@@ -657,7 +656,7 @@ CHECKSUMS
   pp (0.6.3) sha256=2951d514450b93ccfeb1df7d021cae0da16e0a7f95ee1e2273719669d0ab9df6
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
-  process-metrics (0.10.1) sha256=4e5c469a63abd91c273cf35bbdb1a315b99a23a6c1cecd9d8717d7d96a6dfed0
+  process-metrics (0.11.0) sha256=69f1602c94e33760e9549173ebf45047d762fe913ba43c135dae3641a2d617fc
   pronto (0.11.5) sha256=3b3f6dcb05a9c923460a2c1f86dc233d0747b37df50b6897164970f76c847f66
   pronto-rubocop (0.11.6) sha256=291ce2038525a6938816d9d82c55090d15c3ec369c1866f795cf02beb9d77b8d
   protocol-hpack (1.5.1) sha256=6feca238b8078da1cd295677d6f306c6001af92d75fe0643d33e6956cbc3ad91
