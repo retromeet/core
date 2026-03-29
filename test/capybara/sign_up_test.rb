@@ -17,6 +17,7 @@ class AccountCreationTest < CapybaraTestCase
 
     login = fill_in_fields
 
+    assert_css(".notification")
     assert_text("Your account has been created")
     assert_instance_of Account, Account.find(email: login)
   end
