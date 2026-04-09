@@ -51,7 +51,7 @@ gem "mustache",
 
 gem "shrine" # Used for file uploads
 
-gem "aws-sdk-s3", "~> 1.217" # For S3-like storage in Shrine
+gem "aws-sdk-s3", "~> 1.219" # For S3-like storage in Shrine
 gem "rexml" # needed by S3
 
 gem "dry-types" # Used by the environment config for casting values
