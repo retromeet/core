@@ -26,7 +26,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (8.1.2.1)
+    activesupport (8.1.3)
       base64
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.3.1)
@@ -108,7 +108,7 @@ GEM
       samovar (~> 2.1)
     base64 (0.3.0)
     bcrypt (3.1.22)
-    bigdecimal (4.1.0)
+    bigdecimal (4.1.1)
     capybara (3.40.0)
       addressable
       matrix
@@ -206,16 +206,15 @@ GEM
     google-protobuf (4.34.1-x86_64-linux-gnu)
       bigdecimal
       rake (~> 13.3)
-    grape (3.1.1)
-      activesupport (>= 7.1)
+    grape (3.2.0)
+      activesupport (>= 7.2)
       dry-configurable
       dry-types (>= 1.1)
       mustermann-grape (~> 1.1.0)
       rack (>= 2)
       zeitwerk
-    grape-entity (1.0.1)
+    grape-entity (1.0.3)
       activesupport (>= 3.0.0)
-      multi_json (>= 1.3.2)
     grape-swagger (2.1.4)
       grape (>= 1.7, < 4.0)
     grape-swagger-entity (0.7.1)
@@ -284,11 +283,9 @@ GEM
     mocha (3.1.0)
       ruby2_keywords (>= 0.0.5)
     msgpack (1.8.0)
-    multi_json (1.19.1)
     multi_xml (0.8.1)
       bigdecimal (>= 3.1, < 5)
-    mustermann (3.0.4)
-      ruby2_keywords (~> 0.0.1)
+    mustermann (3.1.0)
     mustermann-grape (1.1.0)
       mustermann (>= 1.0.0)
     net-http (0.9.1)
@@ -357,7 +354,7 @@ GEM
       stringio
     public_suffix (7.0.5)
     racc (1.8.1)
-    rack (3.1.20)
+    rack (3.1.21)
     rack-test (2.2.0)
       rack (>= 1.3)
     rainbow (3.1.1)
@@ -498,7 +495,7 @@ DEPENDENCIES
   faker
   falcon
   falcon-capybara
-  grape (~> 3.1)
+  grape (~> 3.2)
   grape-entity (~> 1.0)
   grape-swagger
   grape-swagger-entity
@@ -541,7 +538,7 @@ DEPENDENCIES
   zeitwerk
 
 CHECKSUMS
-  activesupport (8.1.2.1) sha256=beec20ced12ad569194554399449a6372fdab03061b8f48a9ed6ef9b7dc251b2
+  activesupport (8.1.3) sha256=21a5e0dfbd4c3ddd9e1317ec6a4d782fa226e7867dc70b0743acda81a1dca20e
   address_composer (2.0.0)
   addressable (2.8.9) sha256=cc154fcbe689711808a43601dee7b980238ce54368d23e127421753e46895485
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
@@ -563,7 +560,7 @@ CHECKSUMS
   bake (0.24.1) sha256=8bfac7e61514b17720e3b13cf6a5e122243f43123c6802707b150904bec5f4c7
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bcrypt (3.1.22) sha256=1f0072e88c2d705d94aff7f2c5cb02eb3f1ec4b8368671e19112527489f29032
-  bigdecimal (4.1.0) sha256=6dc07767aa3dc456ccd48e7ae70a07b474e9afd7c5bc576f80bd6da5c8dd6cae
+  bigdecimal (4.1.1) sha256=1c09efab961da45203c8316b0cdaec0ff391dfadb952dd459584b63ebf8054ca
   capybara (3.40.0) sha256=42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
   childprocess (5.1.0) sha256=9a8d484be2fd4096a0e90a0cd3e449a05bc3aa33f8ac9e4d6dcef6ac1455b6ec
   committee (5.5.0)
@@ -600,8 +597,8 @@ CHECKSUMS
   gitlab (4.20.1) sha256=08bb40fcbcb54817bb1a5067308afe2445a4919c86212fc072d24d1e4784145c
   google-protobuf (4.34.1) sha256=347181542b8d659c60f028fa3791c9cccce651a91ad27782dbc5c5e374796cdc
   google-protobuf (4.34.1-x86_64-linux-gnu) sha256=87088c9fd8e47b5b40ca498fc1195add6149e941ff7e81c532a5b0b8876d4cc9
-  grape (3.1.1) sha256=774f16782d917a90e69de0499dfaab571e5ad967569ac066a2b0b918af12de69
-  grape-entity (1.0.1) sha256=e00f9e94e407aff77aa2945d741f544d07e48501927942988799913151d02634
+  grape (3.2.0) sha256=2aeeb020e5605f6314ce8ca8d30d90c9ee8f26bc959c5b34db7b8486764e4d2c
+  grape-entity (1.0.3) sha256=4761151ec823ca1e65bb397ac6fd3c6b69b8d1dc63465313de851fbd07224dac
   grape-swagger (2.1.4) sha256=3279351bebafbca24e0331b9f7c6dbfefb262042a1f3d224ed41cf2be4aee35b
   grape-swagger-entity (0.7.1) sha256=082144811cdd14c15b9d9f0a27a4e3ff9c27c7081130d334a3de59953769b37d
   haml (7.2.0) sha256=87fd2b71f7feab1724337b090a7d767f5ab2d42f08c974f3ead673f18cfcd55a
@@ -637,10 +634,9 @@ CHECKSUMS
   minitest-hooks (1.5.3) sha256=ef50dd3bf47e6d1646befc358c640c71ca41f5650f0036b4c69929a44d6f32c4
   mocha (3.1.0) sha256=75f42d69ebfb1f10b32489dff8f8431d37a418120ecdfc07afe3bc183d4e1d56
   msgpack (1.8.0) sha256=e64ce0212000d016809f5048b48eb3a65ffb169db22238fb4b72472fecb2d732
-  multi_json (1.19.1) sha256=7aefeff8f2c854bf739931a238e4aea64592845e0c0395c8a7d2eea7fdd631b7
   multi_xml (0.8.1) sha256=addba0290bac34e9088bfe73dc4878530297a82a7bbd66cb44dcd0a4b86edf5a
   mustache (1.1.1)
-  mustermann (3.0.4) sha256=85fadcb6b3c6493a8b511b42426f904b7f27b282835502233dd154daab13aa22
+  mustermann (3.1.0) sha256=e73b006ffb7f743eae9303a7d6622e0dd9e1e5522718a2139c006085878768b9
   mustermann-grape (1.1.0) sha256=8d258a986004c8f01ce4c023c0b037c168a9ed889cf5778068ad54398fa458c5
   net-http (0.9.1) sha256=25ba0b67c63e89df626ed8fac771d0ad24ad151a858af2cc8e6a716ca4336996
   net-imap (0.5.12) sha256=cb8cd05bd353fcc19b6cbc530a9cb06b577a969ea10b7ddb0f37787f74be4444
@@ -673,7 +669,7 @@ CHECKSUMS
   psych (5.3.1) sha256=eb7a57cef10c9d70173ff74e739d843ac3b2c019a003de48447b2963d81b1974
   public_suffix (7.0.5) sha256=1a8bb08f1bbea19228d3bed6e5ed908d1cb4f7c2726d18bd9cadf60bc676f623
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
-  rack (3.1.20) sha256=de256e32c2be9df9959a3e4e1e4feade81804362a91fa5807f571f70083ef84e
+  rack (3.1.21) sha256=285c5f228eef30dbd1dc147859a880b71bc44412fea575cc58c28797f2db9777
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
   rake (13.3.1) sha256=8c9e89d09f66a26a01264e7e3480ec0607f0c497a861ef16063604b1b08eb19c
