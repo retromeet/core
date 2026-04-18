@@ -48,12 +48,12 @@ GEM
       io-event (~> 1.11)
       metrics (~> 0.12)
       traces (~> 0.18)
-    async-bus (0.3.2)
+    async-bus (0.4.0)
       async
       io-endpoint
       io-stream
       msgpack
-    async-container (0.34.4)
+    async-container (0.34.5)
       async (~> 2.22)
     async-http (0.94.2)
       async (>= 2.10.2)
@@ -74,7 +74,8 @@ GEM
       async
       async-container (~> 0.34)
       string-format (~> 0.2)
-    async-service-supervisor (0.14.0)
+    async-service-supervisor (0.16.0)
+      async (~> 2.38)
       async-bus
       async-service (~> 0.15)
       async-utilization (~> 0.3)
@@ -322,7 +323,7 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.9.0)
-    process-metrics (0.11.0)
+    process-metrics (0.11.1)
       console (~> 1.8)
       json (~> 2)
     pronto (0.11.5)
@@ -543,13 +544,13 @@ CHECKSUMS
   addressable (2.8.9) sha256=cc154fcbe689711808a43601dee7b980238ce54368d23e127421753e46895485
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   async (2.39.0) sha256=df18730073f2bbb45788077dfa20cb365ecc1b9453969f44de6796b5191a00aa
-  async-bus (0.3.2) sha256=08bcdb9dc5eb38c78676800f8a1ed44736d1596d9d2f55de18b7bb6dad20cc25
-  async-container (0.34.4) sha256=0d705d485802a01c9dba070e7288257b4d8032f7f052d4e8753d76f74673ff66
+  async-bus (0.4.0) sha256=23c3459b02e8422e928a4eb9c60abf92b36e59c89c9958338f14eb25dab7759b
+  async-container (0.34.5) sha256=905d950bb4cc5219238214d3a11ac6c4b74d4affecd930027e929ba0b86234bd
   async-http (0.94.2) sha256=c5ca94b337976578904a373833abe5b8dfb466a2946af75c4ae38c409c5c78b2
   async-http-cache (0.4.6) sha256=2038d1f093182f16b50b4db271c25085e3938da10bfcfc2904cadb0530fddfd6
   async-pool (0.11.2) sha256=0a43a17b02b04d9c451b7d12fafa9a50e55dc6dd00d4369aca00433f16a7e3ed
   async-service (0.22.0) sha256=84616488145654d42f994c2097eef39811a21548bf0da18d20a7b61813e63b61
-  async-service-supervisor (0.14.0) sha256=a0eabe1dfeae9b5764627976ba60d744c53e52b86a21787ada8fe74e448e9a35
+  async-service-supervisor (0.16.0) sha256=b2ad897e85eadbdf7fba9018ab92f0fa80aaebfea77a215eafad500e3e0e5f0e
   async-utilization (0.3.2) sha256=201a27e0948fe23fc14a01a0ecbe5e420e27cebae3a51f36e56fc45fb31df3b4
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
   aws-partitions (1.1237.0) sha256=9b82f529b69ad83a8e4c5e123038924ed5e8f59bd6064a293ef20efc63364841
@@ -657,7 +658,7 @@ CHECKSUMS
   pp (0.6.3) sha256=2951d514450b93ccfeb1df7d021cae0da16e0a7f95ee1e2273719669d0ab9df6
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
   prism (1.9.0) sha256=7b530c6a9f92c24300014919c9dcbc055bf4cdf51ec30aed099b06cd6674ef85
-  process-metrics (0.11.0) sha256=69f1602c94e33760e9549173ebf45047d762fe913ba43c135dae3641a2d617fc
+  process-metrics (0.11.1) sha256=269558b264326fef22fb7d5acaa9ce55e37e0ae379c1ae478923fbcce208e6e2
   pronto (0.11.5) sha256=3b3f6dcb05a9c923460a2c1f86dc233d0747b37df50b6897164970f76c847f66
   pronto-rubocop (0.11.6) sha256=291ce2038525a6938816d9d82c55090d15c3ec369c1866f795cf02beb9d77b8d
   protocol-hpack (1.5.1) sha256=6feca238b8078da1cd295677d6f306c6001af92d75fe0643d33e6956cbc3ad91
